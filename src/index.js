@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 import Phaser from 'phaser';
 import Level from './js/scenes/Level';
 
@@ -12,6 +11,7 @@ const config = {
       gravity: { y: 200 },
     },
   },
+  pixelArt: true,
   scene: [Level],
   scale: {
     mode: Phaser.Scale.FIT,

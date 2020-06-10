@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 /* eslint-disable camelcase */
 import Phaser from 'phaser';
 import b_1 from '../../assets/level0/b_1.png';
@@ -36,13 +35,13 @@ export default class Level extends Phaser.Scene {
   create() {
     this.add.image(1020, 256, 'bak_2');
     this.add.image(648, 132, 'bak_1');
-    this.add.image(655, 120, 'moons').setScrollFactor(1.1, 1);
-    this.add.image(970, 315, 'bak_5').setScrollFactor(0.97, 1);
+    this.add.image(695, 120, 'moons').setScrollFactor(1.15, 1);
+    this.add.image(900, 315, 'bak_5').setScrollFactor(0.9, 1);
     this.add.image(263, 280, 'bak_1');
     this.add.image(0, 0, 'b_1').setOrigin(0);
-    this.add.image(1000, 350, 'bak_3').setScrollFactor(0.95, 1);
-    this.add.image(512, 0, 'b_2').setOrigin(0);
-    this.add.image(1024, 0, 'b_3').setOrigin(0);
+    this.add.image(950, 350, 'bak_3').setScrollFactor(0.9, 1);
+    this.add.image(511, 0, 'b_2').setOrigin(0);
+    this.add.image(1023, 0, 'b_3').setOrigin(0);
 
 
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -65,10 +64,6 @@ export default class Level extends Phaser.Scene {
     this.camera = this.cameras.main;
     this.camera.setBounds(0, 0, 1536, 512);
     this.camera.setZoom(2);
-
-
-    //  Input Events
-    // this.cursors = this.input.keyboard.createCursorKeys();
   }
 
   update(time, delta) {
