@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import Level from './js/scenes/Level';
+import GameBar from './js/interface/GameBar';
 
 const config = {
   type: Phaser.AUTO,
@@ -12,7 +13,7 @@ const config = {
     },
   },
   pixelArt: true,
-  scene: [Level],
+  scene: [Level, GameBar],
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,

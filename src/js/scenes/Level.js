@@ -1,5 +1,7 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable camelcase */
 import Phaser from 'phaser';
+
 import b_1 from '../../assets/level0/b_1.png';
 import b_2 from '../../assets/level0/b_2.png';
 import b_3 from '../../assets/level0/b_3.png';
@@ -19,7 +21,6 @@ export default class Level extends Phaser.Scene {
     this.scale.pageAlignVertically = true;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   preload() {
     this.load.image('moons', moons);
     this.load.image('b_1', b_1);
@@ -31,7 +32,6 @@ export default class Level extends Phaser.Scene {
     this.load.image('bak_5', bak_5);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   create() {
     this.add.image(1020, 256, 'bak_2');
     this.add.image(648, 132, 'bak_1');
@@ -43,6 +43,7 @@ export default class Level extends Phaser.Scene {
     this.add.image(511, 0, 'b_2').setOrigin(0);
     this.add.image(1023, 0, 'b_3').setOrigin(0);
 
+    this.scene.launch('game-bar');
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
