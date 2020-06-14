@@ -48,10 +48,13 @@ export default class Level extends Phaser.Scene {
     this.scene.launch('game-bar');
 
     this.count = 0;
+    this.health = 100;
 
     this.input.keyboard.on('keydown_SPACE', () => {
       this.count += 1;
+      this.health -= 10;
       eventsCenter.emit('update-health', this.count);
+      eventsCenter.emit('update-health-bar', this.health);
     });
 
     this.cursors = this.input.keyboard.createCursorKeys();
