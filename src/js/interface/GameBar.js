@@ -37,8 +37,8 @@ export default class GameBar extends Phaser.Scene {
 
     /* стирает прослушывание событий после закрытия сцены */
     this.events.on(Phaser.Scenes.Events.SHUTDOWN, () => {
-      eventsCenter.off('update-health', this.updateCount, this);
-      eventsCenter.off('update-health-bar', this.updateCountBar, this);
+      eventsCenter.off('update-health', this.updateHealth, this);
+      eventsCenter.off('update-health-bar', this.updateHealthBar, this);
     });
   }
 
@@ -46,8 +46,19 @@ export default class GameBar extends Phaser.Scene {
     this.health.text = health;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   updateHealthBar(health) {
     this.healtBar.update(health);
+  }
+
+  updateBullets(bullets) {
+    this.bullets.text = bullets;
+  }
+
+  updateFood(food) {
+    this.food.text = food;
+  }
+
+  updateKeys(keys) {
+    this.keys.text = keys;
   }
 }
