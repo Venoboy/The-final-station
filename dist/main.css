@@ -1,5 +1,9 @@
 body {
   margin: 0; }
 
+@font-face {
+  font-family: font1;
+  src: url(assets/fonts/87d9bc007cd78a3dd3e6c18af6a14576.ttf); }
+
 
 /*# sourceMappingURL=main.css.map*/

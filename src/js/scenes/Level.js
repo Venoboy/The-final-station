@@ -11,6 +11,8 @@ import bak_3 from '../../assets/level0/bak_3.png';
 import bak_5 from '../../assets/level0/bak_5.png';
 import moons from '../../assets/level0/backgr_3.png';
 
+import eventsCenter from '../eventsCenter';
+
 export default class Level extends Phaser.Scene {
   constructor() {
     super('game-scene');
@@ -44,6 +46,13 @@ export default class Level extends Phaser.Scene {
     this.add.image(1023, 0, 'b_3').setOrigin(0);
 
     this.scene.launch('game-bar');
+
+    this.count = 0;
+
+    this.input.keyboard.on('keydown_SPACE', () => {
+      this.count += 1;
+      eventsCenter.emit('update-health', this.count);
+    });
 
     this.cursors = this.input.keyboard.createCursorKeys();
 

@@ -1,1 +1,1 @@
-{"version":3,"sources":["webpack:///style.scss"],"names":[],"mappings":"AAAA;EACE,SAAS","file":"main.css","sourcesContent":["body {\r\n  margin: 0;\r\n}\r\n"],"sourceRoot":""}
+{"version":3,"sources":["webpack:///style.scss"],"names":[],"mappings":"AAAA;EACE,SAAS;;AAGX;EACE,kBAAkB;EAClB,4CAA2C","file":"main.css","sourcesContent":["body {\r\n  margin: 0;\r\n}\r\n\r\n@font-face {\r\n  font-family: font1;\r\n  src: url('../assets/fonts/pixcyrFixed.ttf');\r\n}\r\n"],"sourceRoot":""}
