@@ -10,7 +10,8 @@
     "identity-obj-proxy": "^3.0.0",
     "phaser": "^3.23.0",
     "webpack": "^4.42.1",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^3.3.11",
+    "xml-loader": "^1.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",

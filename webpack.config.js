@@ -81,6 +81,14 @@ module.exports = (env, options) => {
             },
           },
         },
+        {
+          type: 'javascript/auto',
+          test: /\.json$/,
+          loader: 'file-loader?name=[name].json',
+          options: {
+            outputPath: 'assets/json/',
+          },
+        },
       ],
     },
 
