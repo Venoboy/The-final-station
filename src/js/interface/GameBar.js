@@ -3,9 +3,12 @@ import Phaser from 'phaser';
 import HealtBar from './HealthBar';
 
 import gameBar from '../../assets/interface/gameBarFrame.png';
+import bullet from '../../assets/interface/bullet.png';
+import bulletEmpty from '../../assets/interface/bullet_empty.png';
 import eventsCenter from '../eventsCenter';
 
 const resizeNumber = 0.6;
+const magazineSize = 6;
 
 export default class GameBar extends Phaser.Scene {
   constructor() {
@@ -14,6 +17,8 @@ export default class GameBar extends Phaser.Scene {
 
   preload() {
     this.load.image('gameBar', gameBar);
+    this.load.image('bullet', bullet);
+    this.load.image('bulletEmpty', bulletEmpty);
   }
 
   create() {
@@ -35,11 +40,23 @@ export default class GameBar extends Phaser.Scene {
     eventsCenter.on('update-health', this.updateHealth, this);
     eventsCenter.on('update-health-bar', this.updateHealthBar, this);
 
-    /* стирает прослушывание событий после закрытия сцены */
+    /* стирает прослушивание событий после закрытия сцены */
     this.events.on(Phaser.Scenes.Events.SHUTDOWN, () => {
       eventsCenter.off('update-health', this.updateHealth, this);
       eventsCenter.off('update-health-bar', this.updateHealthBar, this);
     });
+    this.initMagazine();
+  }
+
+  initMagazine() {
+    const bulletWidth = this.add.image(0, 0, 'bullet').width * resizeNumber;
+    const containerX = 200;
+    const containerY = 200;
+    const bullets = [];
+    for (let i = 0; i < magazineSize; i += 1) {
+      bullets.push(this.add.image(containerX + (i * bulletWidth), containerY, 'bullet').setScale(resizeNumber));
+    }
+    this.magazine = this.add.container(containerX, containerY, bullets);
   }
 
   updateHealth(health) {
