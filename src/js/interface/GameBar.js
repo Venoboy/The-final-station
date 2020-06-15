@@ -9,10 +9,34 @@ import bulletEmpty from '../../assets/interface/bulletBG.png';
 import eventsCenter from '../eventsCenter';
 
 const magazineSize = 6;
+const textConfig = {
+  fontFamily: 'font1',
+  fontSize: 18,
+};
+/* x positions of game bar items */
+const itemsX = {
+  healthText: 165,
+  healthBar: 180,
+  weaponText: 400,
+  weaponMagazine: 420,
+  foodText: 575,
+  keysText: 685,
+};
+/* default values of game bar items */
+const defaultValues = {
+  health: 2,
+  bullets: magazineSize,
+  food: 2,
+  keys: 0,
+};
 
 export default class GameBar extends Phaser.Scene {
   constructor() {
     super('game-bar');
+  }
+
+  init(startValues) {
+    this.startValues = startValues || defaultValues;
   }
 
   preload() {
@@ -22,36 +46,49 @@ export default class GameBar extends Phaser.Scene {
   }
 
   create() {
-    this.frame = this.add.image(0, 0, 'gameBar').setOrigin(0);
-    const { width } = this.frame;
-    const { height } = this.frame;
-    const textHeight = this.cameras.main.height - height / 2 + 4;
-    this.frame.setDisplaySize(width, height);
+    this.frame = this.add.image(0, 0, 'gameBar');
+    const frameCenterY = this.cameras.main.height - this.frame.height / 2;
     this.frame.setPosition(
-      this.cameras.main.centerX - width / 2, this.cameras.main.height - height,
+      this.cameras.main.centerX, frameCenterY,
     );
 
-    this.health = this.add.text(165, textHeight, '2', { fontFamily: 'font1', fontSize: 18 }).setOrigin(0.5);
-    this.bullets = this.add.text(400, textHeight, '6', { fontFamily: 'font1', fontSize: 18 }).setOrigin(0.5);
-    this.food = this.add.text(575, textHeight, '2', { fontFamily: 'font1', fontSize: 18 }).setOrigin(0.5);
-    this.keys = this.add.text(685, textHeight, '0', { fontFamily: 'font1', fontSize: 18 }).setOrigin(0.5);
+    this.addTextItems(frameCenterY);
+    this.healtBar = new HealtBar(this, itemsX.healthBar, frameCenterY - 5);
+    this.addMagazine(frameCenterY + 2);
 
-    this.healtBar = new HealtBar(this, 180, textHeight - 8, 120);
-
+    /* adding events to connect this scene with game scene */
     eventsCenter.on('update-health', this.updateHealth, this);
     eventsCenter.on('update-health-bar', this.updateHealthBar, this);
     eventsCenter.on('update-magazine', this.updateMagazine, this);
 
-    /* стирает прослушивание событий после закрытия сцены */
+    /* destroing events when this game will be shutdowned */
     this.events.on(Phaser.Scenes.Events.SHUTDOWN, () => {
       eventsCenter.off('update-health', this.updateHealth, this);
       eventsCenter.off('update-health-bar', this.updateHealthBar, this);
     });
+  }
 
+  addTextItems(frameCenterY) {
+    const itemsCenterY = frameCenterY + 3;
+    this.health = this.add.text(
+      itemsX.healthText, itemsCenterY, this.startValues.health, textConfig,
+    ).setOrigin(0.5);
+    this.bullets = this.add.text(
+      itemsX.weaponText, itemsCenterY, this.startValues.bullets, textConfig,
+    ).setOrigin(0.5);
+    this.food = this.add.text(
+      itemsX.foodText, itemsCenterY, this.startValues.food, textConfig,
+    ).setOrigin(0.5);
+    this.keys = this.add.text(
+      itemsX.keysText, itemsCenterY, this.startValues.keys, textConfig,
+    ).setOrigin(0.5);
+  }
+
+  addMagazine(frameCenterY) {
     const bulletImg = this.add.image(0, 0, 'bullet');
     const bulletBG = this.add.image(0, 0, 'bulletEmpty');
     this.magazine = new WeaponMagazine(
-      this, magazineSize, magazineSize, 417, textHeight,
+      this, magazineSize, magazineSize, itemsX.weaponMagazine, frameCenterY,
       bulletImg.texture, bulletBG.texture, bulletImg.width,
     );
     bulletImg.destroy();

@@ -13,6 +13,13 @@ import moons from '../../assets/level0/backgr_3.png';
 
 import eventsCenter from '../eventsCenter';
 
+const startValues = {
+  health: 2,
+  bullets: 6,
+  food: 2,
+  keys: 10,
+};
+
 export default class Level extends Phaser.Scene {
   constructor() {
     super('game-scene');
@@ -45,7 +52,7 @@ export default class Level extends Phaser.Scene {
     this.add.image(511, 0, 'b_2').setOrigin(0);
     this.add.image(1023, 0, 'b_3').setOrigin(0);
 
-    this.scene.launch('game-bar');
+    this.scene.launch('game-bar', startValues);
 
     this.count = 0;
     this.health = 100;
