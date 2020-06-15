@@ -49,12 +49,23 @@ export default class Level extends Phaser.Scene {
 
     this.count = 0;
     this.health = 100;
+    this.bullets = 6;
 
     this.input.keyboard.on('keydown_SPACE', () => {
       this.count += 1;
-      this.health -= 10;
+      if (this.health === 0) {
+        this.health = 100;
+      } else {
+        this.health -= 10;
+      }
+      if (this.bullets === 0) {
+        this.bullets = 6;
+      } else {
+        this.bullets -= 1;
+      }
       eventsCenter.emit('update-health', this.count);
       eventsCenter.emit('update-health-bar', this.health);
+      eventsCenter.emit('update-magazine', this.bullets);
     });
 
     this.cursors = this.input.keyboard.createCursorKeys();

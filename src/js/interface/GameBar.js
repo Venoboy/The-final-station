@@ -1,13 +1,13 @@
 /* eslint-disable linebreak-style */
 import Phaser from 'phaser';
 import HealtBar from './HealthBar';
+import WeaponMagazine from './WeaponMagazine';
 
 import gameBar from '../../assets/interface/gameBarFrame.png';
 import bullet from '../../assets/interface/bullet.png';
-import bulletEmpty from '../../assets/interface/bullet_empty.png';
+import bulletEmpty from '../../assets/interface/bulletBG.png';
 import eventsCenter from '../eventsCenter';
 
-const resizeNumber = 0.6;
 const magazineSize = 6;
 
 export default class GameBar extends Phaser.Scene {
@@ -23,12 +23,13 @@ export default class GameBar extends Phaser.Scene {
 
   create() {
     this.frame = this.add.image(0, 0, 'gameBar').setOrigin(0);
-    const width = resizeNumber * this.frame.width;
-    const height = resizeNumber * this.frame.height;
+    const { width } = this.frame;
+    const { height } = this.frame;
     const textHeight = this.cameras.main.height - height / 2 + 4;
     this.frame.setDisplaySize(width, height);
-    // eslint-disable-next-line max-len
-    this.frame.setPosition(this.cameras.main.centerX - width / 2, this.cameras.main.height - height);
+    this.frame.setPosition(
+      this.cameras.main.centerX - width / 2, this.cameras.main.height - height,
+    );
 
     this.health = this.add.text(165, textHeight, '2', { fontFamily: 'font1', fontSize: 18 }).setOrigin(0.5);
     this.bullets = this.add.text(400, textHeight, '6', { fontFamily: 'font1', fontSize: 18 }).setOrigin(0.5);
@@ -39,24 +40,22 @@ export default class GameBar extends Phaser.Scene {
 
     eventsCenter.on('update-health', this.updateHealth, this);
     eventsCenter.on('update-health-bar', this.updateHealthBar, this);
+    eventsCenter.on('update-magazine', this.updateMagazine, this);
 
     /* стирает прослушивание событий после закрытия сцены */
     this.events.on(Phaser.Scenes.Events.SHUTDOWN, () => {
       eventsCenter.off('update-health', this.updateHealth, this);
       eventsCenter.off('update-health-bar', this.updateHealthBar, this);
     });
-    this.initMagazine();
-  }
 
-  initMagazine() {
-    const bulletWidth = this.add.image(0, 0, 'bullet').width * resizeNumber;
-    const containerX = 200;
-    const containerY = 200;
-    const bullets = [];
-    for (let i = 0; i < magazineSize; i += 1) {
-      bullets.push(this.add.image(containerX + (i * bulletWidth), containerY, 'bullet').setScale(resizeNumber));
-    }
-    this.magazine = this.add.container(containerX, containerY, bullets);
+    const bulletImg = this.add.image(0, 0, 'bullet');
+    const bulletBG = this.add.image(0, 0, 'bulletEmpty');
+    this.magazine = new WeaponMagazine(
+      this, magazineSize, magazineSize, 417, textHeight,
+      bulletImg.texture, bulletBG.texture, bulletImg.width,
+    );
+    bulletImg.destroy();
+    bulletBG.destroy();
   }
 
   updateHealth(health) {
@@ -69,6 +68,10 @@ export default class GameBar extends Phaser.Scene {
 
   updateBullets(bullets) {
     this.bullets.text = bullets;
+  }
+
+  updateMagazine(bullets) {
+    this.magazine.updateMagazine(bullets);
   }
 
   updateFood(food) {
