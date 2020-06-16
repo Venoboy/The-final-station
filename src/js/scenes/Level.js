@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 /* eslint-disable camelcase */
 import Phaser from 'phaser';
 

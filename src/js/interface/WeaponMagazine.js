@@ -1,5 +1,3 @@
-/* eslint-disable linebreak-style */
-
 export default class WeaponMagazine {
   constructor(scene, magazineSize, bulletsNumber, x, y, bulletTexture, bgTexture, bulletWidth) {
     this.scene = scene;

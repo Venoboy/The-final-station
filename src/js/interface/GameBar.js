@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 import Phaser from 'phaser';
 import HealtBar from './HealthBar';
 import WeaponMagazine from './WeaponMagazine';
