@@ -18,10 +18,10 @@ export default class Player {
     };
     const compoundBody = Body.create({
       parts: [mainBody, this.sensors.bottom, this.sensors.left, this.sensors.right],
-      frictionStatic: 0.5,
+      frictionStatic: 0.1,
       frictionAir: 0.02,
       friction: 0.1,
-      // slop: 0.2,
+      // slop: 0,
     });
 
     this.player
@@ -29,5 +29,17 @@ export default class Player {
       .setScale(0.5)
       .setFixedRotation()
       .setPosition(x, y);
+
+    this.isTouching = { left: false, right: false, ground: false };
+
+    scene.matter.world.on('beforeupdate', this.resetTouching, this);
+
+    scene.matterCollision.addOnCollideStart({})
+  }
+
+  resetTouching() {
+    this.isTouching.left = false;
+    this.isTouching.right = false;
+    this.isTouching.ground = false;
   }
 }

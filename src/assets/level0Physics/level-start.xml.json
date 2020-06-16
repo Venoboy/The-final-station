@@ -4,9 +4,9 @@
 		"type": "fromPhysicsEditor",
 		"label": "backBody",
 		"isStatic": true,
-		"density": 1,
+		"density": 0.8,
 		"restitution": 0,
-		"friction": 1,
+		"friction": 0.5,
 		"frictionAir": 0.01,
 		"frictionStatic": 1,
 		"collisionFilter": {
