@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import Phaser from 'phaser';
 import HealtBar from './HealthBar';
 import WeaponMagazine from './WeaponMagazine';
@@ -45,8 +46,8 @@ export default class GameBar extends Phaser.Scene {
   }
 
   create() {
-    this.frame = this.add.image(0, 0, 'gameBar');
-    const frameCenterY = this.cameras.main.height - this.frame.height / 2;
+    this.frame = this.add.image(0, 0, 'gameBar').setScale(0.6);
+    const frameCenterY = this.cameras.main.height - (this.frame.height / 2) * 0.6;
     this.frame.setPosition(
       this.cameras.main.centerX, frameCenterY,
     );
