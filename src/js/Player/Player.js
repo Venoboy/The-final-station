@@ -34,7 +34,30 @@ export default class Player {
 
     scene.matter.world.on('beforeupdate', this.resetTouching, this);
 
-    scene.matterCollision.addOnCollideStart({})
+    scene.matterCollision.addOnCollideStart({
+      objectA: [this.sensors.bottom, this.sensors.left, this.sensors.right],
+      callback: this.onSensorCollide,
+      context: this,
+    });
+    scene.matterCollision.addOnCollideActive({
+      objectA: [this.sensors.bottom, this.sensors.left, this.sensors.right],
+      callback: this.onSensorCollide,
+      context: this,
+    });
+  }
+
+  onSensorCollide({ bodyA, bodyB, pair }) {
+    // console.log(pair);
+    if (bodyB.isSensor) return; // We only care about collisions with physical objects
+    if (bodyA === this.sensors.left) {
+      this.isTouching.left = true;
+      // if (pair.separation > 0.5) this.player.x += pair.separation - 0.5;
+    } else if (bodyA === this.sensors.right) {
+      this.isTouching.right = true;
+      // if (pair.separation > 0.5) this.player.x -= pair.separation - 0.5;
+    } else if (bodyA === this.sensors.bottom) {
+      this.isTouching.ground = true;
+    }
   }
 
   resetTouching() {
