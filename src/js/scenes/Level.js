@@ -45,14 +45,15 @@ export default class Level extends Phaser.Scene {
     this.add.image(648, 132, 'bak_1');
     this.add.image(695, 120, 'moons').setScrollFactor(1.15, 1);
     this.add.image(900, 315, 'bak_5').setScrollFactor(0.9, 1);
-    this.add.image(263, 280, 'bak_1');
-    this.add.image(0, 0, 'b_1').setOrigin(0);
+    this.add.image(263, 280, 'bak_1').setScrollFactor(0.9, 1);
+    this.add.image(256, 256, 'b_1');
     this.add.image(950, 350, 'bak_3').setScrollFactor(0.9, 1);
-    this.add.image(511, 0, 'b_2').setOrigin(0);
-    this.add.image(1023, 0, 'b_3').setOrigin(0);
+    this.add.image(767, 256, 'b_2');
+    this.add.image(1279, 256, 'b_3');
 
     this.scene.launch('game-bar', startValues);
 
+    /* start of gamebar testing */
     this.count = 0;
     this.health = 100;
     this.bullets = 6;
@@ -73,6 +74,7 @@ export default class Level extends Phaser.Scene {
       eventsCenter.emit('update-health-bar', this.health);
       eventsCenter.emit('update-magazine', this.bullets);
     });
+    /* end of gamebar testing */
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
