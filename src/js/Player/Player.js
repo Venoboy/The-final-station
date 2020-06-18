@@ -1,11 +1,9 @@
 import Phaser from 'phaser';
 
 export default class Player {
-  constructor(scene, x, y) {
-    this.scene = scene;
-
-    // Create the physics-based player that we will move around and animate
-    this.player = scene.matter.add.image(x, y, 'hero');
+  constructor(scene, x, y, stringId) {
+    this.player = scene.matter.add.image(x, y, stringId);
+    console.log(this.player);
     this.player.setDensity(10);
 
     const { Body, Bodies } = Phaser.Physics.Matter.Matter;
@@ -21,7 +19,6 @@ export default class Player {
       frictionStatic: 0.1,
       frictionAir: 0.02,
       friction: 0.1,
-      // slop: 0,
     });
 
     this.player
@@ -29,6 +26,7 @@ export default class Player {
       .setScale(0.5)
       .setFixedRotation()
       .setPosition(x, y);
+    console.log(this.player);
 
     this.isTouching = {
       left: false,
@@ -51,7 +49,7 @@ export default class Player {
     });
   }
 
-  onSensorCollide({ bodyA, bodyB, pair }) {
+  onSensorCollide({ bodyA, bodyB }) {
     if (bodyB.isSensor) return; // We only care about collisions with physical objects
     if (bodyA === this.sensors.left) {
       this.isTouching.left = true;
