@@ -54,48 +54,9 @@ export default class Level extends Phaser.Scene {
     this.add.image(10, 10, 'hunterImg').setOrigin(0);
 
     this.playerInteraction.create();
-
-
-    this.cursors = this.input.keyboard.createCursorKeys();
-
-    // const controlConfig = {
-    //   camera: this.cameras.main,
-    //   left: this.cursors.left,
-    //   right: this.cursors.right,
-    //   up: this.cursors.up,
-    //   down: this.cursors.down,
-    //   zoomIn: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q),
-    //   zoomOut: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E),
-    //   acceleration: 0.02,
-    //   drag: 0.0005,
-    //   maxSpeed: 0.5,
-    // };
-
-    // this.controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
-
-    // this.camera = this.cameras.main;
-    // this.camera.setBounds(0, 0, 1536, 512);
-    // this.camera.setZoom(1);
-
-    // this.graphics = this.add.graphics({ lineStyle: { width: 4, color: 0xaa00aa } });
-    //
-    // this.line = new Phaser.Geom.Line(0, 200, 600, 200);
-    //
-    // this.text = this.add.text(100, 50, '');
   }
 
-  update(time, delta) {
+  update() {
     this.playerInteraction.update();
-    // this.controls.update(delta);
-
-    // Phaser.Geom.Line.Rotate(this.line, 0.02);
-
-    // this.graphics.clear();
-
-    // this.graphics.strokeLineShape(this.line);
-    //
-    // var angle = Phaser.Geom.Line.Angle(this.line);
-    //
-    // this.text.setText('Line Angle: ' + Phaser.Math.RadToDeg(angle));
   }
 }

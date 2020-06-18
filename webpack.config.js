@@ -69,7 +69,7 @@ module.exports = (env, options) => {
           },
         },
         {
-          test: /\.ico$/,
+          test: /\.(ico)$/,
           loader: 'file-loader?name=[name].[ext]',
         },
         {
@@ -79,14 +79,6 @@ module.exports = (env, options) => {
             options: {
               outputPath: 'assets/fonts/',
             },
-          },
-        },
-        {
-          type: 'javascript/auto',
-          test: /\.json$/,
-          loader: 'file-loader?name=[name].json',
-          options: {
-            outputPath: 'assets/json/',
           },
         },
       ],

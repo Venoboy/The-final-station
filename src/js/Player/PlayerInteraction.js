@@ -1,7 +1,7 @@
 import Player from './Player';
-import level0png from '../../assets/level0Physics/b_1.png';
 import level0json from '../../assets/level0Physics/level-start.xml.json';
-import level0stairsPath from '../../assets/level0Physics/level-start-stairs.xml.json';
+import level0MiddleJson from '../../assets/level0Physics/level-middle.xml.json';
+import level0stairsJson from '../../assets/level0Physics/level-start-stairs.xml.json';
 import hunterPath from '../../assets/level0/hunter_1_0.png';
 
 export default class PlayerInteraction {
@@ -10,7 +10,6 @@ export default class PlayerInteraction {
     this.player = this.playerInstance.player || {};
     this.cursors = {};
     this.scene = scene;
-    this.ground = {};
     this.stairs = {};
     this.isPlayerOnStairs = false;
     this.movingKeysPressed = false;
@@ -35,9 +34,6 @@ export default class PlayerInteraction {
   }
 
   preload() {
-    this.scene.load.image('levelStart', level0png);
-    this.scene.load.json('level0json', level0json);
-    this.scene.load.json('level0stairs', level0stairsPath);
     this.scene.load.image('hero', hunterPath);
   }
 
@@ -46,22 +42,24 @@ export default class PlayerInteraction {
     this.playerInstance = new Player(this.scene, 107, 168, 'hero');
     this.player = this.playerInstance.player;
 
-    const level0shapes = this.scene.cache.json.get('level0json');
     this.player.body.ignoreGravity = false;
-    this.ground = this.scene.matter.add.fromPhysicsEditor(250, 260.65, level0shapes.f_1);
+    this.ground = this.scene.matter.add.fromPhysicsEditor(250, 260.65, level0json.f_1);
     this.ground.frictionStatic = 0.5;
     this.ground.friction = 0.5;
     this.ground.density = 1;
     this.ground.slop = 0.2;
 
-    const level0stairsShape = this.scene.cache.json.get('level0stairs');
-    this.stairs = this.scene.matter.add.fromPhysicsEditor(486, 235, level0stairsShape.f_1);
+    this.groundMiddle = this.scene.matter.add.fromPhysicsEditor(750, 260, level0MiddleJson.f_2);
+
+    // const level0stairsShape = this.scene.cache.json.get('level0stairs');
+    console.log(level0json);
+    this.stairs = this.scene.matter.add.fromPhysicsEditor(486, 235, level0stairsJson.f_1);
     this.stairs.collisionFilter.mask = 2;
 
     this.camera = this.scene.cameras.main;
     this.camera.startFollow(this.player, false, 0.5, 0.5);
     this.camera.setBounds(0, 0, 1536, 512);
-    this.camera.setZoom(3);
+    this.camera.setZoom(1);
 
     this.cursors = this.scene.input.keyboard.createCursorKeys();
   }
