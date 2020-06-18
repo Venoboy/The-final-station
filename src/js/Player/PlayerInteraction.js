@@ -58,7 +58,10 @@ export default class PlayerInteraction {
     this.stairs = this.scene.matter.add.fromPhysicsEditor(486, 235, level0stairsShape.f_1);
     this.stairs.collisionFilter.mask = 2;
 
-    this.scene.cameras.main.startFollow(this.player, false, 0.5, 0.5);
+    this.camera = this.scene.cameras.main;
+    this.camera.startFollow(this.player, false, 0.5, 0.5);
+    this.camera.setBounds(0, 0, 1536, 512);
+    this.camera.setZoom(3);
 
     this.cursors = this.scene.input.keyboard.createCursorKeys();
   }

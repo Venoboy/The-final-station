@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import PhaserMatterCollisionPlugin from 'phaser-matter-collision-plugin';
 
-import PlayerInteraction from './js/Player/PlayerInteraction';
+import Level from './js/scenes/Level';
 
 const config = {
   type: Phaser.AUTO,
@@ -34,25 +34,22 @@ const config = {
       },
     ],
   },
-  scene: {
-    preload,
-    create,
-    update,
-  },
+  pixelArt: true,
+  scene: [Level],
 };
 
-const game = new Phaser.Game(config);
-let playerInteraction;
+export default new Phaser.Game(config);
+// let playerInteraction;
 
-function preload() {
-  playerInteraction = new PlayerInteraction(this.scene.scene);
-  playerInteraction.preload();
-}
-
-function create() {
-  playerInteraction.create();
-}
-
-function update() {
-  playerInteraction.update();
-}
+// function preload() {
+//   playerInteraction = new PlayerInteraction(this.scene.scene);
+//   playerInteraction.preload();
+// }
+//
+// function create() {
+//   playerInteraction.create();
+// }
+//
+// function update() {
+//   playerInteraction.update();
+// }
