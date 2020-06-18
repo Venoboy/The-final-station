@@ -54,12 +54,25 @@ let ground;
 let stairs;
 let isPlayerOnStairs;
 let playerInstance;
+let movingKeysPressed = false;
+let lastStep = false;
+
+const LAST_STEP_LENGTH = 1.5;
 
 
 function playerStairsOverlap(bodyA, bodyB, collisionInfo) {
-  console.log(bodyA, bodyB, collisionInfo);
+  // console.log(bodyA, bodyB, collisionInfo);
   const playerBody = bodyA;
   playerBody.ignoreGravity = true;
+}
+
+function setLastStep() {
+  lastStep = true;
+}
+
+function checkLastStep(bodyA, bodyB, collisionInfo) {
+  // console.log(collisionInfo.depth, bodyA);
+  return collisionInfo.depth < LAST_STEP_LENGTH;
 }
 
 function collisionEndFun(eventData) {
@@ -128,15 +141,20 @@ function create() {
 }
 
 function update() {
+  this.matter.overlap(player.body, stairs, setLastStep, checkLastStep);
+  console.log(lastStep);
   if (cursors.left.isDown) {
+    movingKeysPressed = true;
     // player.thrustBack(0.0005);
-    player.setVelocityX(-0.8);
+    player.setVelocityX(-1.8);
     // console.log('left', player.body.velocity);
   } else if (cursors.right.isDown) {
+    movingKeysPressed = true;
     // player.thrust(0.0005);
-    player.setVelocityX(0.8);
+    player.setVelocityX(1.8);
     // console.log('right');
   } else {
+    movingKeysPressed = false;
     player.setVelocityX(0);
     // this.matter.world.on('collisionactive', (e) => {
     //   console.log(e);
@@ -145,7 +163,7 @@ function update() {
       // player.setToSleep();
     }
     if (isPlayerOnStairs) {
-      if (cursors.up.isDown) {
+      if (cursors.up.isDown && !lastStep) {
         // player.thrustLeft(0.0001);
         player.setVelocityY(-0.4);
       } else if (cursors.down.isDown) {
@@ -157,6 +175,8 @@ function update() {
     }
   }
   player.body.ignoreGravity = false;
+  player.body.ignoreGravity = !movingKeysPressed;
+
   if (playerInstance.isTouching.ground) {
     player.body.ignoreGravity = true;
   }
@@ -166,7 +186,7 @@ function update() {
   // }
 
   isPlayerOnStairs = this.matter.overlap(player.body, stairs, playerStairsOverlap);
-  console.log(isPlayerOnStairs);
+  lastStep = false;
   // console.log(isOverlap);
   // console.log(this.matter.intersectBody(player.body, stairs));
 }
