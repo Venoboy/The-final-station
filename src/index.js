@@ -47,7 +47,7 @@ var config = {
   },
 };
 
-var game = new Phaser.Game(config);
+const game = new Phaser.Game(config);
 let cursors;
 let player;
 let ground;
@@ -58,9 +58,11 @@ let movingKeysPressed = false;
 let lastStep = false;
 
 const LAST_STEP_LENGTH = 1.5;
+const PLAYER_SPEED_X = 1.8;
+const PLAYER_SPEED_Y = 0.8;
 
 
-function playerStairsOverlap(bodyA, bodyB, collisionInfo) {
+function playerStairsOverlap(bodyA) {
   // console.log(bodyA, bodyB, collisionInfo);
   const playerBody = bodyA;
   playerBody.ignoreGravity = true;
@@ -73,20 +75,6 @@ function setLastStep() {
 function checkLastStep(bodyA, bodyB, collisionInfo) {
   // console.log(collisionInfo.depth, bodyA);
   return collisionInfo.depth < LAST_STEP_LENGTH;
-}
-
-function collisionEndFun(eventData) {
-  // console.log(eventData.pairs[0]);
-  const {
-    bodyA, bodyB, gameObjectA, gameObjectB, pair
-  } = eventData;
-  if (bodyA && bodyB) {
-    if (bodyA.label === ('Body' || 'stairs-example') && (bodyB.label === ('Body' || 'stairs-example'))) {
-      console.log(bodyA, bodyB);
-      bodyA.setVelocityY(0);
-      bodyB.setVelocityY(0);
-    }
-  }
 }
 
 function preload() {
@@ -105,88 +93,49 @@ function create() {
   ground = this.matter.add.fromPhysicsEditor(250, 260.65, level0shapes.f_1);
   ground.frictionStatic = 0.5;
   ground.friction = 0.5;
-  const groundElements = Phaser.Physics.Matter.PhysicsEditorParser
-    .parseFixture(level0shapes.f_1.fixtures[1]);
-  // console.log(groundElements);
   ground.density = 1;
   ground.slop = 0.2;
 
   const level0stairsShape = this.cache.json.get('level0stairs');
   stairs = this.matter.add.fromPhysicsEditor(486, 235, level0stairsShape.f_1);
   stairs.collisionFilter.mask = 2;
-  // this.setCollisionGroup(stairs, 1);
-  // console.log(stairs);
 
   playerInstance = new Player(this, 107, 168);
-  // console.log(playerInstance);
   player = playerInstance.player;
-  // player.setDensity(0.01);
 
-  // player = this.matter.add.image(107, 168, 'hero');
-  // player.setScale(0.5, 0.5);
-  // player.setFriction(1, 0.01, 0);
-  // player.setMass(200);
-  // player.setFixedRotation();
 
   this.cameras.main.startFollow(player, false, 0.5, 0.5);
 
   cursors = this.input.keyboard.createCursorKeys();
-
-  this.matter.world.on('collisionend', collisionEndFun);
-  this.matterCollision.addOnCollideEnd({
-    objectA: player.body,
-    objectB: stairs,
-    callback: collisionEndFun,
-  });
 }
 
 function update() {
   this.matter.overlap(player.body, stairs, setLastStep, checkLastStep);
-  console.log(lastStep);
   if (cursors.left.isDown) {
     movingKeysPressed = true;
-    // player.thrustBack(0.0005);
-    player.setVelocityX(-1.8);
-    // console.log('left', player.body.velocity);
+    player.setVelocityX(-PLAYER_SPEED_X);
   } else if (cursors.right.isDown) {
     movingKeysPressed = true;
-    // player.thrust(0.0005);
-    player.setVelocityX(1.8);
-    // console.log('right');
+    player.setVelocityX(PLAYER_SPEED_X);
   } else {
     movingKeysPressed = false;
     player.setVelocityX(0);
-    // this.matter.world.on('collisionactive', (e) => {
-    //   console.log(e);
-    // })
-    if (!player.body.velocity.y) {
-      // player.setToSleep();
-    }
     if (isPlayerOnStairs) {
       if (cursors.up.isDown && !lastStep) {
-        // player.thrustLeft(0.0001);
-        player.setVelocityY(-0.4);
+        player.setVelocityY(-PLAYER_SPEED_Y);
       } else if (cursors.down.isDown) {
-        // player.thrustRight(0.0001);
-        player.setVelocityY(0.4);
+        player.setVelocityY(PLAYER_SPEED_Y);
       } else {
         player.setVelocityY(0);
       }
     }
   }
   player.body.ignoreGravity = false;
-  player.body.ignoreGravity = !movingKeysPressed;
-
-  if (playerInstance.isTouching.ground) {
-    player.body.ignoreGravity = true;
-  }
-  // console.log(playerInstance.isTouching.ground);
-  // if (player.body.force.y < 0) {
-  //   player.applyForce({ x: 0, y: -player.body.force.y });
-  // }
+  player.body.ignoreGravity = !movingKeysPressed
+    && playerInstance.isTouching.body
+    && !playerInstance.isTouching.left
+    && !playerInstance.isTouching.right;
 
   isPlayerOnStairs = this.matter.overlap(player.body, stairs, playerStairsOverlap);
   lastStep = false;
-  // console.log(isOverlap);
-  // console.log(this.matter.intersectBody(player.body, stairs));
 }
