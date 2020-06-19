@@ -19,6 +19,8 @@ const startValues = {
   keys: 10,
 };
 
+const heightPerScreen = 350;
+
 export default class Level extends Phaser.Scene {
   constructor() {
     super('game-scene');
@@ -81,6 +83,7 @@ export default class Level extends Phaser.Scene {
     /* end of gamebar testing */
 
     this.cursors = this.input.keyboard.createCursorKeys();
+    console.log(this.cameras.main.width);
 
     const controlConfig = {
       camera: this.cameras.main,
@@ -99,7 +102,7 @@ export default class Level extends Phaser.Scene {
 
     this.camera = this.cameras.main;
     this.camera.setBounds(0, 0, 1536, 512);
-    this.camera.setZoom(2);
+    this.camera.setZoom(this.camera.width / heightPerScreen);
   }
 
   update(time, delta) {

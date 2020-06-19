@@ -8,12 +8,21 @@ import bullet from '../../assets/interface/bullet.png';
 import bulletEmpty from '../../assets/interface/bulletBG.png';
 import eventsCenter from '../eventsCenter';
 
+const baseCanvasWidth = 1128;
 const magazineSize = 6;
 const textConfig = {
   fontFamily: 'font1',
   fontSize: 18,
 };
 /* x positions of game bar items */
+// const itemsX = {
+//   healthText: 165,
+//   healthBar: 180,
+//   weaponText: 400,
+//   weaponMagazine: 420,
+//   foodText: 575,
+//   keysText: 685,
+// };
 const itemsX = {
   healthText: 165,
   healthBar: 180,
@@ -47,14 +56,10 @@ export default class GameBar extends Phaser.Scene {
 
   create() {
     this.frame = this.add.image(0, 0, 'gameBar').setScale(0.6);
-    const HWProportion = this.frame.height / this.frame.width;
-    const a = 701616;
-    const canvasWidth = (document.querySelector('canvas').style.width).slice(0, -2);
-    console.log(canvasWidth);
-    this.frame.displayWidth = a / canvasWidth;
-    console.log(this.frame.displayWidth);
-    this.frame.displayHeight = this.frame.displayWidth * HWProportion;
-    const frameCenterY = this.cameras.main.height - (this.frame.displayHeight / 2);
+    const zoom = baseCanvasWidth / document.querySelector('canvas').style.width.slice(0, -2);
+    const yOffset = (this.cameras.main.height - (this.cameras.main.height / zoom)) / 2;
+    this.cameras.main.setZoom(zoom);
+    const frameCenterY = this.cameras.main.height - (this.frame.displayHeight / 2) - yOffset;
     this.frame.setPosition(
       this.cameras.main.centerX, frameCenterY,
     );
@@ -103,7 +108,6 @@ export default class GameBar extends Phaser.Scene {
   }
 
   updateHealth(health) {
-    console.log(this.frame.displayWidth);
     this.health.text = health;
   }
 
