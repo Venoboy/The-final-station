@@ -9,8 +9,10 @@
     "autoprefixer": "latest",
     "identity-obj-proxy": "^3.0.0",
     "phaser": "^3.23.0",
+    "phaser-matter-collision-plugin": "^0.10.2",
     "webpack": "^4.42.1",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^3.3.11",
+    "xml-loader": "^1.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.6",

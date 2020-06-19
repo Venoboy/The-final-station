@@ -69,7 +69,7 @@ module.exports = (env, options) => {
           },
         },
         {
-          test: /\.ico$/,
+          test: /\.(ico)$/,
           loader: 'file-loader?name=[name].[ext]',
         },
         {

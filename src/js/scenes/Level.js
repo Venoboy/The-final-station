@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import Phaser from 'phaser';
 
+import PlayerInteraction from '../Player/PlayerInteraction';
 import b_1 from '../../assets/level0/b_1.png';
 import b_2 from '../../assets/level0/b_2.png';
 import b_3 from '../../assets/level0/b_3.png';
@@ -22,6 +23,7 @@ const startValues = {
 export default class Level extends Phaser.Scene {
   constructor() {
     super('game-scene');
+    this.playerInteraction = {};
   }
 
   init() {
@@ -38,6 +40,9 @@ export default class Level extends Phaser.Scene {
     this.load.image('bak_2', bak_2);
     this.load.image('bak_3', bak_3);
     this.load.image('bak_5', bak_5);
+
+    this.playerInteraction = new PlayerInteraction(this.scene.scene);
+    this.playerInteraction.preload();
   }
 
   create() {
@@ -78,27 +83,10 @@ export default class Level extends Phaser.Scene {
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
-    const controlConfig = {
-      camera: this.cameras.main,
-      left: this.cursors.left,
-      right: this.cursors.right,
-      up: this.cursors.up,
-      down: this.cursors.down,
-      zoomIn: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q),
-      zoomOut: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E),
-      acceleration: 0.02,
-      drag: 0.0005,
-      maxSpeed: 0.5,
-    };
-
-    this.controls = new Phaser.Cameras.Controls.SmoothedKeyControl(controlConfig);
-
-    this.camera = this.cameras.main;
-    this.camera.setBounds(0, 0, 1536, 512);
-    this.camera.setZoom(2);
+    this.playerInteraction.create();
   }
 
-  update(time, delta) {
-    this.controls.update(delta);
+  update() {
+    this.playerInteraction.update();
   }
 }
