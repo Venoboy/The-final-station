@@ -2,12 +2,12 @@ import Phaser from 'phaser';
 import PhaserMatterCollisionPlugin from 'phaser-matter-collision-plugin';
 
 import Level from './js/scenes/Level';
+import GameBar from './js/interface/GameBar';
 
 const config = {
   type: Phaser.AUTO,
-  width: 512,
+  width: 800,
   height: 512,
-  backgroundColor: '#c4dedf',
   physics: {
     default: 'matter',
     matter: {
@@ -18,7 +18,7 @@ const config = {
       debug: {
         renderFill: false,
         showInternalEdges: true,
-        showConvexHulls: true,
+        showConvexHulls: false,
         showBody: true,
         showStaticBody: true,
       },
@@ -35,21 +35,11 @@ const config = {
     ],
   },
   pixelArt: true,
-  scene: [Level],
+  scene: [Level, GameBar],
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+  },
 };
 
 export default new Phaser.Game(config);
-// let playerInteraction;
-
-// function preload() {
-//   playerInteraction = new PlayerInteraction(this.scene.scene);
-//   playerInteraction.preload();
-// }
-//
-// function create() {
-//   playerInteraction.create();
-// }
-//
-// function update() {
-//   playerInteraction.update();
-// }

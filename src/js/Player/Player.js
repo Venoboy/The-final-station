@@ -3,7 +3,6 @@ import Phaser from 'phaser';
 export default class Player {
   constructor(scene, x, y, stringId) {
     this.player = scene.matter.add.image(x, y, stringId);
-    console.log(this.player);
     this.player.setDensity(10);
 
     const { Body, Bodies } = Phaser.Physics.Matter.Matter;
@@ -23,10 +22,9 @@ export default class Player {
 
     this.player
       .setExistingBody(compoundBody)
-      .setScale(0.5)
+      .setScale(0.6)
       .setFixedRotation()
       .setPosition(x, y);
-    console.log(this.player);
 
     this.isTouching = {
       left: false,
