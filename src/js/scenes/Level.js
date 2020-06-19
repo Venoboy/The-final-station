@@ -59,6 +59,10 @@ export default class Level extends Phaser.Scene {
     this.bullets = 6;
 
     this.input.keyboard.on('keydown_SPACE', () => {
+      console.log(window.devicePixelRatio);
+      console.log(window.innerWidth);
+      console.log(window.outerWidth);
+      console.log(document.querySelector('canvas').style.width);
       this.count += 1;
       if (this.health === 0) {
         this.health = 100;

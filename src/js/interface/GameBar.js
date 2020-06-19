@@ -47,7 +47,14 @@ export default class GameBar extends Phaser.Scene {
 
   create() {
     this.frame = this.add.image(0, 0, 'gameBar').setScale(0.6);
-    const frameCenterY = this.cameras.main.height - (this.frame.height / 2) * 0.6;
+    const HWProportion = this.frame.height / this.frame.width;
+    const a = 701616;
+    const canvasWidth = (document.querySelector('canvas').style.width).slice(0, -2);
+    console.log(canvasWidth);
+    this.frame.displayWidth = a / canvasWidth;
+    console.log(this.frame.displayWidth);
+    this.frame.displayHeight = this.frame.displayWidth * HWProportion;
+    const frameCenterY = this.cameras.main.height - (this.frame.displayHeight / 2);
     this.frame.setPosition(
       this.cameras.main.centerX, frameCenterY,
     );
@@ -96,6 +103,7 @@ export default class GameBar extends Phaser.Scene {
   }
 
   updateHealth(health) {
+    console.log(this.frame.displayWidth);
     this.health.text = health;
   }
 
