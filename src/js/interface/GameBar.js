@@ -8,7 +8,7 @@ import bullet from '../../assets/interface/bullet.png';
 import bulletEmpty from '../../assets/interface/bulletBG.png';
 import eventsCenter from '../eventsCenter';
 
-const baseCanvasWidth = 2100;
+// const baseCanvasWidth = 2100;
 const magazineSize = 6;
 const textConfig = {
   fontFamily: 'font1',
@@ -46,14 +46,13 @@ export default class GameBar extends Phaser.Scene {
   }
 
   create() {
-    this.frame = this.add.image(0, 0, 'gameBar').setScale(0.6);
-    const zoom = baseCanvasWidth / document.querySelector('canvas').style.width.slice(0, -2);
-    const yOffset = (this.cameras.main.height - (this.cameras.main.height / zoom)) / 2;
-    this.cameras.main.setZoom(zoom);
-    const frameCenterY = this.cameras.main.height - (this.frame.displayHeight / 2) - yOffset;
-    this.frame.setPosition(
-      this.cameras.main.centerX, frameCenterY,
-    );
+    this.frame = this.add.image(0, 0, 'gameBar').setScale(0.8);
+    // const zoom = baseCanvasWidth / document.querySelector('canvas').style.width.slice(0, -2);
+    // const yOffset = (this.cameras.main.height - (this.cameras.main.height / zoom)) / 2;
+    // this.cameras.main.setZoom(zoom);
+    // const frameCenterY = this.cameras.main.height - (this.frame.displayHeight / 2) - yOffset;
+    const frameCenterY = this.cameras.main.height - (this.frame.displayHeight / 2);
+    this.frame.setPosition(this.cameras.main.centerX, frameCenterY);
 
     this.addTextItems(frameCenterY);
     const helthBarOffset = this.calculateOffset(percentageOffsets.healthBar);
