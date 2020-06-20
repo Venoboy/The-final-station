@@ -8,28 +8,19 @@ import bullet from '../../assets/interface/bullet.png';
 import bulletEmpty from '../../assets/interface/bulletBG.png';
 import eventsCenter from '../eventsCenter';
 
-const baseCanvasWidth = 1128;
+const baseCanvasWidth = 2100;
 const magazineSize = 6;
 const textConfig = {
   fontFamily: 'font1',
   fontSize: 18,
 };
-/* x positions of game bar items */
-// const itemsX = {
-//   healthText: 165,
-//   healthBar: 180,
-//   weaponText: 400,
-//   weaponMagazine: 420,
-//   foodText: 575,
-//   keysText: 685,
-// };
-const itemsX = {
-  healthText: 165,
-  healthBar: 180,
-  weaponText: 400,
-  weaponMagazine: 420,
-  foodText: 575,
-  keysText: 685,
+const percentageOffsets = {
+  healthText: 0.1206,
+  healthBar: 0.1447,
+  weaponText: 0.4984,
+  weaponMagazine: 0.5305,
+  foodText: 0.7797,
+  keysText: 0.9566,
 };
 /* default values of game bar items */
 const defaultValues = {
@@ -65,7 +56,8 @@ export default class GameBar extends Phaser.Scene {
     );
 
     this.addTextItems(frameCenterY);
-    this.healtBar = new HealtBar(this, itemsX.healthBar, frameCenterY - 5);
+    const helthBarOffset = this.calculateOffset(percentageOffsets.healthBar);
+    this.healtBar = new HealtBar(this, helthBarOffset, frameCenterY - 5);
     this.addMagazine(frameCenterY + 2);
 
     /* adding events to connect this scene with game scene */
@@ -81,30 +73,40 @@ export default class GameBar extends Phaser.Scene {
   }
 
   addTextItems(frameCenterY) {
+    const helthOffset = this.calculateOffset(percentageOffsets.healthText);
+    const bulletsOffset = this.calculateOffset(percentageOffsets.weaponText);
+    const foodOffset = this.calculateOffset(percentageOffsets.foodText);
+    const keysOffset = this.calculateOffset(percentageOffsets.keysText);
     const itemsCenterY = frameCenterY + 3;
     this.health = this.add.text(
-      itemsX.healthText, itemsCenterY, this.startValues.health, textConfig,
+      helthOffset, itemsCenterY, this.startValues.health, textConfig,
     ).setOrigin(0.5);
     this.bullets = this.add.text(
-      itemsX.weaponText, itemsCenterY, this.startValues.bullets, textConfig,
+      bulletsOffset, itemsCenterY, this.startValues.bullets, textConfig,
     ).setOrigin(0.5);
     this.food = this.add.text(
-      itemsX.foodText, itemsCenterY, this.startValues.food, textConfig,
+      foodOffset, itemsCenterY, this.startValues.food, textConfig,
     ).setOrigin(0.5);
     this.keys = this.add.text(
-      itemsX.keysText, itemsCenterY, this.startValues.keys, textConfig,
+      keysOffset, itemsCenterY, this.startValues.keys, textConfig,
     ).setOrigin(0.5);
   }
 
   addMagazine(frameCenterY) {
+    const magazineOffset = this.calculateOffset(percentageOffsets.weaponMagazine);
     const bulletImg = this.add.image(0, 0, 'bullet');
     const bulletBG = this.add.image(0, 0, 'bulletEmpty');
     this.magazine = new WeaponMagazine(
-      this, magazineSize, magazineSize, itemsX.weaponMagazine, frameCenterY,
+      this, magazineSize, magazineSize, magazineOffset, frameCenterY,
       bulletImg.texture, bulletBG.texture, bulletImg.width,
     );
     bulletImg.destroy();
     bulletBG.destroy();
+  }
+
+  calculateOffset(percentageOffset) {
+    return (window.innerWidth - this.frame.displayWidth) / 2
+    + (percentageOffset * this.frame.displayWidth);
   }
 
   updateHealth(health) {

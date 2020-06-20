@@ -4,8 +4,8 @@ import GameBar from './js/interface/GameBar';
 
 const config = {
   type: Phaser.AUTO,
-  width: 800,
-  height: 512,
+  width: window.innerWidth,
+  height: window.innerHeight,
   physics: {
     default: 'arcade',
     arcade: {
