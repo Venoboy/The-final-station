@@ -12,7 +12,7 @@ import eventsCenter from '../eventsCenter';
 const magazineSize = 6;
 const textConfig = {
   fontFamily: 'font1',
-  fontSize: 18,
+  fontSize: 24,
 };
 const percentageOffsets = {
   healthText: 0.1206,
@@ -47,17 +47,13 @@ export default class GameBar extends Phaser.Scene {
 
   create() {
     this.frame = this.add.image(0, 0, 'gameBar').setScale(0.8);
-    // const zoom = baseCanvasWidth / document.querySelector('canvas').style.width.slice(0, -2);
-    // const yOffset = (this.cameras.main.height - (this.cameras.main.height / zoom)) / 2;
-    // this.cameras.main.setZoom(zoom);
-    // const frameCenterY = this.cameras.main.height - (this.frame.displayHeight / 2) - yOffset;
     const frameCenterY = this.cameras.main.height - (this.frame.displayHeight / 2);
     this.frame.setPosition(this.cameras.main.centerX, frameCenterY);
 
-    this.addTextItems(frameCenterY);
+    this.addTextItems(frameCenterY + 1);
     const helthBarOffset = this.calculateOffset(percentageOffsets.healthBar);
-    this.healtBar = new HealtBar(this, helthBarOffset, frameCenterY - 5);
-    this.addMagazine(frameCenterY + 2);
+    this.healtBar = new HealtBar(this, helthBarOffset, frameCenterY - 6);
+    this.addMagazine(frameCenterY + 4);
 
     /* adding events to connect this scene with game scene */
     eventsCenter.on('update-health', this.updateHealth, this);

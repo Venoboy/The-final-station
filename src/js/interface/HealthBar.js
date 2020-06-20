@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 
 export default class HealthBar {
-  constructor(scene, x, y, width = 120, height = 15, maxHealth = 100) {
+  constructor(scene, x, y, width = 160, height = 20, maxHealth = 100) {
     this.bar = new Phaser.GameObjects.Graphics(scene);
 
     this.x = x;
