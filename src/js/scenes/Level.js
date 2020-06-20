@@ -10,7 +10,7 @@ import bak_3 from '../../assets/level0/bak_3.png';
 import bak_5 from '../../assets/level0/bak_5.png';
 import moons from '../../assets/level0/backgr_3.png';
 
-import eventsCenter from '../eventsCenter';
+import { intrefaceTestInLevel } from '../test/interfaceTest';
 
 const startValues = {
   health: 2,
@@ -55,28 +55,7 @@ export default class Level extends Phaser.Scene {
 
     this.scene.launch('game-bar', startValues);
 
-    /* start of gamebar testing */
-    this.count = 0;
-    this.health = 100;
-    this.bullets = 6;
-
-    this.input.keyboard.on('keydown_SPACE', () => {
-      this.count += 1;
-      if (this.health === 0) {
-        this.health = 100;
-      } else {
-        this.health -= 10;
-      }
-      if (this.bullets === 0) {
-        this.bullets = 6;
-      } else {
-        this.bullets -= 1;
-      }
-      eventsCenter.emit('update-health', this.count);
-      eventsCenter.emit('update-health-bar', this.health);
-      eventsCenter.emit('update-magazine', this.bullets);
-    });
-    /* end of gamebar testing */
+    intrefaceTestInLevel(this);
 
     this.cursors = this.input.keyboard.createCursorKeys();
 

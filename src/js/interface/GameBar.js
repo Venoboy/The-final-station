@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 import Phaser from 'phaser';
 import HealtBar from './HealthBar';
 import WeaponMagazine from './WeaponMagazine';
@@ -6,7 +5,8 @@ import WeaponMagazine from './WeaponMagazine';
 import gameBar from '../../assets/interface/gameBarFrame.png';
 import bullet from '../../assets/interface/bullet.png';
 import bulletBG from '../../assets/interface/bulletBG.png';
-import eventsCenter from '../eventsCenter';
+
+import { intarfaceTestInGameBar } from '../test/interfaceTest';
 
 const magazineSize = 6;
 const textConfig = {
@@ -47,19 +47,8 @@ export default class GameBar extends Phaser.Scene {
   create() {
     this.addItems();
     this.changePosition();
-
-    /* adding events to connect this scene with game scene */
-    eventsCenter.on('update-health', this.updateHealth, this);
-    eventsCenter.on('update-health-bar', this.updateHealthBar, this);
-    eventsCenter.on('update-magazine', this.updateMagazine, this);
-
-    /* destroing events when this game will be shutdowned */
-    this.events.on(Phaser.Scenes.Events.SHUTDOWN, () => {
-      eventsCenter.off('update-health', this.updateHealth, this);
-      eventsCenter.off('update-health-bar', this.updateHealthBar, this);
-    });
-
     this.scale.on('resize', this.changePosition, this);
+    intarfaceTestInGameBar(this);
   }
 
   changePosition() {
