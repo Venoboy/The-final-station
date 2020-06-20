@@ -27,8 +27,8 @@ export default class Level extends Phaser.Scene {
   }
 
   init() {
-    this.scale.scaleMode = Phaser.Scale.SHOW_ALL;
-    this.scale.pageAlignVertically = true;
+    // this.scale.scaleMode = Phaser.Scale.SHOW_ALL;
+    this.scale.pageAlignVertically = false;
   }
 
   preload() {
@@ -61,10 +61,6 @@ export default class Level extends Phaser.Scene {
     this.bullets = 6;
 
     this.input.keyboard.on('keydown_SPACE', () => {
-      console.log(window.devicePixelRatio);
-      console.log(window.innerWidth);
-      console.log(window.outerWidth);
-      console.log(document.querySelector('canvas').style.width);
       this.count += 1;
       if (this.health === 0) {
         this.health = 100;
@@ -83,7 +79,6 @@ export default class Level extends Phaser.Scene {
     /* end of gamebar testing */
 
     this.cursors = this.input.keyboard.createCursorKeys();
-    console.log(this.cameras.main.width);
 
     const controlConfig = {
       camera: this.cameras.main,

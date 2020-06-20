@@ -4,8 +4,6 @@ import GameBar from './js/interface/GameBar';
 
 const config = {
   type: Phaser.AUTO,
-  width: window.innerWidth,
-  height: window.innerHeight,
   physics: {
     default: 'arcade',
     arcade: {
@@ -15,9 +13,16 @@ const config = {
   pixelArt: true,
   scene: [Level, GameBar],
   scale: {
-    mode: Phaser.Scale.FIT,
-    autoCenter: Phaser.Scale.CENTER_BOTH,
+    mode: Phaser.Scale.RESIZE,
+    width: window.innerWidth,
+    height: window.innerHeight,
   },
 };
 
-export default new Phaser.Game(config);
+const game = new Phaser.Game(config);
+
+export default game;
+
+// window.addEventListener('resize', () => {
+//   game.scale.resize(window.innerWidth, window.innerHeight);
+// }, false);

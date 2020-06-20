@@ -44,4 +44,10 @@ export default class HealthBar {
 
     this.bar.fillRect(this.x, this.y, newWidth, this.height);
   }
+
+  setPosition(x, y) {
+    this.x = x;
+    this.y = y;
+    this.draw();
+  }
 }
