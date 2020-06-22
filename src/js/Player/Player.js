@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import Phaser from 'phaser';
 
 export default class Player {
@@ -12,9 +13,11 @@ export default class Player {
       bottom: Bodies.rectangle(w * 0.5, h, w * 0.25, 2, { isSensor: true }),
       left: Bodies.rectangle(0, h * 0.5, 2, h * 0.1, { isSensor: true }),
       right: Bodies.rectangle(w, h * 0.5, 2, h * 0.1, { isSensor: true }),
+      around: Bodies.circle(w * 0.5, h * 0.5, w * 0.6, { isSensor: true }),
     };
     const compoundBody = Body.create({
-      parts: [this.mainBody, this.sensors.bottom, this.sensors.left, this.sensors.right],
+      parts: [this.mainBody, this.sensors.bottom, this.sensors.left, this.sensors.right,
+        this.sensors.around],
       frictionStatic: 0.1,
       frictionAir: 0.02,
       friction: 0.1,
@@ -36,12 +39,19 @@ export default class Player {
     scene.matter.world.on('beforeupdate', this.resetTouching, this);
 
     scene.matterCollision.addOnCollideStart({
-      objectA: [this.sensors.bottom, this.sensors.left, this.sensors.right, this.mainBody],
+      objectA: [this.sensors.bottom, this.sensors.left, this.sensors.right, this.mainBody,
+        this.sensors.around],
       callback: this.onSensorCollide,
       context: this,
     });
     scene.matterCollision.addOnCollideActive({
-      objectA: [this.sensors.bottom, this.sensors.left, this.sensors.right, this.mainBody],
+      objectA: [this.sensors.bottom, this.sensors.left, this.sensors.right, this.mainBody,
+        this.sensors.around],
+      callback: this.onSensorCollide,
+      context: this,
+    });
+    scene.matterCollision.addOnCollideEnd({
+      objectA: [this.sensors.around],
       callback: this.onSensorCollide,
       context: this,
     });

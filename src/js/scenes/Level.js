@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable camelcase */
 import Phaser from 'phaser';
 
@@ -12,6 +13,9 @@ import bak_5 from '../../assets/level0/bak_5.png';
 import moons from '../../assets/level0/backgr_3.png';
 
 import { intrefaceTestInLevel } from '../test/interfaceTest';
+
+import InteractionObject from '../interactionObjects/InteractionObject';
+import door from '../../assets/interaction-objects/Door1.png';
 
 const startValues = {
   health: 2,
@@ -43,6 +47,8 @@ export default class Level extends Phaser.Scene {
     this.load.image('bak_3', bak_3);
     this.load.image('bak_5', bak_5);
 
+    this.load.image('door', door);
+
     this.playerInteraction = new PlayerInteraction(this.scene.scene);
     this.playerInteraction.preload();
   }
@@ -57,6 +63,8 @@ export default class Level extends Phaser.Scene {
     this.add.image(950, 350, 'bak_3').setScrollFactor(0.9, 1);
     this.add.image(767, 256, 'b_2');
     this.add.image(1279, 256, 'b_3');
+
+    this.door = new InteractionObject(this, 189, 178, 'door');
 
     this.scene.launch('game-bar', startValues);
 
