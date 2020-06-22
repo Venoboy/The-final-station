@@ -65,6 +65,10 @@ export default class Level extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys();
 
     this.playerInteraction.create();
+
+    this.camera = this.cameras.main;
+    this.camera.setBounds(0, 0, 1536, 512);
+    this.camera.setZoom(this.camera.width / heightPerScreen);
   }
 
   update() {
