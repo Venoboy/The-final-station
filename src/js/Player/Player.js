@@ -12,9 +12,11 @@ export default class Player {
       bottom: Bodies.rectangle(w * 0.5, h, w * 0.25, 2, { isSensor: true }),
       left: Bodies.rectangle(0, h * 0.5, 2, h * 0.1, { isSensor: true }),
       right: Bodies.rectangle(w, h * 0.5, 2, h * 0.1, { isSensor: true }),
+      around: Bodies.rectangle(w * 0.5, h * 0.5, w * 1.5, h * 1.5, { isSensor: true }),
     };
     const compoundBody = Body.create({
-      parts: [this.mainBody, this.sensors.bottom, this.sensors.left, this.sensors.right],
+      parts: [this.mainBody, this.sensors.bottom, this.sensors.left,
+        this.sensors.right, this.sensors.around],
       frictionStatic: 0.1,
       frictionAir: 0.02,
       friction: 0.1,

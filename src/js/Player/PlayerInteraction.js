@@ -20,7 +20,7 @@ export default class PlayerInteraction {
 
     this.LAST_STEP_LENGTH = 1.5;
     this.PLAYER_SPEED_X = 1.8;
-    this.PLAYER_SPEED_Y = 0.8;
+    this.PLAYER_SPEED_Y = 1.8;
   }
 
   static playerStairsOverlap(bodyA) {
@@ -40,6 +40,7 @@ export default class PlayerInteraction {
 
   create() {
     this.playerInstance = new Player(this.scene, 107, 168, 'hero');
+    console.log(this.playerInstance);
     this.player = this.playerInstance.player;
 
     this.player.body.ignoreGravity = false;
@@ -69,7 +70,8 @@ export default class PlayerInteraction {
 
   update() {
     this.scene.matter
-      .overlap(this.player.body, this.stairsArray, this.setLastStep, this.checkLastStep);
+      .overlap(this.playerInstance.mainBody, this.stairsArray,
+        this.setLastStep, this.checkLastStep);
     if (this.cursors.left.isDown) {
       this.movingKeysPressed = true;
       this.player.setVelocityX(-this.PLAYER_SPEED_X);
@@ -96,7 +98,8 @@ export default class PlayerInteraction {
       && !this.playerInstance.isTouching.right;
 
     this.isPlayerOnStairs = this.scene.matter
-      .overlap(this.player.body, this.stairsArray, PlayerInteraction.playerStairsOverlap);
+      .overlap(this.playerInstance.mainBody, this.stairsArray,
+        PlayerInteraction.playerStairsOverlap);
     this.lastStep = false;
   }
 }
