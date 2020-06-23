@@ -13,11 +13,9 @@ export default class Player {
       bottom: Bodies.rectangle(w * 0.5, h, w * 0.25, 2, { isSensor: true }),
       left: Bodies.rectangle(0, h * 0.5, 2, h * 0.1, { isSensor: true }),
       right: Bodies.rectangle(w, h * 0.5, 2, h * 0.1, { isSensor: true }),
-      around: Bodies.rectangle(w * 0.5, h * 0.5, w * 3, h * 0.8, { isSensor: true }),
     };
     const compoundBody = Body.create({
-      parts: [this.mainBody, this.sensors.bottom, this.sensors.left, this.sensors.right,
-        this.sensors.around],
+      parts: [this.mainBody, this.sensors.bottom, this.sensors.left, this.sensors.right],
       frictionStatic: 0.1,
       frictionAir: 0.02,
       friction: 0.1,
@@ -39,31 +37,29 @@ export default class Player {
     scene.matter.world.on('beforeupdate', this.resetTouching, this);
 
     scene.matterCollision.addOnCollideStart({
-      objectA: [this.sensors.bottom, this.sensors.left, this.sensors.right, this.mainBody,
-        this.sensors.around],
+      objectA: [this.sensors.bottom, this.sensors.left, this.sensors.right, this.mainBody],
       callback: this.onSensorCollide,
       context: this,
     });
     scene.matterCollision.addOnCollideActive({
-      objectA: [this.sensors.bottom, this.sensors.left, this.sensors.right, this.mainBody,
-        this.sensors.around],
+      objectA: [this.sensors.bottom, this.sensors.left, this.sensors.right, this.mainBody],
       callback: this.onSensorCollide,
       context: this,
     });
     scene.matterCollision.addOnCollideEnd({
-      objectA: [this.sensors.around],
+      objectA: [this.mainBody],
       callback: this.onSensorCollideEnd,
       context: this,
     });
   }
 
   onSensorCollide({ bodyA, bodyB }) {
-    if (bodyB.isSensor) return; // We only care about collisions with physical objects
-    if (bodyA === this.sensors.around && bodyB.gameObject) {
+    if (bodyA === this.mainBody && bodyB.gameObject) {
       if (bodyB.gameObject.interactionObject) {
         bodyB.gameObject.activate();
       }
     }
+    if (bodyB.isSensor) return; // We only care about collisions with physical objects
     if (bodyA === this.sensors.left) {
       this.isTouching.left = true;
     } else if (bodyA === this.sensors.right) {
@@ -76,9 +72,9 @@ export default class Player {
   }
 
   onSensorCollideEnd({ bodyA, bodyB }) {
-    if (bodyB.isSensor) return; // We only care about collisions with physical objects
-    if (bodyA === this.sensors.around && bodyB.gameObject) {
+    if (bodyA === this.mainBody && bodyB.gameObject) {
       if (bodyB.gameObject.interactionObject) {
+        console.log(bodyB);
         bodyB.gameObject.deactivate();
       }
     }
