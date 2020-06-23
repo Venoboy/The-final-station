@@ -9,20 +9,22 @@ export default class InteractionObject {
     this.object = this.scene.matter.add.image(
       this.x, this.y, beforeActionTexture, null, { isStatic: true },
     );
-    this.isActive = false;
     this.scene.game.renderer.addPipeline('outline', new OutlinePipeline(this.scene.game));
+    this.object.interactionObject = true;
+    this.object.activate = this.activate;
+    this.object.deactivate = this.deactivate;
   }
 
   activate() {
-    this.object.setPipeline('outline');
-    this.object.pipeline.setFloat2(
+    this.setPipeline('outline');
+    this.pipeline.setFloat2(
       'uTextureSize',
-      this.object.width,
-      this.object.height,
+      this.width,
+      this.height,
     );
   }
 
   deactivate() {
-    this.object.resetPipeline();
+    this.resetPipeline();
   }
 }
