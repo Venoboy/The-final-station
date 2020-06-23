@@ -6,7 +6,8 @@ export default class InteractionObject {
     this.scene = scene;
     this.x = x;
     this.y = y;
-    this.afterActionTexture = afterActionTexture;
+    this.afterActionImage = this.scene.add.image(this.x, this.y, afterActionTexture)
+      .setVisible(false);
     this.object = this.scene.matter.add.image(
       this.x, this.y, beforeActionTexture, null,
     );

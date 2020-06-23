@@ -13,9 +13,11 @@ export default class Player {
       bottom: Bodies.rectangle(w * 0.5, h, w * 0.25, 2, { isSensor: true }),
       left: Bodies.rectangle(0, h * 0.5, 2, h * 0.1, { isSensor: true }),
       right: Bodies.rectangle(w, h * 0.5, 2, h * 0.1, { isSensor: true }),
+      around: Bodies.circle(w * 0.5, h * 0.5, w, { isSensor: true }),
     };
     const compoundBody = Body.create({
-      parts: [this.mainBody, this.sensors.bottom, this.sensors.left, this.sensors.right],
+      parts: [this.mainBody, this.sensors.bottom, this.sensors.left, this.sensors.right,
+        this.sensors.around],
       frictionStatic: 0.1,
       frictionAir: 0.02,
       friction: 0.1,
@@ -37,7 +39,8 @@ export default class Player {
     scene.matter.world.on('beforeupdate', this.resetTouching, this);
 
     scene.matterCollision.addOnCollideStart({
-      objectA: [this.sensors.bottom, this.sensors.left, this.sensors.right, this.mainBody],
+      objectA: [this.sensors.bottom, this.sensors.left, this.sensors.right, this.mainBody,
+        this.sensors.around],
       callback: this.onSensorCollide,
       context: this,
     });
@@ -47,14 +50,14 @@ export default class Player {
       context: this,
     });
     scene.matterCollision.addOnCollideEnd({
-      objectA: [this.mainBody],
+      objectA: [this.sensors.around],
       callback: this.onSensorCollideEnd,
       context: this,
     });
   }
 
   onSensorCollide({ bodyA, bodyB }) {
-    if (bodyA === this.mainBody && bodyB.gameObject) {
+    if (bodyA === this.sensors.around && bodyB.gameObject) {
       if (bodyB.gameObject.interactionObject) {
         bodyB.gameObject.activate();
       }
@@ -72,7 +75,7 @@ export default class Player {
   }
 
   onSensorCollideEnd({ bodyA, bodyB }) {
-    if (bodyA === this.mainBody && bodyB.gameObject) {
+    if (bodyA === this.sensors.around && bodyB.gameObject) {
       if (bodyB.gameObject.interactionObject) {
         bodyB.gameObject.deactivate();
       }

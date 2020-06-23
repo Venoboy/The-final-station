@@ -10,7 +10,7 @@ export default class Door extends InteractionObject {
     const { width: w, height: h } = this.object;
     const mainBody = Bodies.rectangle(w * 0.5, h * 0.5, w, h);
     const sensors = {
-      around: Bodies.circle(w * 0.5, h * 0.5, 2 * w, { isSensor: true }),
+      around: Bodies.rectangle(w * 0.5, h * 0.5, w, h, { isSensor: true }),
     };
     const compoundBody = Body.create({
       parts: [mainBody, sensors.around],
@@ -25,7 +25,7 @@ export default class Door extends InteractionObject {
   keyHandler() {
     if (this.object.activated) {
       this.object.destroy(this.scene);
-      this.scene.add.image(this.x, this.y, this.afterActionTexture);
+      this.afterActionImage.setVisible(true);
     }
   }
 }
