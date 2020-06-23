@@ -74,7 +74,6 @@ export default class Player {
   onSensorCollideEnd({ bodyA, bodyB }) {
     if (bodyA === this.mainBody && bodyB.gameObject) {
       if (bodyB.gameObject.interactionObject) {
-        console.log(bodyB);
         bodyB.gameObject.deactivate();
       }
     }

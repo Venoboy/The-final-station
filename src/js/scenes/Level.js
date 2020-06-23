@@ -14,7 +14,7 @@ import moons from '../../assets/level0/backgr_3.png';
 
 import { intrefaceTestInLevel } from '../test/interfaceTest';
 
-import InteractionObject from '../interactionObjects/InteractionObject';
+import Door from '../interactionObjects/Door';
 import door from '../../assets/interaction-objects/Door1.png';
 import door_ from '../../assets/interaction-objects/Door1_.png';
 
@@ -66,7 +66,7 @@ export default class Level extends Phaser.Scene {
     this.add.image(767, 256, 'b_2');
     this.add.image(1279, 256, 'b_3');
 
-    this.door = new InteractionObject(this, 189, 178, 'door', 'door_');
+    this.door = new Door(this, 189, 178, 'door', 'door_');
 
     this.scene.launch('game-bar', startValues);
 
