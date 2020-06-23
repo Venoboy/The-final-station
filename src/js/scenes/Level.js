@@ -16,6 +16,7 @@ import { intrefaceTestInLevel } from '../test/interfaceTest';
 
 import InteractionObject from '../interactionObjects/InteractionObject';
 import door from '../../assets/interaction-objects/Door1.png';
+import door_ from '../../assets/interaction-objects/Door1_.png';
 
 const startValues = {
   health: 2,
@@ -48,6 +49,7 @@ export default class Level extends Phaser.Scene {
     this.load.image('bak_5', bak_5);
 
     this.load.image('door', door);
+    this.load.image('door_', door_);
 
     this.playerInteraction = new PlayerInteraction(this.scene.scene);
     this.playerInteraction.preload();
@@ -64,7 +66,7 @@ export default class Level extends Phaser.Scene {
     this.add.image(767, 256, 'b_2');
     this.add.image(1279, 256, 'b_3');
 
-    this.door = new InteractionObject(this, 189, 178, 'door');
+    this.door = new InteractionObject(this, 189, 178, 'door', 'door_');
 
     this.scene.launch('game-bar', startValues);
 

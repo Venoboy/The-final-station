@@ -3,10 +3,11 @@ import Phaser from 'phaser';
 import OutlinePipeline from './OutlinePipeline';
 
 export default class InteractionObject {
-  constructor(scene, x, y, beforeActionTexture) {
+  constructor(scene, x, y, beforeActionTexture, afterActionTexture) {
     this.scene = scene;
     this.x = x;
     this.y = y;
+    this.afterActionTexture = afterActionTexture;
     this.object = this.scene.matter.add.image(
       this.x, this.y, beforeActionTexture, null,
     );
@@ -27,11 +28,23 @@ export default class InteractionObject {
     this.object.body.isStatic = true;
 
     this.object.interactionObject = true;
+    this.object.activated = false;
     this.object.activate = this.activate;
     this.object.deactivate = this.deactivate;
+
+    this.actionKey = this.scene.input.keyboard.addKey('E');
+    this.actionKey.on('up', this.keyHandler, this);
+  }
+
+  keyHandler() {
+    if (this.object.activated) {
+      this.object.destroy(this.scene);
+      this.scene.add.image(this.x, this.y, this.afterActionTexture);
+    }
   }
 
   activate() {
+    this.activated = true;
     this.setPipeline('outline');
     this.pipeline.setFloat2(
       'uTextureSize',
@@ -41,6 +54,7 @@ export default class InteractionObject {
   }
 
   deactivate() {
+    this.activated = false;
     this.resetPipeline();
   }
 }
