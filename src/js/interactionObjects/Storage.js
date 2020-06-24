@@ -7,38 +7,50 @@ const textConfig = {
 };
 
 export default class Storage extends InteractionObject {
-  constructor(scene, x, y, beforeActionTexture, afterActionTexture, inner) {
+  constructor(scene, x, y, beforeActionTexture, afterActionTexture, items) {
     super(scene, x, y, beforeActionTexture, afterActionTexture);
-    this.items = inner.items;
-    this.renderText = inner.renderText;
+    this.items = items;
+
     const offset = (this.afterActionImage.width - this.object.width) / 2;
     this.afterActionImage.setX(this.x + offset);
+  }
+
+  generateText() {
+    const items = this.items.reduce((res, item) => `${res + item.name}\n`, '');
+    const quantities = this.items.reduce((res, item) => `${res + item.quantity}\n`, '');
+    const itemsText = this.scene.add.text(0, 0, items, textConfig);
+    itemsText.setResolution(10);
+    itemsText.setOrigin(0.5);
+    // eslint-disable-next-line max-len
+    const quantityText = this.scene.add.text(itemsText.width, 0, quantities, textConfig);
+    quantityText.setResolution(10);
+    quantityText.setOrigin(0.5);
+    return [itemsText, quantityText];
   }
 
   keyHandler() {
     if (this.object.activated) {
       this.object.destroy(this.scene);
       this.afterActionImage.setVisible(true);
-      const text = this.scene.add
-        .text(this.x, this.y - 20, this.renderText, textConfig)
-        .setOrigin(0.5)
-        .setResolution(10);
+
+      const textItems = this.generateText();
+      const container = this.scene.add.container(this.x, this.y - 20, textItems);
       const timeline = this.scene.tweens.createTimeline();
 
       timeline.add({
-        targets: text,
-        y: text.y - 10,
+        targets: container,
+        y: container.y - 10,
         duration: 500,
       });
       timeline.add({
-        targets: text,
+        targets: container,
         alpha: 0,
         duration: 500,
         delay: 2000,
       });
 
       timeline.play();
-      timeline.onComplete = () => { text.destroy(); };
+      timeline.onComplete = () => { container.destroy(); };
     }
   }
 }

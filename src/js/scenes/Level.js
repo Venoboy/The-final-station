@@ -73,20 +73,16 @@ export default class Level extends Phaser.Scene {
     this.add.image(767, 256, 'b_2');
     this.add.image(1279, 256, 'b_3');
 
-    const lockerInner = {
-      items: [
-        {
-          name: 'bullets',
-          quantity: 12,
-        },
-        {
-          name: 'health',
-          quantity: 2,
-        },
-      ],
-      renderText:
-      'Bullets  x12\nHealth    2',
-    };
+    const lockerInner = [
+      {
+        name: 'bullets',
+        quantity: 12,
+      },
+      {
+        name: 'health',
+        quantity: 2,
+      },
+    ];
 
     this.door = new Door(this, 189, 178, 'door', 'door_');
     this.locker = new Storage(this, 165, 175, 'locker', 'locker_', lockerInner);
