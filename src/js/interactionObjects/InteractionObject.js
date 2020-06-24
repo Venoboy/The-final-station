@@ -1,8 +1,8 @@
 /* eslint-disable linebreak-style */
-import OutlinePipeline from './OutlinePipeline';
+import Phaser from 'phaser';
 
 export default class InteractionObject {
-  constructor(scene, x, y, beforeActionTexture, afterActionTexture) {
+  constructor(scene, x, y, beforeActionTexture, afterActionTexture = beforeActionTexture) {
     this.scene = scene;
     this.x = x;
     this.y = y;
@@ -11,11 +11,24 @@ export default class InteractionObject {
     this.object = this.scene.matter.add.image(
       this.x, this.y, beforeActionTexture, null,
     );
-    this.scene.game.renderer.addPipeline('outline', new OutlinePipeline(this.scene.game));
     this.object.interactionObject = true;
     this.object.activated = false;
     this.object.activate = this.activate;
     this.object.deactivate = this.deactivate;
+
+    const { Body, Bodies } = Phaser.Physics.Matter.Matter;
+    const { width: w, height: h } = this.object;
+    const sensors = {
+      around: Bodies.rectangle(w * 0.5, h * 0.5, w, h, { isSensor: true }),
+    };
+    const compoundBody = Body.create({
+      parts: [sensors.around],
+    });
+
+    this.object
+      .setExistingBody(compoundBody)
+      .setPosition(this.x, this.y);
+    this.object.body.isStatic = true;
 
     this.actionKey = this.scene.input.keyboard.addKey('E');
     this.actionKey.on('up', this.keyHandler, this);

@@ -15,8 +15,12 @@ import moons from '../../assets/level0/backgr_3.png';
 import { intrefaceTestInLevel } from '../test/interfaceTest';
 
 import Door from '../interactionObjects/Door';
+import Storage from '../interactionObjects/Storage';
 import door from '../../assets/interaction-objects/Door1.png';
 import door_ from '../../assets/interaction-objects/Door1_.png';
+import locker from '../../assets/interaction-objects/Locker.png';
+import locker_ from '../../assets/interaction-objects/Locker_.png';
+import deadBody from '../../assets/interaction-objects/DeadBody3.png';
 
 const startValues = {
   health: 2,
@@ -50,6 +54,9 @@ export default class Level extends Phaser.Scene {
 
     this.load.image('door', door);
     this.load.image('door_', door_);
+    this.load.image('locker', locker);
+    this.load.image('locker_', locker_);
+    this.load.image('deadBody', deadBody);
 
     this.playerInteraction = new PlayerInteraction(this.scene.scene);
     this.playerInteraction.preload();
@@ -66,7 +73,16 @@ export default class Level extends Phaser.Scene {
     this.add.image(767, 256, 'b_2');
     this.add.image(1279, 256, 'b_3');
 
+    const lockerInner = [
+      {
+        name: 'bullets',
+        quantity: 12,
+      },
+    ];
+
     this.door = new Door(this, 189, 178, 'door', 'door_');
+    this.deadBody = new Storage(this, 370, 202, 'deadBody');
+    this.locker = new Storage(this, 165, 175, 'locker', 'locker_', lockerInner);
 
     this.scene.launch('game-bar', startValues);
 
