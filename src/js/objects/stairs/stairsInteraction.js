@@ -1,3 +1,0 @@
-const stairsInteraction = (stairsArray, playerInstance) => {
-
-};
