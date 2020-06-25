@@ -68,8 +68,7 @@ export default class Level extends Phaser.Scene {
 
     this.camera = this.cameras.main;
     this.camera.setBounds(0, 0, 1536, 512);
-    // this.camera.setZoom(this.camera.width / heightPerScreen);
-    this.camera.setZoom(2);
+    this.camera.setZoom(this.camera.width / heightPerScreen);
   }
 
   update() {
