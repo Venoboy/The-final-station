@@ -12,7 +12,7 @@ export default class Player {
       bottom: Bodies.rectangle(w * 0.5, h, w * 0.25, 2, { isSensor: true }),
       left: Bodies.rectangle(0, h * 0.5, 2, h * 0.1, { isSensor: true }),
       right: Bodies.rectangle(w, h * 0.5, 2, h * 0.1, { isSensor: true }),
-      around: Bodies.rectangle(w * 0.5, h * 0.5, w * 1.5, h * 1.5, { isSensor: true }),
+      around: Bodies.rectangle(w * 0.5, h * 0.5, w * 1.8, h * 1.1, { isSensor: true }),
     };
     const compoundBody = Body.create({
       parts: [this.mainBody, this.sensors.bottom, this.sensors.left,
@@ -24,7 +24,7 @@ export default class Player {
 
     this.player
       .setExistingBody(compoundBody)
-      .setScale(0.6)
+      .setScale(0.4)
       .setFixedRotation()
       .setPosition(x, y);
 
