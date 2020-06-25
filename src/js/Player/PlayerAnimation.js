@@ -77,6 +77,18 @@ export default class PersonAnimation {
           pointer.x + this.scene.cameras.main.scrollX,
           pointer.y + this.scene.cameras.main.scrollY
         );
+        if ( person.list[2].parentContainer.x > pointer.x){
+          gunBack = this.scene.add.image(0, 1, 'gunback').setOrigin(1, 0.5);
+          person.replace(gun, gunBack);
+          body.anims.play('Lturn', true);
+          legs.anims.play('Lturnleg', true);
+        }
+        else if( person.list[2].parentContainer.x < pointer.x){
+          console.log([person.list[2].parentContainer.x,  pointer.x + this.scene.cameras.main.scrollX])
+          person.replace(person.list[2], gun);
+          body.anims.play('Rturn', true);
+          legs.anims.play('Rturnleg', true);
+        }
       },
       this
     );
@@ -124,8 +136,12 @@ export default class PersonAnimation {
 
     this.scene.anims.create({
       key: 'Lturn',
-      frames: [{ key: 'dude', frame: 10 }],
-      frameRate: 20,
+      frames: this.scene.anims.generateFrameNumbers('dude', {
+        start: 6,
+        end: 8,
+      }),
+      frameRate: 4,
+      repeat: -1,
     });
     this.scene.anims.create({
       key: 'Lturnleg',
@@ -134,8 +150,12 @@ export default class PersonAnimation {
     });
     this.scene.anims.create({
       key: 'Rturn',
-      frames: [{ key: 'dude', frame: 5 }],
-      frameRate: 20,
+      frames: this.scene.anims.generateFrameNumbers('dude', {
+        start: 3,
+        end: 5,
+      }),
+      frameRate: 4,
+      repeat: -1,
     });
     this.scene.anims.create({
       key: 'Rturnleg',
@@ -169,10 +189,11 @@ export default class PersonAnimation {
   }
   update() {
 
-    gunBack = this.scene.add.sprite(0, 1, 'gunback').setOrigin(1, 0.5);
+    gunBack = this.scene.add.image(0, 1, 'gunback').setOrigin(1, 0.5);
 
     if (cursors.left.isDown) {
       person.replace(gun, gunBack);
+      console.log(person.list[2].parentContainer.x);
 
       body.anims.play('left', true);
       legs.anims.play('leftl', true);
