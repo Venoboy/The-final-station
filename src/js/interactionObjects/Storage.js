@@ -11,7 +11,7 @@ export default class Storage extends InteractionObject {
     super(scene, x, y, beforeActionTexture, afterActionTexture);
     this.items = items;
 
-    const offset = (this.afterActionImage.width - this.object.width) / 2;
+    const offset = (this.afterActionImage.width - this.width) / 2;
     this.afterActionImage.setX(this.x + offset);
   }
 
@@ -28,9 +28,8 @@ export default class Storage extends InteractionObject {
     return [itemsText, quantityText];
   }
 
-  keyHandler() {
-    if (this.object.activated) {
-      this.object.destroy(this.scene);
+  interact() {
+    if (this.activated) {
       this.afterActionImage.setVisible(true);
 
       const textItems = this.generateText();
@@ -51,6 +50,8 @@ export default class Storage extends InteractionObject {
 
       timeline.play();
       timeline.onComplete = () => { container.destroy(); };
+
+      this.destroy(this.scene);
     }
   }
 }

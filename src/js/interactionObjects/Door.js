@@ -5,9 +5,12 @@ import InteractionObject from './InteractionObject';
 export default class Door extends InteractionObject {
   constructor(scene, x, y, beforeActionTexture, afterActionTexture) {
     super(scene, x, y, beforeActionTexture, afterActionTexture);
+    this.createCompoundBody(x, y);
+  }
 
+  createCompoundBody() {
     const { Body, Bodies } = Phaser.Physics.Matter.Matter;
-    const { width: w, height: h } = this.object;
+    const { width: w, height: h } = this;
     const mainBody = Bodies.rectangle(w * 0.5, h * 0.5, w, h);
     const sensors = {
       around: Bodies.rectangle(w * 0.5, h * 0.5, w, h, { isSensor: true }),
@@ -15,17 +18,13 @@ export default class Door extends InteractionObject {
     const compoundBody = Body.create({
       parts: [mainBody, sensors.around],
     });
-
-    this.object
-      .setExistingBody(compoundBody)
-      .setPosition(this.x, this.y);
-    this.object.body.isStatic = true;
+    return compoundBody;
   }
 
-  keyHandler() {
-    if (this.object.activated) {
-      this.object.destroy(this.scene);
+  interact() {
+    if (this.activated) {
       this.afterActionImage.setVisible(true);
+      this.destroy(this.scene);
     }
   }
 }

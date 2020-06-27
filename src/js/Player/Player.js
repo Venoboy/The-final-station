@@ -1,5 +1,6 @@
 /* eslint-disable linebreak-style */
 import Phaser from 'phaser';
+import ObjectInteraction from './ObjectInteraction';
 
 export default class Player {
   constructor(scene, x, y, stringId) {
@@ -13,11 +14,11 @@ export default class Player {
       bottom: Bodies.rectangle(w * 0.5, h, w * 0.25, 2, { isSensor: true }),
       left: Bodies.rectangle(0, h * 0.5, 2, h * 0.1, { isSensor: true }),
       right: Bodies.rectangle(w, h * 0.5, 2, h * 0.1, { isSensor: true }),
-      around: Bodies.circle(w * 0.5, h * 0.5, w, { isSensor: true }),
+      objectSensor: Bodies.rectangle(w, h * 0.5, w * 0.5, h, { isSensor: true }),
     };
     const compoundBody = Body.create({
       parts: [this.mainBody, this.sensors.bottom, this.sensors.left, this.sensors.right,
-        this.sensors.around],
+        this.sensors.objectSensor],
       frictionStatic: 0.1,
       frictionAir: 0.02,
       friction: 0.1,
@@ -39,8 +40,7 @@ export default class Player {
     scene.matter.world.on('beforeupdate', this.resetTouching, this);
 
     scene.matterCollision.addOnCollideStart({
-      objectA: [this.sensors.bottom, this.sensors.left, this.sensors.right, this.mainBody,
-        this.sensors.around],
+      objectA: [this.sensors.bottom, this.sensors.left, this.sensors.right, this.mainBody],
       callback: this.onSensorCollide,
       context: this,
     });
@@ -49,19 +49,11 @@ export default class Player {
       callback: this.onSensorCollide,
       context: this,
     });
-    scene.matterCollision.addOnCollideEnd({
-      objectA: [this.sensors.around],
-      callback: this.onSensorCollideEnd,
-      context: this,
-    });
+
+    this.objectInteraction = new ObjectInteraction(scene, this);
   }
 
   onSensorCollide({ bodyA, bodyB }) {
-    if (bodyA === this.sensors.around && bodyB.gameObject) {
-      if (bodyB.gameObject.interactionObject) {
-        bodyB.gameObject.activate();
-      }
-    }
     if (bodyB.isSensor) return; // We only care about collisions with physical objects
     if (bodyA === this.sensors.left) {
       this.isTouching.left = true;
@@ -71,14 +63,6 @@ export default class Player {
       this.isTouching.ground = true;
     } else if (bodyA === this.mainBody) {
       this.isTouching.body = true;
-    }
-  }
-
-  onSensorCollideEnd({ bodyA, bodyB }) {
-    if (bodyA === this.sensors.around && bodyB.gameObject) {
-      if (bodyB.gameObject.interactionObject) {
-        bodyB.gameObject.deactivate();
-      }
     }
   }
 
