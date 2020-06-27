@@ -6,12 +6,15 @@ export default class InteractionObject extends Phaser.Physics.Matter.Image {
     super(scene.matter.world, x, y, beforeActionTexture);
     this.scene = scene;
     this.interactionObject = true;
-    this.activated = false;
     this.afterActionImage = scene.add.image(x, y, afterActionTexture)
       .setVisible(false);
 
     const body = this.createCompoundBody();
     this.setCompoundBody(body, x, y);
+
+    this.interactionInfo = {
+      type: '',
+    };
   }
 
   createCompoundBody() {
@@ -35,7 +38,6 @@ export default class InteractionObject extends Phaser.Physics.Matter.Image {
   }
 
   activate() {
-    this.activated = true;
     this.setPipeline('outline');
     this.pipeline.setFloat2(
       'uTextureSize',
@@ -45,7 +47,6 @@ export default class InteractionObject extends Phaser.Physics.Matter.Image {
   }
 
   deactivate() {
-    this.activated = false;
     this.resetPipeline();
   }
 }

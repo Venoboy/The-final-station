@@ -6,6 +6,7 @@ export default class Door extends InteractionObject {
   constructor(scene, x, y, beforeActionTexture, afterActionTexture) {
     super(scene, x, y, beforeActionTexture, afterActionTexture);
     this.createCompoundBody(x, y);
+    this.interactionInfo.type = 'door';
   }
 
   createCompoundBody() {
@@ -22,9 +23,9 @@ export default class Door extends InteractionObject {
   }
 
   interact() {
-    if (this.activated) {
-      this.afterActionImage.setVisible(true);
-      this.destroy(this.scene);
-    }
+    const info = this.interactionInfo;
+    this.afterActionImage.setVisible(true);
+    this.destroy(this.scene);
+    return info;
   }
 }

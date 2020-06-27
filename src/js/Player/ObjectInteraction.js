@@ -1,4 +1,6 @@
 /* eslint-disable linebreak-style */
+import { updateUI } from '../interface/UIHelpers';
+
 export default class ObjectInteraction {
   constructor(scene, player) {
     this.scene = scene;
@@ -20,19 +22,19 @@ export default class ObjectInteraction {
     this.interactKey.on('up', this.interact, this);
   }
 
-  onObjectCollide({ bodyA, bodyB }) {
-    if (bodyB.gameObject) {
-      if (bodyB.gameObject.interactionObject) {
-        bodyB.gameObject.activate();
-        this.activatedObject = bodyB.gameObject;
+  onObjectCollide(bodies) {
+    if (bodies.bodyB.gameObject) {
+      if (bodies.bodyB.gameObject.interactionObject) {
+        bodies.bodyB.gameObject.activate();
+        this.activatedObject = bodies.bodyB.gameObject;
       }
     }
   }
 
-  onObjectCollideEnd({ bodyA, bodyB }) {
-    if (bodyB.gameObject) {
-      if (bodyB.gameObject.interactionObject) {
-        bodyB.gameObject.deactivate();
+  onObjectCollideEnd(bodies) {
+    if (bodies.bodyB.gameObject) {
+      if (bodies.bodyB.gameObject.interactionObject) {
+        bodies.bodyB.gameObject.deactivate();
         this.activatedObject = null;
       }
     }
@@ -40,7 +42,17 @@ export default class ObjectInteraction {
 
   interact() {
     if (this.activatedObject) {
-      this.activatedObject.interact();
+      const interactionInfo = this.activatedObject.interact();
+      this.processInteraction(interactionInfo);
+    }
+  }
+
+  processInteraction(info) {
+    if (info.type === 'storage') {
+      info.items.forEach((item) => {
+        this.player[item.name] += item.quantity;
+        updateUI(item.name, this.player[item.name]);
+      });
     }
   }
 }

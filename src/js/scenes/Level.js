@@ -12,8 +12,6 @@ import bak_3 from '../../assets/level0/bak_3.png';
 import bak_5 from '../../assets/level0/bak_5.png';
 import moons from '../../assets/level0/backgr_3.png';
 
-import { intrefaceTestInLevel } from '../test/interfaceTest';
-
 import Door from '../interactionObjects/Door';
 import Storage from '../interactionObjects/Storage';
 import door from '../../assets/interaction-objects/Door1.png';
@@ -22,12 +20,14 @@ import locker from '../../assets/interaction-objects/Locker.png';
 import locker_ from '../../assets/interaction-objects/Locker_.png';
 import deadBody from '../../assets/interaction-objects/DeadBody3.png';
 
-const startValues = {
-  health: 2,
-  bullets: 6,
-  food: 2,
-  keys: 10,
-};
+import { interactionObjectsData } from '../interactionObjects/data/level0';
+
+// const startValues = {
+//   health: 2,
+//   bullets: 6,
+//   food: 2,
+//   keys: 10,
+// };
 
 const heightPerScreen = 350;
 
@@ -73,27 +73,21 @@ export default class Level extends Phaser.Scene {
     this.add.image(767, 256, 'b_2');
     this.add.image(1279, 256, 'b_3');
 
-    const lockerInner = [
-      {
-        name: 'bullets',
-        quantity: 12,
-      },
-      {
-        name: 'health',
-        quantity: 2,
-      },
-    ];
-
     this.door = new Door(this, 189, 178, 'door', 'door_');
-    this.locker = new Storage(this, 165, 175, 'locker', 'locker_', lockerInner);
-
-    this.scene.launch('game-bar', startValues);
-
-    intrefaceTestInLevel(this);
+    this.locker = new Storage(this, 165, 175, 'locker', 'locker_', interactionObjectsData.locker1);
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
     this.playerInteraction.create();
+
+    const startValues = {
+      health: this.playerInteraction.playerInstance.health,
+      food: this.playerInteraction.playerInstance.food,
+      keys: this.playerInteraction.playerInstance.keys,
+      bullets: this.playerInteraction.playerInstance.bullets,
+    };
+
+    this.scene.launch('game-bar', startValues);
 
     this.camera = this.cameras.main;
     this.camera.setBounds(0, 0, 1536, 512);

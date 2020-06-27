@@ -2,10 +2,22 @@
 import Phaser from 'phaser';
 import ObjectInteraction from './ObjectInteraction';
 
+const defaultValues = {
+  health: 2,
+  bullets: 6,
+  food: 2,
+  keys: 0,
+};
+
 export default class Player {
   constructor(scene, x, y, stringId) {
     this.player = scene.matter.add.image(x, y, stringId);
     this.player.setDensity(10);
+
+    this.health = defaultValues.health;
+    this.bullets = defaultValues.bullets;
+    this.food = defaultValues.food;
+    this.keys = defaultValues.keys;
 
     const { Body, Bodies } = Phaser.Physics.Matter.Matter;
     const { width: w, height: h } = this.player;
