@@ -24,7 +24,9 @@ export default class Door extends InteractionObject {
 
   interact() {
     const info = this.interactionInfo;
-    this.afterActionImage.setVisible(true);
+    if (this.afterActionImage) {
+      this.afterActionImage.setVisible(true);
+    }
     this.destroy(this.scene);
     return info;
   }

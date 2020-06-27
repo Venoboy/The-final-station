@@ -12,22 +12,15 @@ import bak_3 from '../../assets/level0/bak_3.png';
 import bak_5 from '../../assets/level0/bak_5.png';
 import moons from '../../assets/level0/backgr_3.png';
 
-import Door from '../interactionObjects/Door';
-import Storage from '../interactionObjects/Storage';
 import door from '../../assets/interaction-objects/Door1.png';
 import door_ from '../../assets/interaction-objects/Door1_.png';
+import lid from '../../assets/interaction-objects/Lid.png';
 import locker from '../../assets/interaction-objects/Locker.png';
 import locker_ from '../../assets/interaction-objects/Locker_.png';
-import deadBody from '../../assets/interaction-objects/DeadBody3.png';
+import deadBody1 from '../../assets/interaction-objects/DeadBody1.png';
+import deadBody2 from '../../assets/interaction-objects/DeadBody2.png';
 
-import { interactionObjectsData } from '../interactionObjects/data/level0';
-
-// const startValues = {
-//   health: 2,
-//   bullets: 6,
-//   food: 2,
-//   keys: 10,
-// };
+import { setInteractionObjects } from '../setters/level0';
 
 const heightPerScreen = 350;
 
@@ -54,9 +47,11 @@ export default class Level extends Phaser.Scene {
 
     this.load.image('door', door);
     this.load.image('door_', door_);
+    this.load.image('lid', lid);
     this.load.image('locker', locker);
     this.load.image('locker_', locker_);
-    this.load.image('deadBody', deadBody);
+    this.load.image('deadBody1', deadBody1);
+    this.load.image('deadBody2', deadBody2);
 
     this.playerInteraction = new PlayerInteraction(this.scene.scene);
     this.playerInteraction.preload();
@@ -73,8 +68,7 @@ export default class Level extends Phaser.Scene {
     this.add.image(767, 256, 'b_2');
     this.add.image(1279, 256, 'b_3');
 
-    this.door = new Door(this, 189, 178, 'door', 'door_');
-    this.locker = new Storage(this, 165, 175, 'locker', 'locker_', interactionObjectsData.locker1);
+    setInteractionObjects(this);
 
     this.cursors = this.input.keyboard.createCursorKeys();
 

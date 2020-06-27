@@ -2,15 +2,20 @@
 import Phaser from 'phaser';
 
 export default class InteractionObject extends Phaser.Physics.Matter.Image {
-  constructor(scene, x, y, beforeActionTexture, afterActionTexture = beforeActionTexture) {
-    super(scene.matter.world, x, y, beforeActionTexture);
-    this.scene = scene;
+  constructor(config) {
+    super(config.scene.matter.world, config.x, config.y, config.beforeTexture);
+    this.scene = config.scene;
     this.interactionObject = true;
-    this.afterActionImage = scene.add.image(x, y, afterActionTexture)
-      .setVisible(false);
+    if (config.afterTexture) {
+      this.afterActionImage = config.scene.add.image(config.x, config.y, config.afterTexture || '')
+        .setVisible(false);
+    } else {
+      this.afterActionImage = null;
+    }
+
 
     const body = this.createCompoundBody();
-    this.setCompoundBody(body, x, y);
+    this.setCompoundBody(body, config.x, config.y);
 
     this.interactionInfo = {
       type: '',
@@ -48,5 +53,14 @@ export default class InteractionObject extends Phaser.Physics.Matter.Image {
 
   deactivate() {
     this.resetPipeline();
+  }
+
+  interact() {
+    const info = this.interactionInfo;
+    if (this.afterActionImage) {
+      this.afterActionImage.setVisible(true);
+    }
+    this.destroy(this.scene);
+    return info;
   }
 }

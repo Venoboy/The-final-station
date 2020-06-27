@@ -7,14 +7,14 @@ const textConfig = {
 };
 
 export default class Storage extends InteractionObject {
-  constructor(scene, x, y, beforeActionTexture, afterActionTexture, items) {
-    super(scene, x, y, beforeActionTexture, afterActionTexture);
-    this.items = items;
+  constructor(config) {
+    super(config);
+    this.items = config.items;
 
     const offset = (this.afterActionImage.width - this.width) / 2;
     this.afterActionImage.setX(this.x + offset);
     this.interactionInfo.type = 'storage';
-    this.interactionInfo.items = items;
+    this.interactionInfo.items = config.items;
   }
 
   generateText() {
@@ -42,15 +42,17 @@ export default class Storage extends InteractionObject {
 
   interact() {
     const info = this.interactionInfo;
-    this.afterActionImage.setVisible(true);
+    if (this.afterActionImage) {
+      this.afterActionImage.setVisible(true);
+    }
 
     const textItems = this.generateText();
-    const container = this.scene.add.container(this.x, this.y - 20, textItems);
+    const container = this.scene.add.container(this.x, this.y - 10, textItems);
     const timeline = this.scene.tweens.createTimeline();
 
     timeline.add({
       targets: container,
-      y: container.y - 10,
+      y: container.y - 20,
       duration: 500,
     });
     timeline.add({
