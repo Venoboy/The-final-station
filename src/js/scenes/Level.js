@@ -12,7 +12,7 @@ import bak_3 from '../../assets/level0/bak_3.png';
 import bak_5 from '../../assets/level0/bak_5.png';
 import moons from '../../assets/level0/backgr_3.png';
 
-import door from '../../assets/interaction-objects/Door1.png';
+import door from '../../assets/interaction-objects/Door3.png';
 import door_ from '../../assets/interaction-objects/Door1_.png';
 import lid from '../../assets/interaction-objects/Lid.png';
 import locker from '../../assets/interaction-objects/Locker.png';

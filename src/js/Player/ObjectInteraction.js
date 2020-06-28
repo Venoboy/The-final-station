@@ -23,7 +23,7 @@ export default class ObjectInteraction {
       objectA: [this.player.sensors.objectSensor],
       callback: (eventData) => {
         const { gameObjectB } = eventData;
-        if (gameObjectB instanceof InteractionObject) {
+        if (gameObjectB instanceof InteractionObject && gameObjectB.activated) {
           this.onObjectCollideEnd(gameObjectB);
         }
       },
@@ -49,7 +49,7 @@ export default class ObjectInteraction {
     if (object === this.activeObject) {
       this.activeObject.deactivate();
       if (this.activatedObjects.length !== 0) {
-        this.activateObject = this.activatedObjects.pop();
+        this.activeObject = this.activatedObjects.pop();
         this.activeObject.activate();
       }
     } else {
