@@ -1,7 +1,7 @@
 /* eslint-disable linebreak-style */
 import Door from '../interactionObjects/Door';
 import Storage from '../interactionObjects/Storage';
-import InteractionObject from '../interactionObjects/InteractionObject';
+import Lid from '../interactionObjects/Lid';
 
 
 import { interactionObjectsData } from '../data/level0';
@@ -44,13 +44,13 @@ const setInteractionObjects = (context) => {
   object = new Door({
     scene: context, x: 844, y: 330, beforeTexture: 'door', afterTexture: 'door_',
   });
-  object = new InteractionObject({
+  object = new Lid({
     scene: context, x: 486, y: 206, beforeTexture: 'lid',
   });
-  object = new InteractionObject({
+  object = new Lid({
     scene: context, x: 791, y: 264, beforeTexture: 'lid',
   });
-  object = new InteractionObject({
+  object = new Lid({
     scene: context, x: 646, y: 294, beforeTexture: 'lid',
   });
   object = new Storage({

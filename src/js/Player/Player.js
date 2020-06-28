@@ -26,7 +26,7 @@ export default class Player {
       bottom: Bodies.rectangle(w * 0.5, h, w * 0.25, 2, { isSensor: true }),
       left: Bodies.rectangle(0, h * 0.5, 2, h * 0.1, { isSensor: true }),
       right: Bodies.rectangle(w, h * 0.5, 2, h * 0.1, { isSensor: true }),
-      objectSensor: Bodies.rectangle(w * 0.5, h * 0.5, w * 1.5, h, { isSensor: true }),
+      objectSensor: Bodies.rectangle(w * 0.5, h * 0.5 + 1, w * 1.5, h + 2, { isSensor: true }),
     };
     const compoundBody = Body.create({
       parts: [this.mainBody, this.sensors.bottom, this.sensors.left, this.sensors.right,
