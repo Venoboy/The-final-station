@@ -51,6 +51,8 @@ export default class ObjectInteraction {
       if (this.activatedObjects.length !== 0) {
         this.activeObject = this.activatedObjects.pop();
         this.activeObject.activate();
+      } else {
+        this.activeObject = null;
       }
     } else {
       const objectIndex = this.activatedObjects.findIndex((el) => el === object);
