@@ -27,6 +27,7 @@ export default class PlayerInteraction {
   create() {
     this.playerInstance = new Player(this.scene, 109.36, 185.5, 'hero');
     this.player = this.playerInstance.player;
+    console.log(this.player);
     this.playerHeight = this.player.height * this.player.scale;
 
     this.ground = this.scene.matter.add.fromPhysicsEditor(250, 260.65, level0json.f_1);
@@ -62,7 +63,6 @@ export default class PlayerInteraction {
   }
 
   update() {
-    console.log(this.player.x, this.player.y);
     this.player.body.ignoreGravity = !this.movingKeysPressed
       && this.playerInstance.isTouching.body
       && !this.playerInstance.isTouching.left

@@ -14,10 +14,10 @@ export default class EnemyConstructor {
 
     const { Body, Bodies } = Phaser.Physics.Matter.Matter;
     const { width: w, height: h } = this.enemy;
-    this.mainBody = Bodies.rectangle(w * 0.5, h * 0.5, w, h, { chamfer: { radius: 6 } });
+    this.mainBody = Bodies.rectangle(w * 0.5, h * 0.5 + 1, 6, 18, { chamfer: { radius: 2 } });
     this.sensors = {
       attack: Bodies.rectangle(w, h * 0.5, w * 0.5, h * 0.4, { isSensor: true }),
-      detect: Bodies.rectangle(w * 0.5, h * 0.5, w * 4, h * 0.5, { isSensor: true }),
+      detect: Bodies.rectangle(w * 0.5, h * 0.5, w * 3, h * 0.5, { isSensor: true }),
     };
     const compoundBody = Body.create({
       parts: [this.mainBody, this.sensors.attack, this.sensors.detect],

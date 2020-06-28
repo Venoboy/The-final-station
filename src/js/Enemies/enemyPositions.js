@@ -1,6 +1,6 @@
 const enemyPositions = {
   big: [
-    { x: 200, y: 185.5 },
+    { x: 200, y: 180 },
   ],
 };
 

@@ -45,7 +45,10 @@ export default class Level extends Phaser.Scene {
     this.load.image('bak_3', bak_3);
     this.load.image('bak_5', bak_5);
 
+    this.playerInteraction = new PlayerInteraction(this.scene.scene);
     this.playerInteraction.preload();
+
+    this.enemyLoader = new EnemyLoader(this.scene.scene);
     this.enemyLoader.preload();
   }
 
@@ -66,10 +69,7 @@ export default class Level extends Phaser.Scene {
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
-    this.playerInteraction = new PlayerInteraction(this.scene.scene);
     this.playerInteraction.create();
-
-    this.enemyLoader = new EnemyLoader(this.scene.scene);
     this.enemyLoader.create();
 
     this.camera = this.cameras.main;
@@ -79,5 +79,6 @@ export default class Level extends Phaser.Scene {
 
   update() {
     this.playerInteraction.update();
+    this.enemyLoader.update();
   }
 }

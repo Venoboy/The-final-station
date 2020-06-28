@@ -16,20 +16,27 @@ export default class EnemyLoader {
   };
 
   create = () => {
-    Object.entries(enemyPositions).forEach((entry) => {
-      const type = entry[0];
-      const positionsArr = entry[1];
+    Object.entries(enemyPositions.default)
+      .filter((elem) => elem[0] !== 'default')
+      .forEach((entry) => {
+        const type = entry[0];
+        const positionsArr = entry[1];
 
-      positionsArr.forEach((position) => {
-        const config = {};
-        config.type = type;
-        config.position = position;
-        config.scene = this.scene;
-        config.settings = enemySettings[type];
-        config.stringId = this.stringIDs.enemyBig;
+        positionsArr.forEach((position) => {
+          const config = {};
+          config.type = type;
+          config.position = position;
+          config.scene = this.scene;
+          config.settings = enemySettings[type];
+          config.stringId = this.stringIDs.enemyBig;
 
-        this.exampleEnemy = new EnemyConstructor(config);
+          this.exampleEnemy = new EnemyConstructor(config);
+          console.log(this.exampleEnemy.enemy.body.velocity);
+        });
       });
-    });
-  }
+  };
+
+  update = () => {
+    this.exampleEnemy.enemy.setVelocityX(0.5);
+  };
 }
