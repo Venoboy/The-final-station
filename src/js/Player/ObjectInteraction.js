@@ -1,20 +1,32 @@
 /* eslint-disable linebreak-style */
 import { updateUI } from '../interface/UIHelpers';
+import InteractionObject from '../interactionObjects/InteractionObject';
 
 export default class ObjectInteraction {
   constructor(scene, player) {
     this.scene = scene;
     this.player = player;
-    this.activatedObject = null;
+    this.activatedObjects = [];
+    this.activeObject = null;
 
     scene.matterCollision.addOnCollideStart({
       objectA: [this.player.sensors.objectSensor],
-      callback: this.onObjectCollide,
+      callback: (eventData) => {
+        const { gameObjectB } = eventData;
+        if (gameObjectB instanceof InteractionObject && !gameObjectB.activated) {
+          this.onObjectCollide(gameObjectB);
+        }
+      },
       context: this,
     });
     scene.matterCollision.addOnCollideEnd({
       objectA: [this.player.sensors.objectSensor],
-      callback: this.onObjectCollideEnd,
+      callback: (eventData) => {
+        const { gameObjectB } = eventData;
+        if (gameObjectB instanceof InteractionObject) {
+          this.onObjectCollideEnd(gameObjectB);
+        }
+      },
       context: this,
     });
 
@@ -22,28 +34,42 @@ export default class ObjectInteraction {
     this.interactKey.on('up', this.interact, this);
   }
 
-  onObjectCollide(bodies) {
-    if (bodies.bodyB.gameObject) {
-      if (bodies.bodyB.gameObject.interactionObject) {
-        bodies.bodyB.gameObject.activate();
-        this.activatedObject = bodies.bodyB.gameObject;
-      }
+  onObjectCollide(object) {
+    if (this.activeObject) {
+      this.activatedObjects.push(this.activeObject);
+      this.activeObject.deactivate();
     }
+    this.activeObject = object;
+    this.activeObject.activate();
+    // eslint-disable-next-line no-param-reassign
+    object.activated = true;
   }
 
-  onObjectCollideEnd(bodies) {
-    if (bodies.bodyB.gameObject) {
-      if (bodies.bodyB.gameObject.interactionObject) {
-        bodies.bodyB.gameObject.deactivate();
-        this.activatedObject = null;
+  onObjectCollideEnd(object) {
+    if (object === this.activeObject) {
+      this.activeObject.deactivate();
+      if (this.activatedObjects.length !== 0) {
+        this.activateObject = this.activatedObjects.pop();
+        this.activeObject.activate();
       }
+    } else {
+      const objectIndex = this.activatedObjects.findIndex((el) => el === object);
+      this.activatedObjects.splice(objectIndex, 1);
     }
+    // eslint-disable-next-line no-param-reassign
+    object.activated = false;
   }
 
   interact() {
-    if (this.activatedObject) {
-      const interactionInfo = this.activatedObject.interact();
+    if (this.activeObject) {
+      const interactionInfo = this.activeObject.interact();
       this.processInteraction(interactionInfo);
+      if (this.activatedObjects.length !== 0) {
+        this.activeObject = this.activatedObjects.pop();
+        this.activeObject.activate();
+      } else {
+        this.activeObject = null;
+      }
     }
   }
 

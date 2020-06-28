@@ -3,6 +3,7 @@ import Door from '../interactionObjects/Door';
 import Storage from '../interactionObjects/Storage';
 import InteractionObject from '../interactionObjects/InteractionObject';
 
+
 import { interactionObjectsData } from '../data/level0';
 
 const setInteractionObjects = (context) => {
@@ -44,7 +45,7 @@ const setInteractionObjects = (context) => {
     scene: context, x: 844, y: 330, beforeTexture: 'door', afterTexture: 'door_',
   });
   object = new InteractionObject({
-    scene: context, x: 486, y: 205, beforeTexture: 'lid',
+    scene: context, x: 486, y: 206, beforeTexture: 'lid',
   });
   object = new InteractionObject({
     scene: context, x: 791, y: 264, beforeTexture: 'lid',
@@ -56,7 +57,7 @@ const setInteractionObjects = (context) => {
     scene: context, x: 165, y: 175, beforeTexture: 'locker', afterTexture: 'locker_', items: interactionObjectsData.locker1,
   });
   object = new Storage({
-    scene: context, x: 363, y: 202, beforeTexture: 'deadBody1', afterTexture: 'deadBody1', items: interactionObjectsData.deadBody1,
+    scene: context, x: 360, y: 202, beforeTexture: 'deadBody1', afterTexture: 'deadBody1', items: interactionObjectsData.deadBody1,
   });
   object = new Storage({
     scene: context, x: 1100, y: 360, beforeTexture: 'deadBody2', afterTexture: 'deadBody2', items: interactionObjectsData.deadBody2,

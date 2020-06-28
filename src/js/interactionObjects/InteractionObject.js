@@ -5,13 +5,13 @@ export default class InteractionObject extends Phaser.Physics.Matter.Image {
   constructor(config) {
     super(config.scene.matter.world, config.x, config.y, config.beforeTexture);
     this.scene = config.scene;
-    this.interactionObject = true;
     if (config.afterTexture) {
       this.afterActionImage = config.scene.add.image(config.x, config.y, config.afterTexture || '')
         .setVisible(false);
     } else {
       this.afterActionImage = null;
     }
+    this.activated = false;
 
 
     const body = this.createCompoundBody();
