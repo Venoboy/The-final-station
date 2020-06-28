@@ -2,6 +2,7 @@
 import Phaser from 'phaser';
 
 import PlayerInteraction from '../Player/PlayerInteraction';
+import EnemyLoader from '../Enemies/EnemyLoader';
 import b_1 from '../../assets/level0/b_1.png';
 import b_2 from '../../assets/level0/b_2.png';
 import b_3 from '../../assets/level0/b_3.png';
@@ -26,6 +27,7 @@ export default class Level extends Phaser.Scene {
   constructor() {
     super('game-scene');
     this.playerInteraction = {};
+    this.enemyLoader = {};
   }
 
   init() {
@@ -43,8 +45,8 @@ export default class Level extends Phaser.Scene {
     this.load.image('bak_3', bak_3);
     this.load.image('bak_5', bak_5);
 
-    this.playerInteraction = new PlayerInteraction(this.scene.scene);
     this.playerInteraction.preload();
+    this.enemyLoader.preload();
   }
 
   create() {
@@ -64,7 +66,11 @@ export default class Level extends Phaser.Scene {
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
+    this.playerInteraction = new PlayerInteraction(this.scene.scene);
     this.playerInteraction.create();
+
+    this.enemyLoader = new EnemyLoader(this.scene.scene);
+    this.enemyLoader.create();
 
     this.camera = this.cameras.main;
     this.camera.setBounds(0, 0, 1536, 512);

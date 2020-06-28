@@ -3,7 +3,6 @@ import Phaser from 'phaser';
 export default class Player {
   constructor(scene, x, y, stringId) {
     this.player = scene.matter.add.image(x, y, stringId);
-    this.player.setDensity(10);
 
     const { Body, Bodies } = Phaser.Physics.Matter.Matter;
     const { width: w, height: h } = this.player;
