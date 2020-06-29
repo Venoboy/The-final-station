@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 import InteractionObject from './InteractionObject';
 
 const textConfig = {
@@ -23,8 +22,9 @@ export default class Storage extends InteractionObject {
     const itemsText = this.scene.add.text(0, 0, items, textConfig);
     itemsText.setResolution(10);
     itemsText.setOrigin(0.5);
-    // eslint-disable-next-line max-len
-    const quantityText = this.scene.add.text(itemsText.width, 0, quantities, textConfig);
+    const quantityText = this.scene.add.text(
+      itemsText.width, 0, quantities, textConfig,
+    );
     quantityText.setResolution(10);
     quantityText.setOrigin(0.5);
     return [itemsText, quantityText];

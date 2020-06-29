@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 import Door from '../interactionObjects/Door';
 import Storage from '../interactionObjects/Storage';
 import Lid from '../interactionObjects/Lid';

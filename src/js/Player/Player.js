@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 import Phaser from 'phaser';
 import ObjectInteraction from './ObjectInteraction';
 

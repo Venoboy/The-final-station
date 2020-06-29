@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 const interactionObjectsData = {
   locker1: [
     {

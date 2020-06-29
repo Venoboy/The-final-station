@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 import { updateUI } from '../interface/UIHelpers';
 import InteractionObject from '../interactionObjects/InteractionObject';
 
@@ -41,8 +40,7 @@ export default class ObjectInteraction {
     }
     this.activeObject = object;
     this.activeObject.activate();
-    // eslint-disable-next-line no-param-reassign
-    object.activated = true;
+    object.setActivated(true);
   }
 
   onObjectCollideEnd(object) {
@@ -58,8 +56,7 @@ export default class ObjectInteraction {
       const objectIndex = this.activatedObjects.findIndex((el) => el === object);
       this.activatedObjects.splice(objectIndex, 1);
     }
-    // eslint-disable-next-line no-param-reassign
-    object.activated = false;
+    object.setActivated(false);
   }
 
   interact() {

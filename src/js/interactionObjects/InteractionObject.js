@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 import Phaser from 'phaser';
 
 export default class InteractionObject extends Phaser.Physics.Matter.Image {
@@ -40,6 +39,10 @@ export default class InteractionObject extends Phaser.Physics.Matter.Image {
       .setPosition(x, y);
     this.body.isStatic = true;
     this.scene.add.existing(this);
+  }
+
+  setActivated(value) {
+    this.activated = value;
   }
 
   activate() {
