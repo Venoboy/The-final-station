@@ -5,44 +5,30 @@ import level0EndJson from '../../assets/level0Physics/level-end.xml.json';
 import level0stairsJson from '../../assets/level0Physics/level-start-stairs.xml.json';
 import level0stairsMiddleJson from '../../assets/level0Physics/level-middle-stairs.xml.json';
 import hunterPath from '../../assets/level0/hunter_1_0.png';
+import StairsInteraction from '../objects/stairs/StairsInteraction';
+import { getCanGoX, setCanGoX } from './helpers/externalParams';
 
 export default class PlayerInteraction {
   constructor(scene) {
     this.playerInstance = {};
     this.player = this.playerInstance.player || {};
-    this.cursors = {};
-    this.scene = scene;
-    this.stairs = {};
-    this.isPlayerOnStairs = false;
     this.movingKeysPressed = false;
-    this.lastStep = false;
+    this.scene = scene;
+    this.stairsInteraction = {};
     this.stairsArray = [];
 
-    this.LAST_STEP_LENGTH = 1.5;
     this.PLAYER_SPEED_X = 1.8;
-    this.PLAYER_SPEED_Y = 0.8;
   }
-
-  static playerStairsOverlap(bodyA) {
-    const playerBody = bodyA;
-    playerBody.ignoreGravity = true;
-  }
-
-  setLastStep = () => {
-    this.lastStep = true;
-  };
-
-  checkLastStep = (bodyA, bodyB, collisionInfo) => collisionInfo.depth < this.LAST_STEP_LENGTH;
 
   preload() {
     this.scene.load.image('hero', hunterPath);
   }
 
   create() {
-    this.playerInstance = new Player(this.scene, 107, 168, 'hero');
+    this.playerInstance = new Player(this.scene, 475, 199, 'hero');
     this.player = this.playerInstance.player;
+    this.playerHeight = this.player.height * this.player.scale;
 
-    this.player.body.ignoreGravity = false;
     this.ground = this.scene.matter.add.fromPhysicsEditor(250, 260.65, level0json.f_1);
     this.ground.frictionStatic = 0.5;
     this.ground.friction = 0.5;
@@ -55,7 +41,7 @@ export default class PlayerInteraction {
     this.stairsArray.push(this.stairs);
     this.stairs.collisionFilter.mask = 2;
     this.stairsMiddle = this.scene.matter.add
-      .fromPhysicsEditor(770, 314, level0stairsMiddleJson.f_2);
+      .fromPhysicsEditor(770, 315.5, level0stairsMiddleJson.f_2);
     this.stairsMiddle.collisionFilter.mask = 2;
     this.stairsArray.push(this.stairsMiddle);
 
@@ -65,38 +51,36 @@ export default class PlayerInteraction {
     this.camera.setZoom(1);
 
     this.cursors = this.scene.input.keyboard.createCursorKeys();
+
+    const playerInteractionConfig = {
+      scene: this.scene,
+      cursors: this.cursors,
+      stairsArray: this.stairsArray,
+      playerInstance: this.playerInstance,
+    };
+    this.stairsInteraction = new StairsInteraction(playerInteractionConfig);
   }
 
   update() {
-    this.scene.matter
-      .overlap(this.player.body, this.stairsArray, this.setLastStep, this.checkLastStep);
-    if (this.cursors.left.isDown) {
+    this.player.body.ignoreGravity = !this.movingKeysPressed
+      && this.playerInstance.isTouching.body
+      && !this.playerInstance.isTouching.left
+      && !this.playerInstance.isTouching.right;
+    setCanGoX(true);
+
+    this.stairsInteraction.setStairsOverlap();
+
+    if (this.cursors.left.isDown && getCanGoX()) {
       this.movingKeysPressed = true;
       this.player.setVelocityX(-this.PLAYER_SPEED_X);
-    } else if (this.cursors.right.isDown) {
+    } else if (this.cursors.right.isDown && getCanGoX()) {
       this.movingKeysPressed = true;
       this.player.setVelocityX(this.PLAYER_SPEED_X);
     } else {
       this.movingKeysPressed = false;
       this.player.setVelocityX(0);
-      if (this.isPlayerOnStairs) {
-        if (this.cursors.up.isDown && !this.lastStep) {
-          this.player.setVelocityY(-this.PLAYER_SPEED_Y);
-        } else if (this.cursors.down.isDown) {
-          this.player.setVelocityY(this.PLAYER_SPEED_Y);
-        } else {
-          this.player.setVelocityY(0);
-        }
-      }
     }
-    this.player.body.ignoreGravity = false;
-    this.player.body.ignoreGravity = !this.movingKeysPressed
-      && this.playerInstance.isTouching.body
-      && !this.playerInstance.isTouching.left
-      && !this.playerInstance.isTouching.right;
 
-    this.isPlayerOnStairs = this.scene.matter
-      .overlap(this.player.body, this.stairsArray, PlayerInteraction.playerStairsOverlap);
-    this.lastStep = false;
+    this.stairsInteraction.controlYMovement();
   }
 }

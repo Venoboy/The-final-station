@@ -16,7 +16,7 @@
 		},
 		"fixtures": [
 			{
-				"label": "stairs-example",
+				"label": "stairs-middle",
 				"isSensor": false,
 				"vertices": [
 					[ { "x":479, "y":206 }, { "x":479, "y":264 }, { "x":493, "y":264 }, { "x":493, "y":206 } ]

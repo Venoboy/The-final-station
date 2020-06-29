@@ -26,10 +26,11 @@ export default class Player {
       left: Bodies.rectangle(0, h * 0.5, 2, h * 0.1, { isSensor: true }),
       right: Bodies.rectangle(w, h * 0.5, 2, h * 0.1, { isSensor: true }),
       objectSensor: Bodies.rectangle(w * 0.5, h * 0.5 + 1, w * 1.5, h + 2, { isSensor: true }),
+      around: Bodies.rectangle(w * 0.5, h * 0.5, w * 1.8, h * 1.1, { isSensor: true }),
     };
     const compoundBody = Body.create({
-      parts: [this.mainBody, this.sensors.bottom, this.sensors.left, this.sensors.right,
-        this.sensors.objectSensor],
+      parts: [this.mainBody, this.sensors.bottom, this.sensors.left,
+        this.sensors.right, this.sensors.around,  this.sensors.objectSensor],
       frictionStatic: 0.1,
       frictionAir: 0.02,
       friction: 0.1,
@@ -37,7 +38,7 @@ export default class Player {
 
     this.player
       .setExistingBody(compoundBody)
-      .setScale(0.6)
+      .setScale(0.4)
       .setFixedRotation()
       .setPosition(x, y);
 
