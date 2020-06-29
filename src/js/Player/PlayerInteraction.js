@@ -26,26 +26,26 @@ export default class PlayerInteraction {
     this.playerInstance = new Player(this.scene, 109.36, 185.5, 'hero');
     this.player = this.playerInstance.player;
     this.player.setCollisionCategory(collisionCategories.player);
-    this.player.setCollidesWith(collisionCategories.ground);
+    this.player.setCollidesWith([collisionCategories.ground]);
 
     this.ground = this.scene.matter.add.fromPhysicsEditor(250, 260.65, level0json.f_1);
     this.ground.frictionStatic = 0.5;
     this.ground.friction = 0.5;
     this.ground.collisionFilter.category = collisionCategories.ground;
-    this.ground.collisionFilter.group = 3;
 
     this.groundMiddle = this.scene.matter.add.fromPhysicsEditor(779, 261, level0MiddleJson.f_2);
+    this.groundMiddle.collisionFilter.category = collisionCategories.ground;
 
     this.groundEnd = this.scene.matter.add.fromPhysicsEditor(1303, 273, level0EndJson.f_3);
+    this.groundEnd.collisionFilter.category = collisionCategories.ground;
 
     this.stairs = this.scene.matter.add.fromPhysicsEditor(486, 235, level0stairsJson.f_1);
+    this.stairs.collisionFilter.category = collisionCategories.stairs;
     this.stairsArray.push(this.stairs);
-    this.stairs.collisionFilter.mask = 2;
     this.stairsMiddle = this.scene.matter.add
       .fromPhysicsEditor(770, 315.5, level0stairsMiddleJson.f_2);
-    this.stairsMiddle.collisionFilter.mask = 2;
+    this.stairsMiddle.collisionFilter.category = collisionCategories.stairs;
     this.stairsArray.push(this.stairsMiddle);
-    console.log(this.player.body.collisionFilter, this.ground.collisionFilter, this.stairsMiddle.collisionFilter);
 
     this.camera = this.scene.cameras.main;
     this.camera.startFollow(this.player, false, 0.1, 0.1);

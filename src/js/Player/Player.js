@@ -12,10 +12,11 @@ export default class Player {
       left: Bodies.rectangle(0, h * 0.5, 2, h * 0.1, { isSensor: true }),
       right: Bodies.rectangle(w, h * 0.5, 2, h * 0.1, { isSensor: true }),
       around: Bodies.rectangle(w * 0.5, h * 0.5, w * 1.8, h * 1.1, { isSensor: true }),
+      body: Bodies.rectangle(w * 0.5, h * 0.5, w, h, { chamfer: { radius: 6 }, isSensor: true }),
     };
     const compoundBody = Body.create({
       parts: [this.mainBody, this.sensors.bottom, this.sensors.left,
-        this.sensors.right, this.sensors.around],
+        this.sensors.right, this.sensors.around, this.sensors.body],
       frictionStatic: 0.1,
       frictionAir: 0.02,
       friction: 0.1,

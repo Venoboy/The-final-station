@@ -74,7 +74,9 @@ export default class Level extends Phaser.Scene {
     this.playerInteraction = new PlayerInteraction(this.scene.scene);
     this.playerInteraction.create();
 
-    this.enemyLoader = new EnemyLoader(this.scene.scene, this.playerInteraction.player);
+    this.enemyLoader = new EnemyLoader(
+      this.scene.scene, this.playerInteraction.playerInstance, this.playerInteraction.stairsArray,
+    );
     this.enemyLoader.create();
 
     this.camera = this.cameras.main;

@@ -1,13 +1,16 @@
 import Phaser from 'phaser';
 import ENEMY_STATES from './enemyStates';
+import collisionCategories from '../world/collisionCategories';
 
 export default class EnemyConstructor {
   constructor(config) {
+    this.config = config;
     this.scene = config.scene;
-    this.player = config.player;
-    this.playerBody = config.player.body;
+    this.playerInstance = config.playerInstance;
+    this.player = this.playerInstance.player;
     this.type = config.type;
     this.position = config.position;
+    this.collisionCategory = config.collisionCategory;
     this.state = ENEMY_STATES.standing;
     this.speed = config.settings.speed;
     this.currentSpeed = 0;
@@ -34,23 +37,13 @@ export default class EnemyConstructor {
       .setExistingBody(compoundBody)
       .setScale(1)
       .setFixedRotation()
-      .setPosition(this.x, this.y);
-
-    this.scene.matterCollision.addOnCollideStart({
-      objectA: this.sensors.detect,
-      objectB: this.player,
-      callback: (eventData) => this.onDetect(eventData),
-    });
-
-    this.scene.matterCollision.addOnCollideEnd({
-      objectA: this.sensors.detect,
-      objectB: this.player,
-      callback: (eventData) => console.log(eventData),
-    });
+      .setPosition(this.x, this.y)
+      .setCollisionCategory(this.collisionCategory)
+      .setCollisionGroup(config.collisionGroup)
+      .setCollidesWith([collisionCategories.ground]);
   }
 
   onDetect = () => {
-    console.log(this.enemy)
     if (this.player.x < this.enemy.x) {
       this.currentSpeed = -this.speed;
     } else {
@@ -58,9 +51,18 @@ export default class EnemyConstructor {
     }
   };
 
-  onStopDetect = (eventData) => {};
+  enemyStairsOverlap = (bodyA, bodyB) => {
+    if (bodyA.position.y < bodyB.position.y) {
+      this.enemy.setCollidesWith([collisionCategories.ground, collisionCategories.stairs]);
+    }
+  };
 
   update = () => {
+    this.enemy.setCollidesWith([collisionCategories.ground]);
+    this.enemy.body.ignoreGravity = false;
+    this.currentSpeed = 0;
+    this.scene.matter.overlap(this.sensors.detect, this.playerInstance.sensors.body, this.onDetect);
+    this.scene.matter.overlap(this.enemy, this.config.stairsArray, this.enemyStairsOverlap);
     this.enemy.setVelocityX(this.currentSpeed);
   }
 }
