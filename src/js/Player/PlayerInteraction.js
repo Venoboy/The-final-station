@@ -1,12 +1,14 @@
 import Player from './Player';
+import { getCanGoX, setCanGoX } from './helpers/externalParams';
+import collisionCategories from '../world/collisionCategories';
+
 import level0json from '../../assets/level0Physics/level-start.xml.json';
 import level0MiddleJson from '../../assets/level0Physics/level-middle.xml.json';
 import level0EndJson from '../../assets/level0Physics/level-end.xml.json';
 import level0stairsJson from '../../assets/level0Physics/level-start-stairs.xml.json';
 import level0stairsMiddleJson from '../../assets/level0Physics/level-middle-stairs.xml.json';
-import hunterPath from '../../assets/level0/hunter_1_0.png';
 import StairsInteraction from '../objects/stairs/StairsInteraction';
-import { getCanGoX, setCanGoX } from './helpers/externalParams';
+
 
 export default class PlayerInteraction {
   constructor(scene) {
@@ -20,19 +22,17 @@ export default class PlayerInteraction {
     this.PLAYER_SPEED_X = 1.8;
   }
 
-  preload() {
-    this.scene.load.image('hero', hunterPath);
-  }
-
   create() {
     this.playerInstance = new Player(this.scene, 109.36, 185.5, 'hero');
     this.player = this.playerInstance.player;
-    console.log(this.player);
-    this.playerHeight = this.player.height * this.player.scale;
+    this.player.setCollisionCategory(collisionCategories.player);
+    this.player.setCollidesWith(collisionCategories.ground);
 
     this.ground = this.scene.matter.add.fromPhysicsEditor(250, 260.65, level0json.f_1);
     this.ground.frictionStatic = 0.5;
     this.ground.friction = 0.5;
+    this.ground.collisionFilter.category = collisionCategories.ground;
+    this.ground.collisionFilter.group = 3;
 
     this.groundMiddle = this.scene.matter.add.fromPhysicsEditor(779, 261, level0MiddleJson.f_2);
 
@@ -45,11 +45,10 @@ export default class PlayerInteraction {
       .fromPhysicsEditor(770, 315.5, level0stairsMiddleJson.f_2);
     this.stairsMiddle.collisionFilter.mask = 2;
     this.stairsArray.push(this.stairsMiddle);
+    console.log(this.player.body.collisionFilter, this.ground.collisionFilter, this.stairsMiddle.collisionFilter);
 
     this.camera = this.scene.cameras.main;
     this.camera.startFollow(this.player, false, 0.1, 0.1);
-    this.camera.setBounds(0, 0, 1536, 512);
-    this.camera.setZoom(1);
 
     this.cursors = this.scene.input.keyboard.createCursorKeys();
 

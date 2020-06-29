@@ -1,19 +1,13 @@
-import bigEnemyPic from '../../assets/level0/enemies/BigZombie Idle_02.png';
 import EnemyConstructor from './EnemyConstructor';
 import enemyPositions from './enemyPositions';
 import enemySettings from './enemySettings';
 
 export default class EnemyLoader {
-  constructor(scene) {
+  constructor(scene, player) {
     this.scene = scene;
-    this.stringIDs = {
-      enemyBig: 'enemyBig',
-    };
+    this.player = player;
+    this.exampleEnemy = {};
   }
-
-  preload = () => {
-    this.scene.load.image(this.stringIDs.enemyBig, bigEnemyPic);
-  };
 
   create = () => {
     Object.entries(enemyPositions.default)
@@ -28,15 +22,15 @@ export default class EnemyLoader {
           config.position = position;
           config.scene = this.scene;
           config.settings = enemySettings[type];
-          config.stringId = this.stringIDs.enemyBig;
+          config.stringId = 'enemyBig';
+          config.player = this.player;
 
           this.exampleEnemy = new EnemyConstructor(config);
-          console.log(this.exampleEnemy.enemy.body.velocity);
         });
       });
   };
 
   update = () => {
-    this.exampleEnemy.enemy.setVelocityX(0.5);
+    this.exampleEnemy.update();
   };
 }

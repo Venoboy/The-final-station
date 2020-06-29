@@ -4,9 +4,13 @@ import ENEMY_STATES from './enemyStates';
 export default class EnemyConstructor {
   constructor(config) {
     this.scene = config.scene;
+    this.player = config.player;
+    this.playerBody = config.player.body;
     this.type = config.type;
     this.position = config.position;
     this.state = ENEMY_STATES.standing;
+    this.speed = config.settings.speed;
+    this.currentSpeed = 0;
     this.x = config.position.x;
     this.y = config.position.y;
     this.enemy = this.scene.matter.add
@@ -31,5 +35,32 @@ export default class EnemyConstructor {
       .setScale(1)
       .setFixedRotation()
       .setPosition(this.x, this.y);
+
+    this.scene.matterCollision.addOnCollideStart({
+      objectA: this.sensors.detect,
+      objectB: this.player,
+      callback: (eventData) => this.onDetect(eventData),
+    });
+
+    this.scene.matterCollision.addOnCollideEnd({
+      objectA: this.sensors.detect,
+      objectB: this.player,
+      callback: (eventData) => console.log(eventData),
+    });
+  }
+
+  onDetect = () => {
+    console.log(this.enemy)
+    if (this.player.x < this.enemy.x) {
+      this.currentSpeed = -this.speed;
+    } else {
+      this.currentSpeed = this.speed;
+    }
+  };
+
+  onStopDetect = (eventData) => {};
+
+  update = () => {
+    this.enemy.setVelocityX(this.currentSpeed);
   }
 }

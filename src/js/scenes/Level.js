@@ -1,8 +1,11 @@
 /* eslint-disable camelcase */
 import Phaser from 'phaser';
 
+import { intrefaceTestInLevel } from '../test/interfaceTest';
 import PlayerInteraction from '../Player/PlayerInteraction';
 import EnemyLoader from '../Enemies/EnemyLoader';
+import { setCollisionCategory } from '../world/collisionCategories';
+
 import b_1 from '../../assets/level0/b_1.png';
 import b_2 from '../../assets/level0/b_2.png';
 import b_3 from '../../assets/level0/b_3.png';
@@ -11,8 +14,9 @@ import bak_2 from '../../assets/level0/bak_2.png';
 import bak_3 from '../../assets/level0/bak_3.png';
 import bak_5 from '../../assets/level0/bak_5.png';
 import moons from '../../assets/level0/backgr_3.png';
+import hunterPath from '../../assets/level0/hunter_1_0.png';
+import bigEnemyPic from '../../assets/level0/enemies/BigZombie Idle_02.png';
 
-import { intrefaceTestInLevel } from '../test/interfaceTest';
 
 const startValues = {
   health: 2,
@@ -44,12 +48,8 @@ export default class Level extends Phaser.Scene {
     this.load.image('bak_2', bak_2);
     this.load.image('bak_3', bak_3);
     this.load.image('bak_5', bak_5);
-
-    this.playerInteraction = new PlayerInteraction(this.scene.scene);
-    this.playerInteraction.preload();
-
-    this.enemyLoader = new EnemyLoader(this.scene.scene);
-    this.enemyLoader.preload();
+    this.load.image('hero', hunterPath);
+    this.load.image('enemyBig', bigEnemyPic);
   }
 
   create() {
@@ -69,7 +69,12 @@ export default class Level extends Phaser.Scene {
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
+    setCollisionCategory(this.scene.scene);
+
+    this.playerInteraction = new PlayerInteraction(this.scene.scene);
     this.playerInteraction.create();
+
+    this.enemyLoader = new EnemyLoader(this.scene.scene, this.playerInteraction.player);
     this.enemyLoader.create();
 
     this.camera = this.cameras.main;
