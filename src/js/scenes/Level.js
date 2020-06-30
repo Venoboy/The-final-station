@@ -1,7 +1,11 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable camelcase */
 import Phaser from 'phaser';
 
 import PlayerInteraction from '../Player/PlayerInteraction';
+import f_1 from '../../assets/level0/f_1.png';
+import f_2 from '../../assets/level0/f_2.png';
+import f_3 from '../../assets/level0/f_3.png';
 import b_1 from '../../assets/level0/b_1.png';
 import b_2 from '../../assets/level0/b_2.png';
 import b_3 from '../../assets/level0/b_3.png';
@@ -36,6 +40,9 @@ export default class Level extends Phaser.Scene {
 
   preload() {
     this.load.image('moons', moons);
+    this.load.image('f_1', f_1);
+    this.load.image('f_2', f_2);
+    this.load.image('f_3', f_3);
     this.load.image('b_1', b_1);
     this.load.image('b_2', b_2);
     this.load.image('b_3', b_3);
@@ -64,7 +71,7 @@ export default class Level extends Phaser.Scene {
     this.add.image(263, 280, 'bak_1').setScrollFactor(0.9, 1);
     this.add.image(256, 256, 'b_1');
     this.add.image(950, 350, 'bak_3').setScrollFactor(0.9, 1);
-    this.add.image(767, 256, 'b_2');
+    this.add.image(768, 256, 'b_2');
     this.add.image(1279, 256, 'b_3');
 
     setInteractionObjects(this);
@@ -85,6 +92,10 @@ export default class Level extends Phaser.Scene {
     this.camera = this.cameras.main;
     this.camera.setBounds(0, 0, 1536, 512);
     this.camera.setZoom(this.camera.width / heightPerScreen);
+
+    this.add.image(256, 256, 'f_1');
+    this.add.image(768, 256, 'f_2');
+    this.add.image(1279, 256, 'f_3');
   }
 
   update() {
