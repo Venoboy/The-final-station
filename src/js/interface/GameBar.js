@@ -6,7 +6,7 @@ import gameBar from '../../assets/interface/gameBarFrame.png';
 import bullet from '../../assets/interface/bullet.png';
 import bulletBG from '../../assets/interface/bulletBG.png';
 
-import { intarfaceTestInGameBar } from '../test/interfaceTest';
+import { switchEventListeners } from './UIHelpers';
 
 const magazineSize = 6;
 const textConfig = {
@@ -48,7 +48,7 @@ export default class GameBar extends Phaser.Scene {
     this.addItems();
     this.changePosition();
     this.scale.on('resize', this.changePosition, this);
-    intarfaceTestInGameBar(this);
+    switchEventListeners(this);
   }
 
   changePosition() {

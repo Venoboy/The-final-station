@@ -17,13 +17,15 @@ import moons from '../../assets/level0/backgr_3.png';
 import hunterPath from '../../assets/level0/hunter_1_0.png';
 import bigEnemyPic from '../../assets/level0/enemies/BigZombie Idle_02.png';
 
+import door from '../../assets/interaction-objects/Door3.png';
+import door_ from '../../assets/interaction-objects/Door1_.png';
+import lid from '../../assets/interaction-objects/Lid.png';
+import locker from '../../assets/interaction-objects/Locker.png';
+import locker_ from '../../assets/interaction-objects/Locker_.png';
+import deadBody1 from '../../assets/interaction-objects/DeadBody1.png';
+import deadBody2 from '../../assets/interaction-objects/DeadBody2.png';
 
-const startValues = {
-  health: 2,
-  bullets: 6,
-  food: 2,
-  keys: 10,
-};
+import { setInteractionObjects } from '../setters/level0';
 
 const heightPerScreen = 350;
 
@@ -48,6 +50,14 @@ export default class Level extends Phaser.Scene {
     this.load.image('bak_2', bak_2);
     this.load.image('bak_3', bak_3);
     this.load.image('bak_5', bak_5);
+    this.load.image('door', door);
+    this.load.image('door_', door_);
+    this.load.image('lid', lid);
+    this.load.image('locker', locker);
+    this.load.image('locker_', locker_);
+    this.load.image('deadBody1', deadBody1);
+    this.load.image('deadBody2', deadBody2);
+
     this.load.image('hero', hunterPath);
     this.load.image('enemyBig', bigEnemyPic);
   }
@@ -63,9 +73,7 @@ export default class Level extends Phaser.Scene {
     this.add.image(767, 256, 'b_2');
     this.add.image(1279, 256, 'b_3');
 
-    this.scene.launch('game-bar', startValues);
-
-    intrefaceTestInLevel(this);
+    setInteractionObjects(this);
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -73,6 +81,15 @@ export default class Level extends Phaser.Scene {
 
     this.playerInteraction = new PlayerInteraction(this.scene.scene);
     this.playerInteraction.create();
+
+    const startValues = {
+      health: this.playerInteraction.playerInstance.health,
+      food: this.playerInteraction.playerInstance.food,
+      keys: this.playerInteraction.playerInstance.keys,
+      bullets: this.playerInteraction.playerInstance.bullets,
+    };
+
+    this.scene.launch('game-bar', startValues);
 
     this.enemyLoader = new EnemyLoader(
       this.scene.scene, this.playerInteraction.playerInstance, this.playerInteraction.stairsArray,
