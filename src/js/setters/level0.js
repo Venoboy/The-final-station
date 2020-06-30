@@ -50,7 +50,7 @@ const setInteractionObjects = (context) => {
     scene: context, x: 791, y: 264, beforeTexture: 'lid',
   });
   object = new Lid({
-    scene: context, x: 646, y: 294, beforeTexture: 'lid',
+    scene: context, x: 646, y: 293, beforeTexture: 'lid',
   });
   object = new Storage({
     scene: context, x: 165, y: 175, beforeTexture: 'locker', afterTexture: 'locker_', items: interactionObjectsData.locker1,
