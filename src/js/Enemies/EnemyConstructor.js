@@ -23,7 +23,7 @@ export default class EnemyConstructor {
     const { width: w, height: h } = this.enemy;
     this.mainBody = Bodies.rectangle(w * 0.5, h * 0.5 + 1, 6, 18, { chamfer: { radius: 2 } });
     this.sensors = {
-      attack: Bodies.rectangle(w, h * 0.5, w * 0.5, h * 0.4, { isSensor: true }),
+      attack: Bodies.rectangle(w * 0.5, h * 0.5, w * 0.9, h * 0.4, { isSensor: true }),
       detect: Bodies.rectangle(w * 0.5, h * 0.5, w * 3, h * 0.5, { isSensor: true }),
     };
     const compoundBody = Body.create({
@@ -44,10 +44,12 @@ export default class EnemyConstructor {
   }
 
   onDetect = () => {
-    if (this.player.x < this.enemy.x) {
+    if (this.player.x < this.enemy.x - 1) {
       this.currentSpeed = -this.speed;
-    } else {
+    } else if (this.player.x > this.enemy.x + 1) {
       this.currentSpeed = this.speed;
+    } else {
+      this.currentSpeed = 0;
     }
   };
 
