@@ -1,5 +1,5 @@
 import Player from './Player';
-import { getCanGoX, setCanGoX } from './helpers/externalParams';
+import { getCanGoX, setCanGoX } from './playerStates/externalParams';
 import collisionCategories from '../world/collisionCategories';
 
 import level0json from '../../assets/level0Physics/level-start.xml.json';
@@ -9,6 +9,7 @@ import level0stairsJson from '../../assets/level0Physics/level-start-stairs.xml.
 import level0stairsMiddleJson from '../../assets/level0Physics/level-middle-stairs.xml.json';
 import StairsInteraction from '../objects/stairs/StairsInteraction';
 
+const groundArray = [];
 
 export default class PlayerInteraction {
   constructor(scene) {
@@ -32,12 +33,15 @@ export default class PlayerInteraction {
     this.ground.frictionStatic = 0.5;
     this.ground.friction = 0.5;
     this.ground.collisionFilter.category = collisionCategories.ground;
+    groundArray.push(this.ground);
 
     this.groundMiddle = this.scene.matter.add.fromPhysicsEditor(779, 261, level0MiddleJson.f_2);
     this.groundMiddle.collisionFilter.category = collisionCategories.ground;
+    groundArray.push(this.groundMiddle);
 
     this.groundEnd = this.scene.matter.add.fromPhysicsEditor(1303, 273, level0EndJson.f_3);
     this.groundEnd.collisionFilter.category = collisionCategories.ground;
+    groundArray.push(this.groundEnd);
 
     this.stairs = this.scene.matter.add.fromPhysicsEditor(486, 235, level0stairsJson.f_1);
     this.stairs.collisionFilter.category = collisionCategories.stairs;
@@ -84,3 +88,6 @@ export default class PlayerInteraction {
     this.stairsInteraction.controlYMovement();
   }
 }
+
+
+export { groundArray };

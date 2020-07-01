@@ -1,11 +1,25 @@
 const collisionCategories = {};
 
-const setCollisionCategory = (scene) => {
-  collisionCategories.player = scene.matter.world.nextCategory();
-  collisionCategories.playerBodySensor = scene.matter.world.nextCategory();
-  collisionCategories.ground = scene.matter.world.nextCategory();
-  collisionCategories.stairs = scene.matter.world.nextCategory();
+let currentCategory = 0;
+
+const nextCategory = () => {
+  if (currentCategory === 0) {
+    currentCategory = 1;
+  } else {
+    currentCategory *= 2;
+  }
+  if (currentCategory > 128) {
+    currentCategory = 1;
+  }
+  return currentCategory;
 };
 
+
+collisionCategories.player = nextCategory();
+collisionCategories.playerBodySensor = nextCategory();
+collisionCategories.ground = nextCategory();
+collisionCategories.stairs = nextCategory();
+
+
 export default collisionCategories;
-export { setCollisionCategory };
+export { nextCategory };

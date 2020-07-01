@@ -1,4 +1,4 @@
-import { setCanGoX } from '../../Player/helpers/externalParams';
+import { setCanGoX } from '../../Player/playerStates/externalParams';
 
 export default class StairsInteraction {
   constructor(config) {
@@ -21,9 +21,9 @@ export default class StairsInteraction {
   }
 
 
-  onStairsHandler = () => {
+  onStairsHandler = (isInPosition) => {
     this.player.body.ignoreGravity = true;
-    if (!(this.lastStep || this.playerInstance.isTouching.ground)) {
+    if (!(this.lastStep || this.playerInstance.isTouching.ground) && isInPosition) {
       setCanGoX(false);
     }
   };
@@ -89,7 +89,6 @@ export default class StairsInteraction {
     const distanceStairsLeft = Math
       .abs((stairs.bounds.max.x - this.STAIRS_WIDTH - playerA.position.x));
 
-    this.onStairsHandler();
 
     if ((this.distanceMiddle < this.ALLOWED_DISTANCE_MIDDLE && stairs.label === 'stairs-middle')
       || (distanceStairsLeft < this.ALLOWED_DISTANCE_SIDES && stairs.label === 'stairs-left')
@@ -99,6 +98,7 @@ export default class StairsInteraction {
     if (this.distanceMiddle === 0 || distanceRightSide === 0 || distanceLeftSide === 0) {
       this.isPlayerOnPosition = true;
     }
+    this.onStairsHandler(this.isPlayerOnPosition);
   };
 
   setLastStep = () => {

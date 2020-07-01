@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import InteractionObject from './InteractionObject';
+import collisionCategories from '../world/collisionCategories';
 
 export default class Door extends InteractionObject {
   constructor(scene, x, y, beforeActionTexture, afterActionTexture) {
@@ -18,6 +19,7 @@ export default class Door extends InteractionObject {
     const compoundBody = Body.create({
       parts: [mainBody, sensors.around],
     });
+    compoundBody.collisionFilter.category = collisionCategories.ground;
     return compoundBody;
   }
 }

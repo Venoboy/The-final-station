@@ -1,10 +1,10 @@
 /* eslint-disable camelcase */
 import Phaser from 'phaser';
 
-import { intrefaceTestInLevel } from '../test/interfaceTest';
 import PlayerInteraction from '../Player/PlayerInteraction';
 import EnemyLoader from '../Enemies/EnemyLoader';
-import { setCollisionCategory } from '../world/collisionCategories';
+import { setInteractionObjects } from '../setters/level0';
+import { stats } from '../Player/playerStates/stats';
 
 import b_1 from '../../assets/level0/b_1.png';
 import b_2 from '../../assets/level0/b_2.png';
@@ -16,7 +16,7 @@ import bak_5 from '../../assets/level0/bak_5.png';
 import moons from '../../assets/level0/backgr_3.png';
 import hunterPath from '../../assets/level0/hunter_1_0.png';
 import bigEnemyPic from '../../assets/level0/enemies/BigZombie Idle_02.png';
-
+import fastEnemyPic from '../../assets/level0/enemies/FastZombie Idle_03.png';
 import door from '../../assets/interaction-objects/Door3.png';
 import door_ from '../../assets/interaction-objects/Door1_.png';
 import lid from '../../assets/interaction-objects/Lid.png';
@@ -25,7 +25,6 @@ import locker_ from '../../assets/interaction-objects/Locker_.png';
 import deadBody1 from '../../assets/interaction-objects/DeadBody1.png';
 import deadBody2 from '../../assets/interaction-objects/DeadBody2.png';
 
-import { setInteractionObjects } from '../setters/level0';
 
 const heightPerScreen = 350;
 
@@ -60,6 +59,7 @@ export default class Level extends Phaser.Scene {
 
     this.load.image('hero', hunterPath);
     this.load.image('enemyBig', bigEnemyPic);
+    this.load.image('enemyFast', fastEnemyPic);
   }
 
   create() {
@@ -77,16 +77,14 @@ export default class Level extends Phaser.Scene {
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
-    setCollisionCategory(this.scene.scene);
-
     this.playerInteraction = new PlayerInteraction(this.scene.scene);
     this.playerInteraction.create();
 
     const startValues = {
-      health: this.playerInteraction.playerInstance.health,
-      food: this.playerInteraction.playerInstance.food,
-      keys: this.playerInteraction.playerInstance.keys,
-      bullets: this.playerInteraction.playerInstance.bullets,
+      health: stats.aids,
+      food: stats.food,
+      keys: stats.keys,
+      bullets: stats.bullets,
     };
 
     this.scene.launch('game-bar', startValues);
