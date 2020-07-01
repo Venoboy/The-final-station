@@ -74,7 +74,7 @@ export default class Level extends Phaser.Scene {
     this.add.image(768, 256, 'b_2');
     this.add.image(1279, 256, 'b_3');
 
-    setInteractionObjects(this);
+    this.interactionObjects = setInteractionObjects(this);
 
     this.cursors = this.input.keyboard.createCursorKeys();
 

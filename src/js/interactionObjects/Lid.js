@@ -2,9 +2,9 @@ import Phaser from 'phaser';
 import InteractionObject from './InteractionObject';
 
 export default class Door extends InteractionObject {
-  constructor(scene, x, y, beforeActionTexture, afterActionTexture) {
-    super(scene, x, y, beforeActionTexture, afterActionTexture);
-    this.createCompoundBody(x, y);
+  constructor(config) {
+    super(config);
+    this.createCompoundBody(config.x, config.y);
     this.interactionInfo.type = 'door';
   }
 

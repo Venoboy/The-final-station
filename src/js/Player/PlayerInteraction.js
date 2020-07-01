@@ -25,7 +25,7 @@ export default class PlayerInteraction {
   }
 
   create() {
-    this.playerInstance = new Player(this.scene, 475, 199, 'hero');
+    this.playerInstance = new Player(this.scene, 130, 178, 'hero');
     this.player = this.playerInstance.player;
     this.playerHeight = this.player.height * this.player.scale;
 
