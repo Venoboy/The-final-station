@@ -1,27 +1,35 @@
+import Phaser from 'phaser';
+
 export default class Room {
   constructor(config) {
     this.id = config.id;
-    this.opened = true;
-    this.room = config.scene.add.rectangle(config.x, config.y, config.w, config.h, 0x1e1e1e, 0);
+    this.opened = false;
+    // this.room = config.scene.add.rectangle(config.x, config.y, config.w, config.h, 0x1e1e1e, 1);
+    this.graphics = config.scene.add.graphics();
+    this.room = new Phaser.Geom.Polygon(config.points);
+    this.graphics.fillStyle(0x1e1e1e);
+    this.graphics.fillPoints(this.room.points, true);
     this.openTween = config.scene.tweens.add({
-      targets: this.room,
+      targets: this.graphics,
       paused: true,
       alpha: 0,
       duration: 1500,
     });
-    this.CloseTween = config.scene.tweens.add({
-      targets: this.room,
+    this.closeTween = config.scene.tweens.add({
+      targets: this.graphics,
       paused: true,
       alpha: 1,
-      duration: 1500,
+      duration: 1000,
     });
   }
 
   close() {
-    this.CloseTween.play();
+    this.closeTween.play();
+    this.opened = false;
   }
 
   open() {
     this.openTween.play();
+    this.opened = true;
   }
 }

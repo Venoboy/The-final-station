@@ -1,38 +1,38 @@
 import Door from '../interactionObjects/Door';
 import Storage from '../interactionObjects/Storage';
 import Lid from '../interactionObjects/Lid';
+import Room from '../rooms/Room';
+import RoomManager from '../rooms/RoomManager';
 
 import {
   interactionObjectsData, doorsPosition, lidsPosition,
   lockersPosition, deadBody1Position, deadBody2Position,
-  shadowsData,
+  roomsData, openRoomsData,
 } from '../data/level0';
 
 const setInteractionObjects = (context) => {
   // eslint-disable-next-line no-unused-vars
-  const objects = {
-    doors: [],
-    lids: [],
-    storages: [],
-  };
-  doorsPosition.forEach((cords) => {
+  const objects = [];
+  doorsPosition.forEach((data) => {
     const door = new Door({
       scene: context,
-      x: cords.x,
-      y: cords.y,
+      id: data.id,
+      x: data.x,
+      y: data.y,
       beforeTexture: 'door',
       afterTexture: 'door_',
     });
-    objects.doors.push(door);
+    objects.push(door);
   });
-  lidsPosition.forEach((cords) => {
+  lidsPosition.forEach((data) => {
     const lid = new Lid({
       scene: context,
-      x: cords.x,
-      y: cords.y,
+      id: data.id,
+      x: data.x,
+      y: data.y,
       beforeTexture: 'lid',
     });
-    objects.lids.push(lid);
+    objects.push(lid);
   });
   lockersPosition.forEach((cords) => {
     const lid = new Storage({
@@ -43,7 +43,7 @@ const setInteractionObjects = (context) => {
       afterTexture: 'locker_',
       items: interactionObjectsData.locker1,
     });
-    objects.storages.push(lid);
+    objects.push(lid);
   });
   deadBody1Position.forEach((cords) => {
     const lid = new Storage({
@@ -54,7 +54,7 @@ const setInteractionObjects = (context) => {
       afterTexture: 'deadBody1',
       items: interactionObjectsData.deadBody1,
     });
-    objects.storages.push(lid);
+    objects.push(lid);
   });
   deadBody2Position.forEach((cords) => {
     const lid = new Storage({
@@ -65,9 +65,26 @@ const setInteractionObjects = (context) => {
       afterTexture: 'deadBody2',
       items: interactionObjectsData.deadBody2,
     });
-    objects.storages.push(lid);
+    objects.push(lid);
   });
   return objects;
 };
 
-export { setInteractionObjects };
+const setRooms = (context) => {
+  const rooms = [];
+  roomsData.forEach((config) => {
+    const room = new Room({
+      scene: context,
+      points: config.points,
+      id: config.id,
+    });
+    rooms.push(room);
+  });
+  const roomManager = new RoomManager({
+    rooms,
+    openers: openRoomsData,
+  });
+  return roomManager;
+};
+
+export { setInteractionObjects, setRooms };

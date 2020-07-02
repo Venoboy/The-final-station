@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import InteractionObject from './InteractionObject';
+import eventsCenter from '../eventsCenter';
 
 export default class Door extends InteractionObject {
   constructor(config) {
@@ -19,5 +20,12 @@ export default class Door extends InteractionObject {
       parts: [mainBody, sensors.around],
     });
     return compoundBody;
+  }
+
+  interact() {
+    console.log(this.id);
+    eventsCenter.emit('lid-opened', this.id);
+    const info = super.interact();
+    return info;
   }
 }

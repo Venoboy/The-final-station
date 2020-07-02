@@ -23,7 +23,7 @@ import locker_ from '../../assets/interaction-objects/Locker_.png';
 import deadBody1 from '../../assets/interaction-objects/DeadBody1.png';
 import deadBody2 from '../../assets/interaction-objects/DeadBody2.png';
 
-import { setInteractionObjects } from '../setters/level0';
+import { setInteractionObjects, setRooms } from '../setters/level0';
 
 const heightPerScreen = 350;
 
@@ -96,6 +96,8 @@ export default class Level extends Phaser.Scene {
     this.add.image(256, 256, 'f_1');
     this.add.image(768, 256, 'f_2');
     this.add.image(1279, 256, 'f_3');
+
+    setRooms(this);
   }
 
   update() {
