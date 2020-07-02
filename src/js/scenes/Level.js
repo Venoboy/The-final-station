@@ -14,6 +14,7 @@ import bak_2 from '../../assets/level0/bak_2.png';
 import bak_3 from '../../assets/level0/bak_3.png';
 import bak_5 from '../../assets/level0/bak_5.png';
 import moons from '../../assets/level0/backgr_3.png';
+import tunnel from '../../assets/level0/tunnel.png';
 
 import door from '../../assets/interaction-objects/Door3.png';
 import door_ from '../../assets/interaction-objects/Door1_.png';
@@ -23,7 +24,7 @@ import locker_ from '../../assets/interaction-objects/Locker_.png';
 import deadBody1 from '../../assets/interaction-objects/DeadBody1.png';
 import deadBody2 from '../../assets/interaction-objects/DeadBody2.png';
 
-import { setInteractionObjects, setRooms } from '../setters/level0';
+import { setInteractionObjects, setRooms, setTunnel } from '../setters/level0';
 
 const heightPerScreen = 350;
 
@@ -51,6 +52,8 @@ export default class Level extends Phaser.Scene {
     this.load.image('bak_3', bak_3);
     this.load.image('bak_5', bak_5);
 
+    this.load.image('tunnel', tunnel);
+
     this.load.image('door', door);
     this.load.image('door_', door_);
     this.load.image('lid', lid);
@@ -71,7 +74,7 @@ export default class Level extends Phaser.Scene {
     this.add.image(263, 280, 'bak_1').setScrollFactor(0.9, 1);
     this.add.image(256, 256, 'b_1');
     this.add.image(950, 350, 'bak_3').setScrollFactor(0.9, 1);
-    this.add.image(768, 256, 'b_2');
+    this.add.image(767.5, 256, 'b_2');
     this.add.image(1279, 256, 'b_3');
 
     this.interactionObjects = setInteractionObjects(this);
@@ -94,10 +97,11 @@ export default class Level extends Phaser.Scene {
     this.camera.setZoom(this.camera.width / heightPerScreen);
 
     this.add.image(256, 256, 'f_1');
-    this.add.image(768, 256, 'f_2');
+    this.add.image(767.5, 256, 'f_2');
     this.add.image(1279, 256, 'f_3');
 
     setRooms(this);
+    setTunnel(this, this.playerInteraction.playerInstance.mainBody);
   }
 
   update() {

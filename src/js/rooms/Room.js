@@ -13,7 +13,7 @@ export default class Room {
       targets: this.graphics,
       paused: true,
       alpha: 0,
-      duration: 1500,
+      duration: 1000,
     });
     this.closeTween = config.scene.tweens.add({
       targets: this.graphics,

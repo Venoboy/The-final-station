@@ -3,6 +3,7 @@ import Storage from '../interactionObjects/Storage';
 import Lid from '../interactionObjects/Lid';
 import Room from '../rooms/Room';
 import RoomManager from '../rooms/RoomManager';
+import TunnelSensor from '../interactionObjects/TunnelSensor';
 
 import {
   interactionObjectsData, doorsPosition, lidsPosition,
@@ -11,7 +12,6 @@ import {
 } from '../data/level0';
 
 const setInteractionObjects = (context) => {
-  // eslint-disable-next-line no-unused-vars
   const objects = [];
   doorsPosition.forEach((data) => {
     const door = new Door({
@@ -87,4 +87,16 @@ const setRooms = (context) => {
   return roomManager;
 };
 
-export { setInteractionObjects, setRooms };
+const setTunnel = (context, collisionBodies) => {
+  const tunnel = new TunnelSensor({
+    scene: context,
+    x: 650,
+    y: 455,
+    texture: 'tunnel',
+    collisionBodies,
+  });
+
+  return tunnel;
+};
+
+export { setInteractionObjects, setRooms, setTunnel };

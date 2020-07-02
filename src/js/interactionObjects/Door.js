@@ -24,7 +24,6 @@ export default class Door extends InteractionObject {
 
   interact() {
     eventsCenter.emit('door-opened', this.id);
-    console.log(this.id);
     const info = super.interact();
     return info;
   }

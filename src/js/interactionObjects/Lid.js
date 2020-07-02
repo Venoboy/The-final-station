@@ -23,7 +23,6 @@ export default class Door extends InteractionObject {
   }
 
   interact() {
-    console.log(this.id);
     eventsCenter.emit('lid-opened', this.id);
     const info = super.interact();
     return info;
