@@ -12,7 +12,7 @@ export default class Door extends InteractionObject {
   createCompoundBody() {
     const { Body, Bodies } = Phaser.Physics.Matter.Matter;
     const { width: w, height: h } = this;
-    const mainBody = Bodies.rectangle(w * 0.5, h * 0.5 + 1, w, 2);
+    const mainBody = Bodies.rectangle(w * 0.5, h * 0.5 + 2, w, 2);
     const sensors = {
       around: Bodies.rectangle(w * 0.5, h * 0.5, w, h, { isSensor: true }),
     };

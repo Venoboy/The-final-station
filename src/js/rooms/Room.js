@@ -29,6 +29,7 @@ export default class Room {
   }
 
   open() {
+    console.log(this.id);
     this.openTween.play();
     this.opened = true;
   }
