@@ -4,7 +4,6 @@ export default class Room {
   constructor(config) {
     this.id = config.id;
     this.opened = false;
-    // this.room = config.scene.add.rectangle(config.x, config.y, config.w, config.h, 0x1e1e1e, 1);
     this.graphics = config.scene.add.graphics();
     this.room = new Phaser.Geom.Polygon(config.points);
     this.graphics.fillStyle(0x1e1e1e);
@@ -29,7 +28,6 @@ export default class Room {
   }
 
   open() {
-    console.log(this.id);
     this.openTween.play();
     this.opened = true;
   }

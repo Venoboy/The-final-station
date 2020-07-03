@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 /* eslint-disable camelcase */
 import Phaser from 'phaser';
 
@@ -31,7 +30,6 @@ export default class Level extends Phaser.Scene {
   }
 
   init() {
-    // this.scale.scaleMode = Phaser.Scale.SHOW_ALL;
     this.scale.pageAlignVertically = false;
   }
 

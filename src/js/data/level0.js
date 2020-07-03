@@ -114,7 +114,7 @@ const lidsPosition = [
     id: 14,
   },
   {
-    x: 648,
+    x: 647,
     y: 293,
     id: 15,
   },
