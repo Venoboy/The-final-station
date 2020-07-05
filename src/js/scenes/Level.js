@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import Phaser from 'phaser';
 
-import PlayerInteraction from '../Player/PlayerInteraction';
+import PlayerInteraction, { stairsArray } from '../Player/PlayerInteraction';
 import EnemyLoader from '../Enemies/EnemyLoader';
 import { setInteractionObjects } from '../setters/level0';
 import { stats } from '../Player/playerStates/stats';
@@ -90,7 +90,7 @@ export default class Level extends Phaser.Scene {
     this.scene.launch('game-bar', startValues);
 
     this.enemyLoader = new EnemyLoader(
-      this.scene.scene, this.playerInteraction.playerInstance, this.playerInteraction.stairsArray,
+      this.scene.scene, this.playerInteraction.playerInstance, stairsArray,
     );
     this.enemyLoader.create();
 

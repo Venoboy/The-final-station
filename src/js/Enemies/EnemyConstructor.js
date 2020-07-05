@@ -4,6 +4,7 @@ import { doors } from '../setters/level0';
 import { looseHealth } from '../Player/playerStates/stats';
 import { groundArray } from '../Player/PlayerInteraction';
 
+
 export default class EnemyConstructor {
   constructor(config) {
     this.config = config;
@@ -27,7 +28,8 @@ export default class EnemyConstructor {
     this.currentWalking = 0;
     this.stayingInterval = 15;
     this.currentStaying = 0;
-    this.direction = 'stay';
+    this.direction = '';
+    this.stop = false;
     this.walkingIntervalsCount = 3;
     this.currentWalkingIntervals = 0;
     this.isEnemySeePlayer = false;
@@ -122,40 +124,43 @@ export default class EnemyConstructor {
 
   enemySearchingPlayer = () => {
     this.activeDoors = doors.filter((door) => door.body !== undefined);
-    this.scene.matter.overlap(this.sensors.left,
-      [...groundArray, ...this.activeDoors], this.sidesSensorsHandler);
+    this.scene.matter.overlap(
+      [this.sensors.left, this.sensors.right],
+      [...groundArray, ...this.activeDoors], this.sidesSensorsHandler,
+    );
 
     if (this.currentWalkingIntervals < this.walkingIntervalsCount) {
       if (this.currentWalking === 0 && this.currentStaying === 0) {
         this.direction = (Math.random() < 0.5) ? 'left' : 'right';
       }
-      if (this.direction === 'stay') {
-        this.currentSpeed = 0;
-      } else if (this.direction === 'left' && this.currentWalking < this.walkingInterval) {
-        this.currentSpeed = this.canGoLeft ? -this.speed : 0;
-        if (this.currentSpeed === 0) {
-          this.direction = 'stay';
-        }
-        this.currentWalking += 1;
-      } else if (this.direction === 'right' && this.currentWalking < this.walkingInterval) {
-        this.currentSpeed = this.canGoRight ? this.speed : 0;
-        if (this.currentSpeed === 0) {
-          this.direction = 'stay';
-        }
-        this.currentWalking += 1;
-      } else if (this.currentWalking === this.walkingInterval
-        && this.currentStaying < this.stayingInterval) {
-        this.currentSpeed = 0;
-        this.currentStaying += 1;
-      } else if (this.currentWalking === this.walkingInterval
-        && this.currentStaying === this.stayingInterval) {
-        this.currentWalking = 0;
-        this.currentStaying = 0;
-        this.currentWalkingIntervals += 1;
-      }
     } else {
       this.isEnemySawPlayer = this.isEnemySeePlayer;
       this.currentWalkingIntervals = 0;
+    }
+
+    if (this.direction === 'left' && this.currentWalking < this.walkingInterval) {
+      this.currentSpeed = (this.canGoLeft && !this.stop) ? -this.speed : 0;
+      if (this.currentSpeed === 0) {
+        this.stop = true;
+      }
+      this.currentWalking += 1;
+    } else if (this.direction === 'right' && this.currentWalking < this.walkingInterval) {
+      this.currentSpeed = (this.canGoRight && !this.stop) ? this.speed : 0;
+      if (this.currentSpeed === 0) {
+        this.stop = true;
+      }
+      this.currentWalking += 1;
+    } else if (this.currentWalking === this.walkingInterval
+      && this.currentStaying < this.stayingInterval) {
+      this.currentSpeed = 0;
+      this.currentStaying += 1;
+    }
+
+    if (this.currentWalking === this.walkingInterval
+      && this.currentStaying === this.stayingInterval) {
+      this.currentWalking = 0;
+      this.currentStaying = 0;
+      this.currentWalkingIntervals += 1;
     }
   };
 
@@ -169,12 +174,10 @@ export default class EnemyConstructor {
   };
 
   update = () => {
-    this.canGoLeft = true;
-    this.canGoRight = true;
     this.enemy.setCollidesWith([collisionCategories.ground]);
     this.enemy.body.ignoreGravity = false;
     this.currentSpeed = 0;
-    this.scene.matter.overlap(this.enemy, this.config.stairsArray, this.enemyStairsOverlap);
+    this.scene.matter.overlap(this.sensors.body, this.config.stairsArray, this.enemyStairsOverlap);
     this.enemyCheckingPlayer();
     // здесь можно вставить анимацию врага, в зависимости от this.currentSpeed
     this.enemy.setVelocityX(this.currentSpeed);
@@ -182,5 +185,8 @@ export default class EnemyConstructor {
     if (this.isEnemySeePlayer) {
       this.isEnemySawPlayer = true;
     }
+    this.canGoLeft = true;
+    this.canGoRight = true;
+    this.stop = false;
   }
 }

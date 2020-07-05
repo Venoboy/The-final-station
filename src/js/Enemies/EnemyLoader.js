@@ -8,12 +8,11 @@ export default class EnemyLoader {
     this.scene = scene;
     this.playerInstance = playerInstance;
     this.stairsArray = stairsArr;
-    this.COLLISION_GROUP_OFFSET = 100;
     this.enemiesArray = [];
+    this.ENEMY_SLEEP_DISTANCE = 240;
   }
 
   create = () => {
-    // let collisionGroup = this.COLLISION_GROUP_OFFSET;
     const collisionGroup = 0;
     Object.entries(enemyPositions.default)
       .filter((elem) => elem[0] !== 'default')
@@ -31,8 +30,6 @@ export default class EnemyLoader {
           config.playerInstance = this.playerInstance;
           config.collisionCategory = nextCategory();
           config.collisionGroup = collisionGroup;
-
-          // collisionGroup += 1;
 
           return new EnemyConstructor(config);
         });
