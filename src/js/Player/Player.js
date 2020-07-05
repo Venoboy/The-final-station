@@ -1,22 +1,11 @@
 import Phaser from 'phaser';
 import ObjectInteraction from './ObjectInteraction';
-
-const defaultValues = {
-  health: 2,
-  bullets: 6,
-  food: 2,
-  keys: 0,
-};
+import { stats } from './playerStates/stats';
 
 export default class Player {
   constructor(scene, x, y, stringId) {
     this.player = scene.matter.add.image(x, y, stringId);
-    this.player.setDensity(10);
-
-    this.health = defaultValues.health;
-    this.bullets = defaultValues.bullets;
-    this.food = defaultValues.food;
-    this.keys = defaultValues.keys;
+    this.stats = stats;
 
     const { Body, Bodies } = Phaser.Physics.Matter.Matter;
     const { width: w, height: h } = this.player;
@@ -27,10 +16,11 @@ export default class Player {
       right: Bodies.rectangle(w, h * 0.5, 2, h * 0.1, { isSensor: true }),
       objectSensor: Bodies.rectangle(w * 0.5, h * 0.5 + 1, w * 1.5, h + 2, { isSensor: true }),
       around: Bodies.rectangle(w * 0.5, h * 0.5, w * 1.8, h * 1.1, { isSensor: true }),
+      body: Bodies.rectangle(w * 0.5, h * 0.5, w, h, { chamfer: { radius: 6 }, isSensor: true }),
     };
     const compoundBody = Body.create({
       parts: [this.mainBody, this.sensors.bottom, this.sensors.left,
-        this.sensors.right, this.sensors.around,  this.sensors.objectSensor],
+        this.sensors.right, this.sensors.around, this.sensors.body, this.sensors.objectSensor],
       frictionStatic: 0.1,
       frictionAir: 0.02,
       friction: 0.1,
