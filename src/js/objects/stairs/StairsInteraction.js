@@ -1,4 +1,5 @@
 import { setCanGoX } from '../../Player/playerStates/externalParams';
+import sidesCollisionHandler from '../../Player/playerStates/sidesCollisionHandler';
 
 export default class StairsInteraction {
   constructor(config) {
@@ -119,7 +120,10 @@ export default class StairsInteraction {
     if (this.isPlayerOnPosition) {
       if (this.cursors.up.isDown && !this.lastStep) {
         this.player.setVelocityY(-this.PLAYER_SPEED_Y);
-      } else if (this.cursors.down.isDown) {
+      } else if (
+        this.cursors.down.isDown
+        && sidesCollisionHandler(this.playerInstance, this.scene).canDown
+      ) {
         this.player.setVelocityY(this.PLAYER_SPEED_Y);
       } else {
         this.player.setVelocityY(0);

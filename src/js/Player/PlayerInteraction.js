@@ -8,8 +8,10 @@ import level0EndJson from '../../assets/level0Physics/level-end.xml.json';
 import level0stairsJson from '../../assets/level0Physics/level-start-stairs.xml.json';
 import level0stairsMiddleJson from '../../assets/level0Physics/level-middle-stairs.xml.json';
 import StairsInteraction from '../objects/stairs/StairsInteraction';
+import sidesCollisionHandler from './playerStates/sidesCollisionHandler';
 
 const groundArray = [];
+const stairsArray = [];
 
 export default class PlayerInteraction {
   constructor(scene) {
@@ -18,7 +20,6 @@ export default class PlayerInteraction {
     this.movingKeysPressed = false;
     this.scene = scene;
     this.stairsInteraction = {};
-    this.stairsArray = [];
 
     this.PLAYER_SPEED_X = 1.8;
   }
@@ -45,11 +46,11 @@ export default class PlayerInteraction {
 
     this.stairs = this.scene.matter.add.fromPhysicsEditor(486, 235, level0stairsJson.f_1);
     this.stairs.collisionFilter.category = collisionCategories.stairs;
-    this.stairsArray.push(this.stairs);
+    stairsArray.push(this.stairs);
     this.stairsMiddle = this.scene.matter.add
       .fromPhysicsEditor(770, 315.5, level0stairsMiddleJson.f_2);
     this.stairsMiddle.collisionFilter.category = collisionCategories.stairs;
-    this.stairsArray.push(this.stairsMiddle);
+    stairsArray.push(this.stairsMiddle);
 
     this.camera = this.scene.cameras.main;
     this.camera.startFollow(this.player, false, 0.1, 0.1);
@@ -59,7 +60,7 @@ export default class PlayerInteraction {
     const playerInteractionConfig = {
       scene: this.scene,
       cursors: this.cursors,
-      stairsArray: this.stairsArray,
+      stairsArray,
       playerInstance: this.playerInstance,
     };
     this.stairsInteraction = new StairsInteraction(playerInteractionConfig);
@@ -71,13 +72,14 @@ export default class PlayerInteraction {
       && !this.playerInstance.isTouching.left
       && !this.playerInstance.isTouching.right;
     setCanGoX(true);
+    const { canLeft, canRight } = sidesCollisionHandler(this.playerInstance, this.scene);
 
     this.stairsInteraction.setStairsOverlap();
 
-    if (this.cursors.left.isDown && getCanGoX()) {
+    if (this.cursors.left.isDown && getCanGoX() && canLeft) {
       this.movingKeysPressed = true;
       this.player.setVelocityX(-this.PLAYER_SPEED_X);
-    } else if (this.cursors.right.isDown && getCanGoX()) {
+    } else if (this.cursors.right.isDown && getCanGoX() && canRight) {
       this.movingKeysPressed = true;
       this.player.setVelocityX(this.PLAYER_SPEED_X);
     } else {
@@ -90,4 +92,4 @@ export default class PlayerInteraction {
 }
 
 
-export { groundArray };
+export { groundArray, stairsArray };
