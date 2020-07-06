@@ -21,7 +21,7 @@ import deadBody2 from '../../assets/interaction-objects/DeadBody2.png';
 
 import { setInteractionObjects, setRooms, setTunnel } from '../setters/level0';
 
-const heightPerScreen = 350;
+const heightPerScreen = 450;
 
 export default class Level extends Phaser.Scene {
   constructor() {
@@ -59,7 +59,7 @@ export default class Level extends Phaser.Scene {
   create() {
     this.add.image(1020, 256, 'bak_2');
     this.add.image(648, 132, 'bak_1');
-    this.add.image(695, 120, 'moons').setScrollFactor(1.15, 1);
+    this.add.image(760, 120, 'moons').setScrollFactor(0.13, 1);
     this.add.image(900, 315, 'bak_5').setScrollFactor(0.9, 1);
     this.add.image(263, 280, 'bak_1').setScrollFactor(0.9, 1);
     this.add.image(950, 350, 'bak_3').setScrollFactor(0.9, 1);
@@ -81,11 +81,10 @@ export default class Level extends Phaser.Scene {
     this.scene.launch('game-bar', startValues);
 
     this.camera = this.cameras.main;
-    this.camera.setBounds(0, 0, 1536, 512);
+    this.camera.setBounds(0, 0, 1280, 512);
     this.camera.setZoom(this.camera.width / heightPerScreen);
 
     this.add.image(768, 256, 'f123');
-
     setRooms(this);
     setTunnel(this, this.playerInteraction.playerInstance.mainBody);
   }

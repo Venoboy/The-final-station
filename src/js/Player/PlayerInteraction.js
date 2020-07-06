@@ -17,7 +17,7 @@ export default class PlayerInteraction {
     this.stairsInteraction = {};
     this.stairsArray = [];
 
-    this.PLAYER_SPEED_X = 1.8;
+    this.PLAYER_SPEED_X = 1.3;
   }
 
   preload() {
