@@ -121,7 +121,7 @@ const lidsPosition = [
 ];
 const lockersPosition = [
   {
-    x: 163,
+    x: 168,
     y: 175,
   },
 ];
