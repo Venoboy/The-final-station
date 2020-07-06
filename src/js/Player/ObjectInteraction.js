@@ -1,5 +1,5 @@
 import { updateUI } from '../interface/UIHelpers';
-import InteractionObject from '../interactionObjects/InteractionObject';
+import InteractionObject from '../objects/interactionObjects/InteractionObject';
 
 export default class ObjectInteraction {
   constructor(scene, player) {

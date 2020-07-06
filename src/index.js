@@ -3,7 +3,7 @@ import PhaserMatterCollisionPlugin from 'phaser-matter-collision-plugin';
 
 import Level from './js/scenes/Level';
 import GameBar from './js/interface/GameBar';
-import OutlinePipeline from './js/interactionObjects/OutlinePipeline';
+import OutlinePipeline from './js/objects/interactionObjects/OutlinePipeline';
 
 const config = {
   type: Phaser.AUTO,

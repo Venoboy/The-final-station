@@ -1,9 +1,9 @@
-import Door from '../interactionObjects/Door';
-import Storage from '../interactionObjects/Storage';
-import Lid from '../interactionObjects/Lid';
+import Door from '../objects/interactionObjects/Door';
+import Storage from '../objects/interactionObjects/Storage';
+import Lid from '../objects/interactionObjects/Lid';
 import Room from '../rooms/Room';
 import RoomManager from '../rooms/RoomManager';
-import TunnelSensor from '../interactionObjects/TunnelSensor';
+import TunnelSensor from '../objects/interactionObjects/TunnelSensor';
 
 import {
   interactionObjectsData, doorsPosition, lidsPosition,
