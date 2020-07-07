@@ -70,7 +70,6 @@ export default class InteractionObject extends Phaser.Physics.Matter.Image {
   interact() {
     const info = this.interactionInfo;
     if (this.sound) {
-      console.log('sound');
       this.sound.play();
     }
     if (this.afterActionImage) {

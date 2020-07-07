@@ -306,8 +306,29 @@ const openRoomsData = new Map([
   [15, [11, 14]],
 ]);
 
+const soundSensorsData = [
+  {
+    x: 651,
+    y: 185,
+    soundKey: 'crowdTalks',
+    distanceThreshold: {
+      x: 125,
+      y: 20,
+    },
+  },
+  {
+    x: 1200,
+    y: 355,
+    soundKey: 'stream',
+    distanceThreshold: {
+      x: 200,
+      y: 20,
+    },
+  }
+];
+
 export {
   interactionObjectsData, doorsData, lidsData,
   lockersData, deadBody1Data, deadBody2Data,
-  roomsData, openRoomsData,
+  roomsData, openRoomsData, soundSensorsData,
 };

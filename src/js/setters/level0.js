@@ -5,11 +5,12 @@ import Lid from '../objects/interactionObjects/Lid';
 import Room from '../rooms/Room';
 import RoomManager from '../rooms/RoomManager';
 import TunnelSensor from '../objects/interactionObjects/TunnelSensor';
+import SoundSensor from '../objects/soundSensors/SoundSensor';
 
 import {
   interactionObjectsData, doorsData, lidsData,
   lockersData, deadBody1Data, deadBody2Data,
-  roomsData, openRoomsData,
+  roomsData, openRoomsData, soundSensorsData,
 } from '../data/level0';
 
 const doors = [];
@@ -108,6 +109,22 @@ const setTunnel = (context, collisionBodies) => {
   return tunnel;
 };
 
+const setSoundSensors = (scene, sensorTrigger) => {
+  const soundSensors = [];
+  soundSensorsData.forEach((data) => {
+    const sensor = new SoundSensor({
+      scene,
+      x: data.x,
+      y: data.y,
+      soundKey: data.soundKey,
+      trigger: sensorTrigger,
+      distanceThreshold: data.distanceThreshold,
+    });
+    soundSensors.push(sensor);
+  });
+  return soundSensors;
+};
+
 export {
-  setInteractionObjects, setRooms, setTunnel, doors,
+  setInteractionObjects, setRooms, setTunnel, doors, setSoundSensors,
 };

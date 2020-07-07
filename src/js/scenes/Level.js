@@ -23,7 +23,9 @@ import locker from '../../assets/interaction-objects/Locker.png';
 import locker_ from '../../assets/interaction-objects/Locker_.png';
 import deadBody1 from '../../assets/interaction-objects/DeadBody1.png';
 import deadBody2 from '../../assets/interaction-objects/DeadBody2.png';
-import { setInteractionObjects, setRooms, setTunnel } from '../setters/level0';
+import {
+  setInteractionObjects, setRooms, setTunnel, setSoundSensors,
+} from '../setters/level0';
 
 import doorSound1 from '../../assets/audio/door_met_1.mp3';
 import doorSound3 from '../../assets/audio/door_met_3.mp3';
@@ -31,6 +33,9 @@ import doorSound4 from '../../assets/audio/door_met_4.mp3';
 import lidSound from '../../assets/audio/lid_open.mp3';
 import lockerSound from '../../assets/audio/locker_open.mp3';
 import pickUpSound from '../../assets/audio/pickUp.mp3';
+import levelMusic from '../../assets/audio/levelMusic.mp3';
+import crowdTalks from '../../assets/audio/crowd_talks.mp3';
+import stream from '../../assets/audio/stream.mp3';
 
 const heightPerScreen = 450;
 
@@ -73,6 +78,9 @@ export default class Level extends Phaser.Scene {
     this.load.audio('lidSound', lidSound);
     this.load.audio('lockerSound', lockerSound);
     this.load.audio('pickUpSound', pickUpSound);
+    this.load.audio('levelMusic', levelMusic);
+    this.load.audio('crowdTalks', crowdTalks);
+    this.load.audio('stream', stream);
   }
 
   create() {
@@ -112,10 +120,17 @@ export default class Level extends Phaser.Scene {
     this.add.image(768, 256, 'f123');
     setRooms(this);
     setTunnel(this, this.playerInteraction.playerInstance.mainBody);
+
+    this.music = this.sound.add('levelMusic');
+    this.music.loop = true;
+    // this.music.play();
+
+    this.soundSensors = setSoundSensors(this, this.playerInteraction.playerInstance.player);
   }
 
   update() {
     this.playerInteraction.update();
     this.enemyLoader.update();
+    this.soundSensors.forEach((soundSensor) => soundSensor.checkDistance());
   }
 }
