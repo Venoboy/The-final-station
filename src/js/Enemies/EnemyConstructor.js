@@ -11,7 +11,7 @@ export default class EnemyConstructor {
     this.scene = config.scene;
     this.activeDoors = doors;
     this.playerInstance = config.playerInstance;
-    this.player = this.playerInstance.player;
+    this.player = this.playerInstance.matterEnabledContainer;
     this.type = config.type;
     this.heightOffset = config.settings.heightOffset;
     this.height = config.settings.height;
