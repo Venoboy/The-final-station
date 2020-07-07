@@ -1,34 +1,88 @@
 import Phaser from 'phaser';
 import ObjectInteraction from './ObjectInteraction';
-import { stats } from './playerStates/stats';
+
+const defaultValues = {
+  health: 2,
+  bullets: 6,
+  food: 2,
+  keys: 0,
+  playerSizes: {
+    h: 40,
+    w: 32,
+  },
+};
 
 export default class Player {
-  constructor(scene, x, y, stringId) {
-    this.player = scene.matter.add.image(x, y, stringId);
-    this.stats = stats;
+  constructor(scene, x, y, container) {
+    this.health = defaultValues.health;
+    this.bullets = defaultValues.bullets;
+    this.food = defaultValues.food;
+    this.keys = defaultValues.keys;
+    this.h = defaultValues.playerSizes.h;
+    this.w = defaultValues.playerSizes.w;
 
     const { Body, Bodies } = Phaser.Physics.Matter.Matter;
-    const { width: w, height: h } = this.player;
-    this.mainBody = Bodies.rectangle(w * 0.5, h * 0.5, w, h, { chamfer: { radius: 6 } });
+    this.height = this.h;
+    this.width = this.w;
+    this.mainBody = Bodies.rectangle(
+      0,
+      this.height * 0.05,
+      this.width * 0.25,
+      this.height * 0.5,
+      { chamfer: { radius: 6 } }
+    );
     this.sensors = {
-      bottom: Bodies.rectangle(w * 0.5, h, w * 0.25, 2, { isSensor: true }),
-      left: Bodies.rectangle(0, h * 0.5, 2, h * 0.1, { isSensor: true }),
-      right: Bodies.rectangle(w, h * 0.5, 2, h * 0.1, { isSensor: true }),
-      objectSensor: Bodies.rectangle(w * 0.5, h * 0.5 + 1, w * 1.5, h + 5, { isSensor: true }),
-      around: Bodies.rectangle(w * 0.5, h * 0.5, w * 1.8, h * 1.1, { isSensor: true }),
-      body: Bodies.rectangle(w * 0.5, h * 0.5, w, h, { chamfer: { radius: 6 }, isSensor: true }),
+      bottom: Bodies.rectangle(1, this.height * 0.35, this.width * 0.25, 1, {
+        isSensor: true,
+      }),
+      left: Bodies.rectangle(-(this.width * 0.12), 1, 2, this.height * 0.15, {
+        isSensor: true,
+      }),
+      right: Bodies.rectangle(this.width * 0.12, 1, 2, this.height * 0.15, {
+        isSensor: true,
+      }),
+      objectSensor: Bodies.rectangle(
+        0,
+        0,
+        this.width * 0.3,
+        this.height * 0.45,
+        {
+          isSensor: true,
+        }
+      ),
+      around: Bodies.rectangle(0, 0, this.width * 0.15, this.height * 0.3, {
+        isSensor: true,
+      }),
+      body: Bodies.rectangle(
+        0,
+        0,
+        this.width * 0.15,
+        this.height * 0.3,
+
+        {
+          chamfer: { radius: 6 },
+          isSensor: true,
+        }
+      ),
     };
     const compoundBody = Body.create({
-      parts: [this.mainBody, this.sensors.bottom, this.sensors.left,
-        this.sensors.right, this.sensors.around, this.sensors.body, this.sensors.objectSensor],
+      parts: [
+        this.mainBody,
+        this.sensors.bottom,
+        this.sensors.left,
+        this.sensors.right,
+        this.sensors.around,
+        this.sensors.objectSensor,
+        this.sensors.body,
+      ],
       frictionStatic: 0.1,
       frictionAir: 0.02,
       friction: 0.1,
     });
 
-    this.player
+    this.matterEnabledContainer = scene.matter.add.gameObject(container);
+    this.matterEnabledContainer
       .setExistingBody(compoundBody)
-      .setScale(0.4)
       .setFixedRotation()
       .setPosition(x, y);
 
@@ -42,12 +96,22 @@ export default class Player {
     scene.matter.world.on('beforeupdate', this.resetTouching, this);
 
     scene.matterCollision.addOnCollideStart({
-      objectA: [this.sensors.bottom, this.sensors.left, this.sensors.right, this.mainBody],
+      objectA: [
+        this.sensors.bottom,
+        this.sensors.left,
+        this.sensors.right,
+        this.mainBody,
+      ],
       callback: this.onSensorCollide,
       context: this,
     });
     scene.matterCollision.addOnCollideActive({
-      objectA: [this.sensors.bottom, this.sensors.left, this.sensors.right, this.mainBody],
+      objectA: [
+        this.sensors.bottom,
+        this.sensors.left,
+        this.sensors.right,
+        this.mainBody,
+      ],
       callback: this.onSensorCollide,
       context: this,
     });
