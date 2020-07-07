@@ -4,7 +4,7 @@ import gunImage from '../../assets/Player/handwithgun.png';
 import bulletImage from '../../assets/Player/bullet.png';
 import gunbackImage from '../../assets/Player/handswithgunback.png';
 import dudeImage from '../../assets/Player/spr.png';
-import dudeLegsImage from '../../assets/Player/sprl.png';
+import dudeLegsImage from '../../assets/Player/AllLegs.png';
 import climb from '../../assets/Player/climb.png';
 
 let angle;
@@ -17,6 +17,7 @@ let bullet;
 let gunBack;
 let cursors;
 let playerOnStairs;
+let turn;
 
 function RightAngle(a) {
   let angleRight = a > 0.75 ? 0.75 : a;
@@ -85,8 +86,8 @@ export default class PersonAnimation {
     this.scene.anims.create({
       key: 'leftl',
       frames: this.scene.anims.generateFrameNumbers('dudeLegs', {
-        start: 0,
-        end: 5,
+        start: 8,
+        end: 15,
       }),
       frameRate: 10,
       repeat: -1,
@@ -103,7 +104,7 @@ export default class PersonAnimation {
     });
     this.scene.anims.create({
       key: 'Lturnleg',
-      frames: [{ key: 'dudeLegs', frame: 6 }],
+      frames: [{ key: 'dudeLegs', frame: 0 }],
       frameRate: 20,
     });
     this.scene.anims.create({
@@ -117,7 +118,7 @@ export default class PersonAnimation {
     });
     this.scene.anims.create({
       key: 'Rturnleg',
-      frames: [{ key: 'dudeLegs', frame: 3 }],
+      frames: [{ key: 'dudeLegs', frame: 1 }],
       frameRate: 20,
     });
 
@@ -133,12 +134,31 @@ export default class PersonAnimation {
     this.scene.anims.create({
       key: 'rightl',
       frames: this.scene.anims.generateFrameNumbers('dudeLegs', {
-        start: 6,
-        end: 13,
+        start: 16,
+        end: 23,
       }),
       frameRate: 10,
       repeat: -1,
     });
+    this.scene.anims.create({
+      key: 'backLeftl',
+      frames: this.scene.anims.generateFrameNumbers('dudeLegs', {
+        start: 2,
+        end: 7,
+      }),
+      frameRate: 6,
+      repeat: -1,
+    });
+    this.scene.anims.create({
+      key: 'backRightl',
+      frames: this.scene.anims.generateFrameNumbers('dudeLegs', {
+        start: 24,
+        end: 29,
+      }),
+      frameRate: 6,
+      repeat: -1,
+    });
+
     this.scene.anims.create({
       key: 'Climb',
       frames: this.scene.anims.generateFrameNumbers('climbing', {
@@ -168,6 +188,7 @@ export default class PersonAnimation {
           this.playerInstance.mainBody.velocity.x === 0 &&
           person.list[2].parentContainer.x > pointer.worldX
         ) {
+          turn = false;
           gunBack = this.scene.add.image(0, 1, 'gunback').setOrigin(1, 0.5);
           person.replace(gun, gunBack);
           body.anims.play('Rturn', true);
@@ -177,6 +198,7 @@ export default class PersonAnimation {
           this.playerInstance.mainBody.velocity.x === 0 &&
           person.list[2].parentContainer.x < pointer.worldX
         ) {
+          turn = true;
           person.replace(person.list[2], gun);
           body.anims.play('Lturn', true);
           legs.anims.play('Lturnleg', true);
@@ -211,16 +233,21 @@ export default class PersonAnimation {
     }
 
     if (cursors.left.isDown) {
-      person.replace(gun, gunBack);
-      body.anims.play('left', true);
-      legs.anims.play('leftl', true);
-      person.list[2].setRotation(LeftAngle(angle) - Math.PI);
+      if (!turn) {
+        legs.anims.play('leftl', true);
+        body.anims.play('left', true);
+      } else if (turn) {
+        body.anims.play('right', true);
+        legs.anims.play('backLeftl', true);
+      }
     } else if (cursors.right.isDown) {
-      person.replace(person.list[2], gun);
-
-      body.anims.play('right', true);
-      legs.anims.play('rightl', true);
-      person.list[2].setRotation(RightAngle(angle));
+      if (turn) {
+        legs.anims.play('rightl', true);
+        body.anims.play('right', true);
+      } else if (!turn) {
+        legs.anims.play('backRightl', true);
+        body.anims.play('left', true);
+      }
     } else if (
       cursors.down.isDown &&
       playerOnStairs &&
