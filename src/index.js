@@ -3,11 +3,10 @@ import PhaserMatterCollisionPlugin from 'phaser-matter-collision-plugin';
 
 import Level from './js/scenes/Level';
 import GameBar from './js/interface/GameBar';
+import OutlinePipeline from './js/objects/interactionObjects/OutlinePipeline';
 
 const config = {
   type: Phaser.AUTO,
-  width: 800,
-  height: 512,
   physics: {
     default: 'matter',
     matter: {
@@ -37,9 +36,21 @@ const config = {
   pixelArt: true,
   scene: [Level, GameBar],
   scale: {
-    mode: Phaser.Scale.FIT,
-    autoCenter: Phaser.Scale.CENTER_BOTH,
+    mode: Phaser.Scale.RESIZE,
+    width: window.innerWidth,
+    height: window.innerHeight,
   },
+  callbacks: {
+    postBoot: game => {
+      game.renderer.addPipeline('outline', new OutlinePipeline(game));
+    }
+  }
 };
 
-export default new Phaser.Game(config);
+const game = new Phaser.Game(config);
+
+export default game;
+
+// window.addEventListener('resize', () => {
+//   game.scale.resize(window.innerWidth, window.innerHeight);
+// }, false);

@@ -1,9 +1,11 @@
 import Phaser from 'phaser';
+import ObjectInteraction from './ObjectInteraction';
+import { stats } from './playerStates/stats';
 
 export default class Player {
   constructor(scene, x, y, stringId) {
     this.player = scene.matter.add.image(x, y, stringId);
-    this.player.setDensity(10);
+    this.stats = stats;
 
     const { Body, Bodies } = Phaser.Physics.Matter.Matter;
     const { width: w, height: h } = this.player;
@@ -12,9 +14,13 @@ export default class Player {
       bottom: Bodies.rectangle(w * 0.5, h, w * 0.25, 2, { isSensor: true }),
       left: Bodies.rectangle(0, h * 0.5, 2, h * 0.1, { isSensor: true }),
       right: Bodies.rectangle(w, h * 0.5, 2, h * 0.1, { isSensor: true }),
+      objectSensor: Bodies.rectangle(w * 0.5, h * 0.5 + 1, w * 1.5, h + 5, { isSensor: true }),
+      around: Bodies.rectangle(w * 0.5, h * 0.5, w * 1.8, h * 1.1, { isSensor: true }),
+      body: Bodies.rectangle(w * 0.5, h * 0.5, w, h, { chamfer: { radius: 6 }, isSensor: true }),
     };
     const compoundBody = Body.create({
-      parts: [this.mainBody, this.sensors.bottom, this.sensors.left, this.sensors.right],
+      parts: [this.mainBody, this.sensors.bottom, this.sensors.left,
+        this.sensors.right, this.sensors.around, this.sensors.body, this.sensors.objectSensor],
       frictionStatic: 0.1,
       frictionAir: 0.02,
       friction: 0.1,
@@ -22,7 +28,7 @@ export default class Player {
 
     this.player
       .setExistingBody(compoundBody)
-      .setScale(0.6)
+      .setScale(0.4)
       .setFixedRotation()
       .setPosition(x, y);
 
@@ -45,6 +51,8 @@ export default class Player {
       callback: this.onSensorCollide,
       context: this,
     });
+
+    this.objectInteraction = new ObjectInteraction(scene, this);
   }
 
   onSensorCollide({ bodyA, bodyB }) {

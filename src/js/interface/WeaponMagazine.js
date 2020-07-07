@@ -1,25 +1,31 @@
+const bulletTexture = 'bullet';
+const bulletBGTexture = 'bulletBG';
+
 export default class WeaponMagazine {
-  constructor(scene, magazineSize, bulletsNumber, x, y, bulletTexture, bgTexture, bulletWidth) {
+  constructor(scene, magazineSize, bulletsNumber, x, y) {
     this.scene = scene;
     this.magazineSize = magazineSize;
-    this.x = x;
-    this.y = y;
-    this.bulletTexture = bulletTexture;
-    this.bgTexture = bgTexture;
     this.bullets = [];
     this.bg = [];
-    this.bulletWidth = bulletWidth;
+    this.bulletWidth = 0;
     this.bulletsNumber = bulletsNumber;
-    this.init();
+    this.defineBulletWidth();
+    this.init(x, y);
   }
 
-  init() {
+  defineBulletWidth() {
+    const temporary = this.scene.add.image(0, 0, bulletTexture);
+    this.bulletWidth = temporary.width;
+    temporary.destroy();
+  }
+
+  init(x, y) {
     for (let i = 0; i < this.magazineSize; i += 1) {
-      this.bg.push(this.scene.add.image(this.x + i * this.bulletWidth, this.y, this.bgTexture));
+      this.bg.push(this.scene.add.image(x + i * this.bulletWidth, y, bulletBGTexture));
     }
     for (let i = 0; i < this.bulletsNumber; i += 1) {
       this.bullets.push(
-        this.scene.add.image(this.x + i * this.bulletWidth, this.y, this.bulletTexture),
+        this.scene.add.image(x + i * this.bulletWidth, y, bulletTexture),
       );
     }
   }
@@ -28,5 +34,10 @@ export default class WeaponMagazine {
     this.bulletsNumber = bulletsNumber;
     this.bullets.slice(0, this.bulletsNumber).forEach((bullet) => bullet.setVisible(true));
     this.bullets.slice(this.bulletsNumber).forEach((bullet) => bullet.setVisible(false));
+  }
+
+  setPosition(x, y) {
+    this.bg.forEach((bullet, i) => bullet.setPosition(x + i * this.bulletWidth, y));
+    this.bullets.forEach((bullet, i) => bullet.setPosition(x + i * this.bulletWidth, y));
   }
 }

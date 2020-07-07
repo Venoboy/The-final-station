@@ -1,26 +1,25 @@
-/* eslint-disable linebreak-style */
 import Phaser from 'phaser';
 import HealtBar from './HealthBar';
 import WeaponMagazine from './WeaponMagazine';
 
 import gameBar from '../../assets/interface/gameBarFrame.png';
 import bullet from '../../assets/interface/bullet.png';
-import bulletEmpty from '../../assets/interface/bulletBG.png';
-import eventsCenter from '../eventsCenter';
+import bulletBG from '../../assets/interface/bulletBG.png';
+
+import { switchEventListeners } from './UIHelpers';
 
 const magazineSize = 6;
 const textConfig = {
   fontFamily: 'font1',
-  fontSize: 18,
+  fontSize: 24,
 };
-/* x positions of game bar items */
-const itemsX = {
-  healthText: 165,
-  healthBar: 180,
-  weaponText: 400,
-  weaponMagazine: 420,
-  foodText: 575,
-  keysText: 685,
+const percentageXOffsets = {
+  healthText: 0.1206,
+  healthBar: 0.1447,
+  weaponText: 0.4984,
+  weaponMagazine: 0.5305,
+  foodText: 0.7797,
+  keysText: 0.9566,
 };
 /* default values of game bar items */
 const defaultValues = {
@@ -42,57 +41,48 @@ export default class GameBar extends Phaser.Scene {
   preload() {
     this.load.image('gameBar', gameBar);
     this.load.image('bullet', bullet);
-    this.load.image('bulletEmpty', bulletEmpty);
+    this.load.image('bulletBG', bulletBG);
   }
 
   create() {
-    this.frame = this.add.image(0, 0, 'gameBar').setScale(0.6);
-    const frameCenterY = this.cameras.main.height - (this.frame.height / 2) * 0.6;
-    this.frame.setPosition(
-      this.cameras.main.centerX, frameCenterY,
-    );
-
-    this.addTextItems(frameCenterY);
-    this.healtBar = new HealtBar(this, itemsX.healthBar, frameCenterY - 5);
-    this.addMagazine(frameCenterY + 2);
-
-    /* adding events to connect this scene with game scene */
-    eventsCenter.on('update-health', this.updateHealth, this);
-    eventsCenter.on('update-health-bar', this.updateHealthBar, this);
-    eventsCenter.on('update-magazine', this.updateMagazine, this);
-
-    /* destroing events when this game will be shutdowned */
-    this.events.on(Phaser.Scenes.Events.SHUTDOWN, () => {
-      eventsCenter.off('update-health', this.updateHealth, this);
-      eventsCenter.off('update-health-bar', this.updateHealthBar, this);
-    });
+    this.addItems();
+    this.changePosition();
+    this.scale.on('resize', this.changePosition, this);
+    switchEventListeners(this);
   }
 
-  addTextItems(frameCenterY) {
-    const itemsCenterY = frameCenterY + 3;
-    this.health = this.add.text(
-      itemsX.healthText, itemsCenterY, this.startValues.health, textConfig,
-    ).setOrigin(0.5);
-    this.bullets = this.add.text(
-      itemsX.weaponText, itemsCenterY, this.startValues.bullets, textConfig,
-    ).setOrigin(0.5);
-    this.food = this.add.text(
-      itemsX.foodText, itemsCenterY, this.startValues.food, textConfig,
-    ).setOrigin(0.5);
-    this.keys = this.add.text(
-      itemsX.keysText, itemsCenterY, this.startValues.keys, textConfig,
-    ).setOrigin(0.5);
+  changePosition() {
+    const YOffset = this.cameras.main.height - (this.frame.displayHeight / 2);
+
+    const healthOffset = this.calculateOffset(percentageXOffsets.healthText);
+    const healthBarOffset = this.calculateOffset(percentageXOffsets.healthBar);
+    const bulletsOffset = this.calculateOffset(percentageXOffsets.weaponText);
+    const magazineOffset = this.calculateOffset(percentageXOffsets.weaponMagazine);
+    const foodOffset = this.calculateOffset(percentageXOffsets.foodText);
+    const keysOffset = this.calculateOffset(percentageXOffsets.keysText);
+
+    this.frame.setPosition(this.cameras.main.centerX, YOffset);
+    this.health.setPosition(healthOffset, YOffset + 3);
+    this.healthBar.setPosition(healthBarOffset, YOffset - 10);
+    this.bullets.setPosition(bulletsOffset, YOffset + 3);
+    this.magazine.setPosition(magazineOffset, YOffset + 2);
+    this.food.setPosition(foodOffset, YOffset + 3);
+    this.keys.setPosition(keysOffset, YOffset + 3);
   }
 
-  addMagazine(frameCenterY) {
-    const bulletImg = this.add.image(0, 0, 'bullet');
-    const bulletBG = this.add.image(0, 0, 'bulletEmpty');
-    this.magazine = new WeaponMagazine(
-      this, magazineSize, magazineSize, itemsX.weaponMagazine, frameCenterY,
-      bulletImg.texture, bulletBG.texture, bulletImg.width,
-    );
-    bulletImg.destroy();
-    bulletBG.destroy();
+  addItems() {
+    this.frame = this.add.image(0, 0, 'gameBar').setScale(0.8);
+    this.healthBar = new HealtBar(this, 0, 0);
+    this.magazine = new WeaponMagazine(this, magazineSize, magazineSize, 0, 0);
+    this.health = this.add.text(0, 0, this.startValues.health, textConfig).setOrigin(0.5);
+    this.bullets = this.add.text(0, 0, this.startValues.bullets, textConfig).setOrigin(0.5);
+    this.food = this.add.text(0, 0, this.startValues.food, textConfig).setOrigin(0.5);
+    this.keys = this.add.text(0, 0, this.startValues.keys, textConfig).setOrigin(0.5);
+  }
+
+  calculateOffset(percentageOffset) {
+    return (window.innerWidth - this.frame.displayWidth) / 2
+    + (percentageOffset * this.frame.displayWidth);
   }
 
   updateHealth(health) {
@@ -100,7 +90,7 @@ export default class GameBar extends Phaser.Scene {
   }
 
   updateHealthBar(health) {
-    this.healtBar.update(health);
+    this.healthBar.update(health);
   }
 
   updateBullets(bullets) {
