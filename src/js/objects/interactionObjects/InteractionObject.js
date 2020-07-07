@@ -1,9 +1,11 @@
 import Phaser from 'phaser';
+import collisionCategories from '../../world/collisionCategories';
 
 export default class InteractionObject extends Phaser.Physics.Matter.Image {
   constructor(config) {
     super(config.scene.matter.world, config.x, config.y, config.beforeTexture);
     this.scene = config.scene;
+    this.id = config.id;
     if (config.afterTexture) {
       this.afterActionImage = config.scene.add.image(config.x, config.y, config.afterTexture || '')
         .setVisible(false);
@@ -11,7 +13,7 @@ export default class InteractionObject extends Phaser.Physics.Matter.Image {
       this.afterActionImage = null;
     }
     this.activated = false;
-
+    this.interactCallbacks = config.interactCallbacks || [];
 
     const body = this.createCompoundBody();
     this.setCompoundBody(body, config.x, config.y);
@@ -30,6 +32,7 @@ export default class InteractionObject extends Phaser.Physics.Matter.Image {
     const compoundBody = Body.create({
       parts: [sensors.around],
     });
+    compoundBody.collisionFilter.category = collisionCategories.ground;
     return compoundBody;
   }
 
@@ -65,5 +68,9 @@ export default class InteractionObject extends Phaser.Physics.Matter.Image {
     }
     this.destroy(this.scene);
     return info;
+  }
+
+  addInteractCallbacks(...callbacks) {
+    this.interactCallbacks.push(...callbacks);
   }
 }

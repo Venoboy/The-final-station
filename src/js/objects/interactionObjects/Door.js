@@ -1,11 +1,12 @@
 import Phaser from 'phaser';
 import InteractionObject from './InteractionObject';
-import collisionCategories from '../world/collisionCategories';
+import eventsCenter from '../../eventsCenter';
+import collisionCategories from '../../world/collisionCategories';
 
 export default class Door extends InteractionObject {
-  constructor(scene, x, y, beforeActionTexture, afterActionTexture) {
-    super(scene, x, y, beforeActionTexture, afterActionTexture);
-    this.createCompoundBody(x, y);
+  constructor(config) {
+    super(config);
+    this.createCompoundBody(config.x, config.y);
     this.interactionInfo.type = 'door';
   }
 
@@ -24,11 +25,8 @@ export default class Door extends InteractionObject {
   }
 
   interact() {
-    const info = this.interactionInfo;
-    if (this.afterActionImage) {
-      this.afterActionImage.setVisible(true);
-    }
-    this.destroy(this.scene);
+    eventsCenter.emit('door-opened', this.id);
+    const info = super.interact();
     return info;
   }
 }

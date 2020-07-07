@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import Player from './Player';
 import { getCanGoX, setCanGoX } from './playerStates/externalParams';
 import collisionCategories from '../world/collisionCategories';
@@ -21,7 +22,7 @@ export default class PlayerInteraction {
     this.scene = scene;
     this.stairsInteraction = {};
 
-    this.PLAYER_SPEED_X = 1.8;
+    this.PLAYER_SPEED_X = 1.3;
   }
 
   create() {
