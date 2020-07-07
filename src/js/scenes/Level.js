@@ -25,6 +25,13 @@ import deadBody1 from '../../assets/interaction-objects/DeadBody1.png';
 import deadBody2 from '../../assets/interaction-objects/DeadBody2.png';
 import { setInteractionObjects, setRooms, setTunnel } from '../setters/level0';
 
+import doorSound1 from '../../assets/audio/door_met_1.mp3';
+import doorSound3 from '../../assets/audio/door_met_3.mp3';
+import doorSound4 from '../../assets/audio/door_met_4.mp3';
+import lidSound from '../../assets/audio/lid_open.mp3';
+import lockerSound from '../../assets/audio/locker_open.mp3';
+import pickUpSound from '../../assets/audio/pickUp.mp3';
+
 const heightPerScreen = 450;
 
 export default class Level extends Phaser.Scene {
@@ -59,6 +66,13 @@ export default class Level extends Phaser.Scene {
     this.load.image('hero', hunterPath);
     this.load.image('enemyBig', bigEnemyPic);
     this.load.image('enemyFast', fastEnemyPic);
+
+    this.load.audio('doorSound1', doorSound1);
+    this.load.audio('doorSound3', doorSound3);
+    this.load.audio('doorSound4', doorSound4);
+    this.load.audio('lidSound', lidSound);
+    this.load.audio('lockerSound', lockerSound);
+    this.load.audio('pickUpSound', pickUpSound);
   }
 
   create() {

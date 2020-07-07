@@ -40,101 +40,119 @@ const interactionObjectsData = {
     },
   ],
 };
-const doorsPosition = [
+const doorsData = [
   {
     x: 189,
     y: 177,
     id: 1,
+    soundKey: 'doorSound1',
   },
   {
     x: 278,
     y: 193,
     id: 2,
+    soundKey: 'doorSound3',
   },
   {
     x: 398,
     y: 193,
     id: 3,
+    soundKey: 'doorSound1',
   },
   {
     x: 526,
     y: 193,
     id: 4,
+    soundKey: 'doorSound4',
   },
   {
     x: 527,
     y: 251,
     id: 5,
+    soundKey: 'doorSound1',
   },
   {
     x: 419,
     y: 251.5,
     id: 6,
+    soundKey: 'doorSound3',
   },
   {
     x: 776,
     y: 193,
     id: 7,
+    soundKey: 'doorSound4',
   },
   {
     x: 768,
     y: 251,
     id: 8,
+    soundKey: 'doorSound4',
   },
   {
     x: 859,
     y: 251,
     id: 9,
+    soundKey: 'doorSound3',
   },
   {
     x: 949,
     y: 280.5,
     id: 10,
+    soundKey: 'doorSound3',
   },
   {
     x: 959,
     y: 329.5,
     id: 11,
+    soundKey: 'doorSound3',
   },
   {
     x: 845,
     y: 329.5,
     id: 12,
+    soundKey: 'doorSound1',
   },
 ];
-const lidsPosition = [
+const lidsData = [
   {
     x: 486,
     y: 206,
     id: 13,
+    soundKey: 'lidSound',
   },
   {
     x: 791,
     y: 264,
     id: 14,
+    soundKey: 'lidSound',
   },
   {
     x: 647,
     y: 293,
     id: 15,
+    soundKey: 'lidSound',
   },
 ];
-const lockersPosition = [
+const lockersData = [
   {
     x: 168,
     y: 175,
+    soundKey: 'lockerSound',
   },
 ];
-const deadBody1Position = [
+const deadBody1Data = [
   {
     x: 360,
     y: 202,
+    soundKey: 'pickUpSound',
   },
 ];
-const deadBody2Position = [
+const deadBody2Data = [
   {
     x: 1100,
     y: 360,
+    soundKey: 'pickUpSound',
   },
 ];
 const roomsData = [
@@ -289,7 +307,7 @@ const openRoomsData = new Map([
 ]);
 
 export {
-  interactionObjectsData, doorsPosition, lidsPosition,
-  lockersPosition, deadBody1Position, deadBody2Position,
+  interactionObjectsData, doorsData, lidsData,
+  lockersData, deadBody1Data, deadBody2Data,
   roomsData, openRoomsData,
 };

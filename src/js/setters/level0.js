@@ -7,8 +7,8 @@ import RoomManager from '../rooms/RoomManager';
 import TunnelSensor from '../objects/interactionObjects/TunnelSensor';
 
 import {
-  interactionObjectsData, doorsPosition, lidsPosition,
-  lockersPosition, deadBody1Position, deadBody2Position,
+  interactionObjectsData, doorsData, lidsData,
+  lockersData, deadBody1Data, deadBody2Data,
   roomsData, openRoomsData,
 } from '../data/level0';
 
@@ -16,7 +16,7 @@ const doors = [];
 
 const setInteractionObjects = (context) => {
   const objects = [];
-  doorsPosition.forEach((data) => {
+  doorsData.forEach((data) => {
     const door = new Door({
       scene: context,
       id: data.id,
@@ -24,52 +24,57 @@ const setInteractionObjects = (context) => {
       y: data.y,
       beforeTexture: 'door',
       afterTexture: 'door_',
+      soundKey: data.soundKey,
     });
     objects.push(door);
     doors.push(door);
   });
-  lidsPosition.forEach((data) => {
+  lidsData.forEach((data) => {
     const lid = new Lid({
       scene: context,
       id: data.id,
       x: data.x,
       y: data.y,
       beforeTexture: 'lid',
+      soundKey: data.soundKey,
     });
     objects.push(lid);
   });
-  lockersPosition.forEach((cords) => {
-    const lid = new Storage({
+  lockersData.forEach((data) => {
+    const locker = new Storage({
       scene: context,
-      x: cords.x,
-      y: cords.y,
+      x: data.x,
+      y: data.y,
       beforeTexture: 'locker',
       afterTexture: 'locker_',
       items: interactionObjectsData.locker1,
+      soundKey: data.soundKey,
     });
-    objects.push(lid);
+    objects.push(locker);
   });
-  deadBody1Position.forEach((cords) => {
-    const lid = new Storage({
+  deadBody1Data.forEach((data) => {
+    const deadBody = new Storage({
       scene: context,
-      x: cords.x,
-      y: cords.y,
+      x: data.x,
+      y: data.y,
       beforeTexture: 'deadBody1',
       afterTexture: 'deadBody1',
       items: interactionObjectsData.deadBody1,
+      soundKey: data.soundKey,
     });
-    objects.push(lid);
+    objects.push(deadBody);
   });
-  deadBody2Position.forEach((cords) => {
-    const lid = new Storage({
+  deadBody2Data.forEach((data) => {
+    const deadBody = new Storage({
       scene: context,
-      x: cords.x,
-      y: cords.y,
+      x: data.x,
+      y: data.y,
       beforeTexture: 'deadBody2',
       afterTexture: 'deadBody2',
       items: interactionObjectsData.deadBody2,
+      soundKey: data.soundKey,
     });
-    objects.push(lid);
+    objects.push(deadBody);
   });
   return objects;
 };
