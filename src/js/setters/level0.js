@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import Door from '../objects/interactionObjects/Door';
 import Storage from '../objects/interactionObjects/Storage';
 import Lid from '../objects/interactionObjects/Lid';
@@ -11,6 +12,8 @@ import {
   roomsData, openRoomsData,
 } from '../data/level0';
 
+const doors = [];
+
 const setInteractionObjects = (context) => {
   const objects = [];
   doorsPosition.forEach((data) => {
@@ -23,6 +26,7 @@ const setInteractionObjects = (context) => {
       afterTexture: 'door_',
     });
     objects.push(door);
+    doors.push(door);
   });
   lidsPosition.forEach((data) => {
     const lid = new Lid({
@@ -99,4 +103,6 @@ const setTunnel = (context, collisionBodies) => {
   return tunnel;
 };
 
-export { setInteractionObjects, setRooms, setTunnel };
+export {
+  setInteractionObjects, setRooms, setTunnel, doors,
+};

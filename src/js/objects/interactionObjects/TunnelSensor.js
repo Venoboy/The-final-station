@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import collisionCategories from '../../world/collisionCategories';
 
 export default class TunnelSensor extends Phaser.Physics.Matter.Image {
   constructor(config) {
@@ -24,6 +25,7 @@ export default class TunnelSensor extends Phaser.Physics.Matter.Image {
     const compoundBody = Body.create({
       parts: [this.sensors.ground],
     });
+    compoundBody.collisionFilter.category = collisionCategories.ground;
     return compoundBody;
   }
 

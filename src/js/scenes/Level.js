@@ -1,16 +1,21 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable camelcase */
 import Phaser from 'phaser';
 
-import PlayerInteraction from '../Player/PlayerInteraction';
 import b123 from '../../assets/level0/b_123.png';
 import f123 from '../../assets/level0/f_123.png';
+import PlayerInteraction, { stairsArray } from '../Player/PlayerInteraction';
+import EnemyLoader from '../Enemies/EnemyLoader';
+import { stats } from '../Player/playerStates/stats';
 import bak_1 from '../../assets/level0/bak_1.png';
 import bak_2 from '../../assets/level0/bak_2.png';
 import bak_3 from '../../assets/level0/bak_3.png';
 import bak_5 from '../../assets/level0/bak_5.png';
 import moons from '../../assets/level0/backgr_3.png';
 import tunnel from '../../assets/level0/tunnel.png';
-
+import hunterPath from '../../assets/level0/hunter_1_0.png';
+import bigEnemyPic from '../../assets/level0/enemies/BigZombie Idle_02.png';
+import fastEnemyPic from '../../assets/level0/enemies/FastZombie Idle_03.png';
 import door from '../../assets/interaction-objects/Door3.png';
 import door_ from '../../assets/interaction-objects/Door1_.png';
 import lid from '../../assets/interaction-objects/Lid.png';
@@ -18,7 +23,6 @@ import locker from '../../assets/interaction-objects/Locker.png';
 import locker_ from '../../assets/interaction-objects/Locker_.png';
 import deadBody1 from '../../assets/interaction-objects/DeadBody1.png';
 import deadBody2 from '../../assets/interaction-objects/DeadBody2.png';
-
 import { setInteractionObjects, setRooms, setTunnel } from '../setters/level0';
 
 const heightPerScreen = 450;
@@ -27,6 +31,7 @@ export default class Level extends Phaser.Scene {
   constructor() {
     super('game-scene');
     this.playerInteraction = {};
+    this.enemyLoader = {};
   }
 
   init() {
@@ -43,7 +48,6 @@ export default class Level extends Phaser.Scene {
     this.load.image('bak_5', bak_5);
 
     this.load.image('tunnel', tunnel);
-
     this.load.image('door', door);
     this.load.image('door_', door_);
     this.load.image('lid', lid);
@@ -52,8 +56,9 @@ export default class Level extends Phaser.Scene {
     this.load.image('deadBody1', deadBody1);
     this.load.image('deadBody2', deadBody2);
 
-    this.playerInteraction = new PlayerInteraction(this.scene.scene);
-    this.playerInteraction.preload();
+    this.load.image('hero', hunterPath);
+    this.load.image('enemyBig', bigEnemyPic);
+    this.load.image('enemyFast', fastEnemyPic);
   }
 
   create() {
@@ -69,16 +74,22 @@ export default class Level extends Phaser.Scene {
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
+    this.playerInteraction = new PlayerInteraction(this.scene.scene);
     this.playerInteraction.create();
 
     const startValues = {
-      health: this.playerInteraction.playerInstance.health,
-      food: this.playerInteraction.playerInstance.food,
-      keys: this.playerInteraction.playerInstance.keys,
-      bullets: this.playerInteraction.playerInstance.bullets,
+      health: stats.aids,
+      food: stats.food,
+      keys: stats.keys,
+      bullets: stats.bullets,
     };
 
     this.scene.launch('game-bar', startValues);
+
+    this.enemyLoader = new EnemyLoader(
+      this.scene.scene, this.playerInteraction.playerInstance, stairsArray,
+    );
+    this.enemyLoader.create();
 
     this.camera = this.cameras.main;
     this.camera.setBounds(0, 0, 1280, 512);
@@ -91,5 +102,6 @@ export default class Level extends Phaser.Scene {
 
   update() {
     this.playerInteraction.update();
+    this.enemyLoader.update();
   }
 }

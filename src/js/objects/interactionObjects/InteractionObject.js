@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import collisionCategories from '../../world/collisionCategories';
 
 export default class InteractionObject extends Phaser.Physics.Matter.Image {
   constructor(config) {
@@ -31,6 +32,7 @@ export default class InteractionObject extends Phaser.Physics.Matter.Image {
     const compoundBody = Body.create({
       parts: [sensors.around],
     });
+    compoundBody.collisionFilter.category = collisionCategories.ground;
     return compoundBody;
   }
 
