@@ -5,6 +5,7 @@ import collisionCategories from '../world/collisionCategories';
 import StairsInteraction from '../objects/stairs/StairsInteraction';
 import sidesCollisionHandler from './playerStates/sidesCollisionHandler';
 
+let stairsInteraction = {};
 
 export default class PlayerInteraction {
   constructor(scene) {
@@ -12,7 +13,6 @@ export default class PlayerInteraction {
     this.player = this.playerInstance.matterEnabledContainer || {};
     this.movingKeysPressed = false;
     this.scene = scene;
-    this.stairsInteraction = {};
 
     this.PLAYER_SPEED_X = 1.8;
   }
@@ -39,11 +39,11 @@ export default class PlayerInteraction {
       cursors: this.cursors,
       playerInstance: this.playerInstance,
     };
-    this.stairsInteraction = new StairsInteraction(playerInteractionConfig);
+    stairsInteraction = new StairsInteraction(playerInteractionConfig);
   }
 
   update() {
-    this.playerAnimation.update(this.stairsInteraction);
+    this.playerAnimation.update(stairsInteraction);
     this.player.body.ignoreGravity = !this.movingKeysPressed
       && this.playerInstance.isTouching.body
       && !this.playerInstance.isTouching.left
@@ -52,7 +52,7 @@ export default class PlayerInteraction {
     setCanGoX(true);
     const { canLeft, canRight } = sidesCollisionHandler(this.playerInstance, this.scene);
 
-    this.stairsInteraction.setStairsOverlap();
+    stairsInteraction.setStairsOverlap();
 
     if (this.cursors.left.isDown && getCanGoX() && canLeft) {
       this.movingKeysPressed = true;
@@ -65,6 +65,8 @@ export default class PlayerInteraction {
       this.player.setVelocityX(0);
     }
 
-    this.stairsInteraction.controlYMovement();
+    stairsInteraction.controlYMovement();
   }
 }
+
+export { stairsInteraction };

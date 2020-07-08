@@ -27,7 +27,7 @@ const sidesCollisionHandler = (playerInstance, scene) => {
   scene.matter.overlap(
     [leftSensor, rightSensor],
     [...currentDoors, ...groundArray],
-    overlapHandler
+    overlapHandler,
   );
 
   return {

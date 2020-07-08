@@ -8,6 +8,10 @@ const stats = {
   food: 2,
   keys: 0,
   health: HERO_MAX_HEALTH,
+  playerSizes: {
+    h: 40,
+    w: 32,
+  },
 };
 
 const looseHealth = (amount) => {
