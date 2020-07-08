@@ -25,8 +25,8 @@ export default class StairsInteraction {
   onStairsHandler = (isInPosition) => {
     this.player.body.ignoreGravity = true;
     if (
-      !(this.lastStep || this.playerInstance.isTouching.ground) &&
-      isInPosition
+      !(this.lastStep || this.playerInstance.isTouching.ground)
+      && isInPosition
     ) {
       setCanGoX(false);
     }
@@ -34,22 +34,21 @@ export default class StairsInteraction {
 
   positionStairsSetter = (player, stairs) => {
     if (
-      (player.position.y < stairs.position.y && this.cursors.down.isDown) ||
-      (player.position.y > stairs.position.y && this.cursors.up.isDown)
+      (player.position.y < stairs.position.y && this.cursors.down.isDown)
+      || (player.position.y > stairs.position.y && this.cursors.up.isDown)
     ) {
       if (stairs.label === 'stairs-middle') {
         this.player.setPosition(stairs.position.x, player.position.y);
         setCanGoX(false);
       } else if (stairs.label === 'stairs-right') {
-        const playerX =
-          stairs.bounds.min.x +
-          player.centerOffset.x * this.player.scale +
-          this.STAIRS_WIDTH;
+        const playerX = stairs.bounds.min.x
+          + player.centerOffset.x * this.player.scale
+          + this.STAIRS_WIDTH;
 
         if (player.position.y < stairs.bounds.min.y) {
           this.player.setPosition(
             playerX,
-            player.position.y + this.playerHeight + 5
+            player.position.y + this.playerHeight + 5,
           );
           setCanGoX(false);
         } else if (this.distanceMiddle < this.ALLOWED_DISTANCE_MIDDLE) {
@@ -57,15 +56,14 @@ export default class StairsInteraction {
           setCanGoX(false);
         }
       } else if (stairs.label === 'stairs-left') {
-        const playerX =
-          stairs.bounds.max.x -
-          player.centerOffset.x * this.player.scale -
-          this.STAIRS_WIDTH;
+        const playerX = stairs.bounds.max.x
+          - player.centerOffset.x * this.player.scale
+          - this.STAIRS_WIDTH;
 
         if (player.position.y < stairs.bounds.min.y) {
           this.player.setPosition(
             playerX,
-            player.position.y + this.playerHeight
+            player.position.y + this.playerHeight,
           );
           setCanGoX(false);
         } else if (this.distanceMiddle < this.ALLOWED_DISTANCE_MIDDLE) {
@@ -74,20 +72,20 @@ export default class StairsInteraction {
         }
       }
     } else if (
-      player.bounds.min.y <= stairs.bounds.min.y &&
-      player.position.y >= stairs.bounds.min.y &&
-      this.cursors.up.isDown
+      player.bounds.min.y <= stairs.bounds.min.y
+      && player.position.y >= stairs.bounds.min.y
+      && this.cursors.up.isDown
     ) {
       if (stairs.label === 'stairs-right') {
         this.player.setPosition(
           stairs.bounds.min.x - player.centerOffset.x * this.player.scale,
-          stairs.bounds.min.y - player.centerOffset.y * this.player.scale
+          stairs.bounds.min.y - player.centerOffset.y * this.player.scale,
         );
         this.lastStep = true;
       } else if (stairs.label === 'stairs-left') {
         this.player.setPosition(
           stairs.bounds.max.x + player.centerOffset.x * this.player.scale,
-          stairs.bounds.min.y - player.centerOffset.y * this.player.scale
+          stairs.bounds.min.y - player.centerOffset.y * this.player.scale,
         );
         this.lastStep = true;
       }
@@ -101,39 +99,39 @@ export default class StairsInteraction {
     this.distanceMiddle = Math.abs(playerA.position.x - stairs.position.x);
 
     const distanceRightSide = Math.abs(
-      playerA.position.x -
-        (stairs.bounds.max.x -
-          this.STAIRS_WIDTH -
-          playerA.centerOffset.x * this.player.scale)
+      playerA.position.x
+      - (stairs.bounds.max.x
+        - this.STAIRS_WIDTH
+        - playerA.centerOffset.x * this.player.scale),
     );
     const distanceStairsRight = Math.abs(
-      stairs.bounds.min.x + this.STAIRS_WIDTH - playerA.position.x
+      stairs.bounds.min.x + this.STAIRS_WIDTH - playerA.position.x,
     );
 
     const distanceLeftSide = Math.abs(
-      playerA.position.x -
-        (stairs.bounds.min.x +
-          this.STAIRS_WIDTH +
-          playerA.centerOffset.x * this.player.scale)
+      playerA.position.x
+      - (stairs.bounds.min.x
+        + this.STAIRS_WIDTH
+        + playerA.centerOffset.x * this.player.scale),
     );
     const distanceStairsLeft = Math.abs(
-      stairs.bounds.max.x - this.STAIRS_WIDTH - playerA.position.x
+      stairs.bounds.max.x - this.STAIRS_WIDTH - playerA.position.x,
     );
 
     if (
-      (this.distanceMiddle < this.ALLOWED_DISTANCE_MIDDLE &&
-        stairs.label === 'stairs-middle') ||
-      (distanceStairsLeft < this.ALLOWED_DISTANCE_SIDES &&
-        stairs.label === 'stairs-left') ||
-      (distanceStairsRight < this.ALLOWED_DISTANCE_SIDES &&
-        stairs.label === 'stairs-right')
+      (this.distanceMiddle < this.ALLOWED_DISTANCE_MIDDLE
+        && stairs.label === 'stairs-middle')
+      || (distanceStairsLeft < this.ALLOWED_DISTANCE_SIDES
+        && stairs.label === 'stairs-left')
+      || (distanceStairsRight < this.ALLOWED_DISTANCE_SIDES
+        && stairs.label === 'stairs-right')
     ) {
       this.positionStairsSetter(playerA, stairs);
     }
     if (
-      this.distanceMiddle === 0 ||
-      distanceRightSide === 0 ||
-      distanceLeftSide === 0
+      this.distanceMiddle === 0
+      || distanceRightSide === 0
+      || distanceLeftSide === 0
     ) {
       this.isPlayerOnPosition = true;
     }
@@ -152,12 +150,12 @@ export default class StairsInteraction {
       this.player,
       this.stairsArray,
       this.setLastStep,
-      this.checkLastStep
+      this.checkLastStep,
     );
     this.scene.matter.overlap(
       this.player,
       this.stairsArray,
-      this.playerStairsOverlap
+      this.playerStairsOverlap,
     );
   };
 
@@ -166,8 +164,8 @@ export default class StairsInteraction {
       if (this.cursors.up.isDown && !this.lastStep) {
         this.player.setVelocityY(-this.PLAYER_SPEED_Y);
       } else if (
-        this.cursors.down.isDown &&
-        sidesCollisionHandler(this.playerInstance, this.scene).canDown
+        this.cursors.down.isDown
+        && sidesCollisionHandler(this.playerInstance, this.scene).canDown
       ) {
         this.player.setVelocityY(this.PLAYER_SPEED_Y);
       } else {

@@ -16,10 +16,10 @@ const config = {
       },
       debug: {
         renderFill: false,
-        showInternalEdges: true,
+        showInternalEdges: false,
         showConvexHulls: false,
-        showBody: true,
-        showStaticBody: true,
+        showBody: false,
+        showStaticBody: false,
       },
       enableSleeping: false,
     },
@@ -41,10 +41,10 @@ const config = {
     height: window.innerHeight,
   },
   callbacks: {
-    postBoot: game => {
+    postBoot: (game) => {
       game.renderer.addPipeline('outline', new OutlinePipeline(game));
-    }
-  }
+    },
+  },
 };
 
 const game = new Phaser.Game(config);

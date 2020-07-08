@@ -33,7 +33,6 @@ export default class Level extends Phaser.Scene {
     super('game-scene');
     this.playerInteraction = {};
     this.enemyLoader = {};
-    
   }
 
   init() {
@@ -80,7 +79,7 @@ export default class Level extends Phaser.Scene {
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
-    
+
     this.playerInteraction.create();
 
     const startValues = {

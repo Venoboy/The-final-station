@@ -40,7 +40,7 @@ export default class PlayerInteraction {
     this.ground = this.scene.matter.add.fromPhysicsEditor(
       250,
       260.65,
-      level0json.f_1
+      level0json.f_1,
     );
     this.ground.frictionStatic = 0.5;
     this.ground.friction = 0.5;
@@ -50,7 +50,7 @@ export default class PlayerInteraction {
     this.groundMiddle = this.scene.matter.add.fromPhysicsEditor(
       779,
       261,
-      level0MiddleJson.f_2
+      level0MiddleJson.f_2,
     );
     this.groundMiddle.collisionFilter.category = collisionCategories.ground;
     groundArray.push(this.groundMiddle);
@@ -58,7 +58,7 @@ export default class PlayerInteraction {
     this.groundEnd = this.scene.matter.add.fromPhysicsEditor(
       1303,
       273,
-      level0EndJson.f_3
+      level0EndJson.f_3,
     );
     this.groundEnd.collisionFilter.category = collisionCategories.ground;
     groundArray.push(this.groundEnd);
@@ -66,14 +66,14 @@ export default class PlayerInteraction {
     this.stairs = this.scene.matter.add.fromPhysicsEditor(
       486,
       235,
-      level0stairsJson.f_1
+      level0stairsJson.f_1,
     );
     this.stairs.collisionFilter.category = collisionCategories.stairs;
     stairsArray.push(this.stairs);
     this.stairsMiddle = this.scene.matter.add.fromPhysicsEditor(
       770,
       315.5,
-      level0stairsMiddleJson.f_2
+      level0stairsMiddleJson.f_2,
     );
     this.stairsMiddle.collisionFilter.category = collisionCategories.stairs;
     stairsArray.push(this.stairsMiddle);
@@ -94,16 +94,15 @@ export default class PlayerInteraction {
 
   update() {
     this.playerAnimation.update(this.stairsInteraction);
-    this.player.body.ignoreGravity =
-      !this.movingKeysPressed &&
-      this.playerInstance.isTouching.body &&
-      !this.playerInstance.isTouching.left &&
-      !this.playerInstance.isTouching.right;
+    this.player.body.ignoreGravity = !this.movingKeysPressed
+      && this.playerInstance.isTouching.body
+      && !this.playerInstance.isTouching.left
+      && !this.playerInstance.isTouching.right;
 
     setCanGoX(true);
     const { canLeft, canRight } = sidesCollisionHandler(
       this.playerInstance,
-      this.scene
+      this.scene,
     );
 
     this.stairsInteraction.setStairsOverlap();
