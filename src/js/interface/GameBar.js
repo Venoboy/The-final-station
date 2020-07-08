@@ -3,7 +3,7 @@ import HealtBar from './HealthBar';
 import WeaponMagazine from './WeaponMagazine';
 
 import gameBar from '../../assets/interface/gameBarFrame.png';
-import bullet from '../../assets/interface/bullet.png';
+import bulletImg from '../../assets/interface/bullet.png';
 import bulletBG from '../../assets/interface/bulletBG.png';
 
 import { switchEventListeners } from './UIHelpers';
@@ -40,7 +40,7 @@ export default class GameBar extends Phaser.Scene {
 
   preload() {
     this.load.image('gameBar', gameBar);
-    this.load.image('bullet', bullet);
+    this.load.image('bulletImg', bulletImg);
     this.load.image('bulletBG', bulletBG);
   }
 

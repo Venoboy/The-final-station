@@ -1,4 +1,4 @@
-const bulletTexture = 'bullet';
+const bulletTexture = 'bulletImg';
 const bulletBGTexture = 'bulletBG';
 
 export default class WeaponMagazine {
@@ -28,7 +28,6 @@ export default class WeaponMagazine {
         this.scene.add.image(x + i * this.bulletWidth, y, bulletTexture),
       );
     }
-    this.scene.add.image(x - 10, y, bulletTexture)
   }
 
   updateMagazine(bulletsNumber) {
