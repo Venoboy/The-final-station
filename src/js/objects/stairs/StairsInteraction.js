@@ -5,8 +5,8 @@ import sidesCollisionHandler from '../../Player/playerStates/sidesCollisionHandl
 export default class StairsInteraction {
   constructor(config) {
     this.playerInstance = config.playerInstance;
-    this.player = this.playerInstance.player;
-    this.playerHeight = this.player.height * this.player.scale;
+    this.player = this.playerInstance.matterEnabledContainer;
+    this.playerHeight = this.player.height;
     this.cursors = config.cursors;
     this.scene = config.scene;
     this.stairs = config.stairs;
@@ -14,6 +14,7 @@ export default class StairsInteraction {
     this.lastStep = false;
     this.stairsArray = config.stairsArray;
     this.distanceMiddle = 100;
+    this.st = '';
 
     this.LAST_STEP_LENGTH = 1.5;
     this.PLAYER_SPEED_Y = 1.8;
@@ -78,6 +79,7 @@ export default class StairsInteraction {
   playerStairsOverlap = (bodyA, bodyB) => {
     const playerA = bodyA;
     const stairs = bodyB;
+    this.st = bodyB;
     this.distanceMiddle = Math.abs(playerA.position.x - stairs.position.x);
 
     const distanceRightSide = Math

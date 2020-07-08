@@ -13,6 +13,7 @@ const sidesCollisionHandler = (playerInstance, scene) => {
 
   const overlapHandler = (bodyA) => {
     if (leftSensor === bodyA) {
+      // console.log('probleminsidesColHan');
       canGoLeft = false;
     } else if (rightSensor === bodyA) {
       canGoRight = false;
@@ -28,7 +29,7 @@ const sidesCollisionHandler = (playerInstance, scene) => {
   scene.matter.overlap(
     [leftSensor, rightSensor],
     [...currentDoors, ...groundArray],
-    overlapHandler,
+    overlapHandler
   );
 
   return {

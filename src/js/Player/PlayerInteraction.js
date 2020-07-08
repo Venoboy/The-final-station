@@ -1,5 +1,4 @@
-/* eslint-disable linebreak-style */
-import Player from './Player';
+import PersonAnimation from './PlayerAnimation';
 import { getCanGoX, setCanGoX } from './playerStates/externalParams';
 import collisionCategories from '../world/collisionCategories';
 
@@ -17,17 +16,24 @@ const stairsArray = [];
 export default class PlayerInteraction {
   constructor(scene) {
     this.playerInstance = {};
-    this.player = this.playerInstance.player || {};
+    this.player = this.playerInstance.matterEnabledContainer || {};
     this.movingKeysPressed = false;
     this.scene = scene;
     this.stairsInteraction = {};
 
-    this.PLAYER_SPEED_X = 1.3;
+    this.PLAYER_SPEED_X = 1.8;
+  }
+
+  preload() {
+    this.playerAnimation = new PersonAnimation(this.scene);
+    this.playerAnimation.preload();
   }
 
   create() {
-    this.playerInstance = new Player(this.scene, 806.27, 201.6, 'hero');
-    this.player = this.playerInstance.player;
+    const player = this.playerAnimation.create();
+    this.playerInstance = player;
+
+    this.player = this.playerInstance.matterEnabledContainer;
     this.player.setCollisionCategory(collisionCategories.player);
     this.player.setCollidesWith([collisionCategories.ground]);
 
@@ -68,11 +74,13 @@ export default class PlayerInteraction {
   }
 
   update() {
-    console.log(this.player.body.position.x, this.player.body.position.y);
-    this.player.body.ignoreGravity = !this.movingKeysPressed
-      && this.playerInstance.isTouching.body
-      && !this.playerInstance.isTouching.left
-      && !this.playerInstance.isTouching.right;
+    this.playerAnimation.update(this.stairsInteraction);
+    this.player.body.ignoreGravity =
+      !this.movingKeysPressed &&
+      this.playerInstance.isTouching.body &&
+      !this.playerInstance.isTouching.left &&
+      !this.playerInstance.isTouching.right;
+
     setCanGoX(true);
     const { canLeft, canRight } = sidesCollisionHandler(this.playerInstance, this.scene);
 
@@ -92,6 +100,5 @@ export default class PlayerInteraction {
     this.stairsInteraction.controlYMovement();
   }
 }
-
 
 export { groundArray, stairsArray };
