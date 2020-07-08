@@ -32,6 +32,9 @@ export default class Level extends Phaser.Scene {
     super('game-scene');
     this.playerInteraction = {};
     this.enemyLoader = {};
+    this.path = '';
+    this.follower = '';
+    this.graphics = '';
   }
 
   init() {

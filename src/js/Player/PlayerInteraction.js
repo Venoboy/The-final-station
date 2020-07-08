@@ -26,7 +26,7 @@ export default class PlayerInteraction {
   }
 
   create() {
-    this.playerInstance = new Player(this.scene, 109.36, 185.5, 'hero');
+    this.playerInstance = new Player(this.scene, 806.27, 201.6, 'hero');
     this.player = this.playerInstance.player;
     this.player.setCollisionCategory(collisionCategories.player);
     this.player.setCollidesWith([collisionCategories.ground]);
@@ -68,6 +68,7 @@ export default class PlayerInteraction {
   }
 
   update() {
+    console.log(this.player.body.position.x, this.player.body.position.y);
     this.player.body.ignoreGravity = !this.movingKeysPressed
       && this.playerInstance.isTouching.body
       && !this.playerInstance.isTouching.left

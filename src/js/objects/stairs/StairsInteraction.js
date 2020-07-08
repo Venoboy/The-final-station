@@ -1,4 +1,5 @@
 import { setCanGoX } from '../../Player/playerStates/externalParams';
+// eslint-disable-next-line import/no-cycle
 import sidesCollisionHandler from '../../Player/playerStates/sidesCollisionHandler';
 
 export default class StairsInteraction {
@@ -62,6 +63,7 @@ export default class StairsInteraction {
       && (player.position.y >= stairs.bounds.min.y)
       && this.cursors.up.isDown) {
       if (stairs.label === 'stairs-right') {
+        // вставить ф-цию
         this.player.setPosition(stairs.bounds.min.x - player.centerOffset.x * this.player.scale,
           stairs.bounds.min.y - player.centerOffset.y * this.player.scale);
         this.lastStep = true;
