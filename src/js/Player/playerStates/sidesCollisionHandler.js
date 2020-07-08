@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/no-cycle
-import { groundArray } from '../PlayerInteraction';
+import { groundArray } from '../../objects/ground/groundCreation';
 import { doors } from '../../setters/level0';
 
 const sidesCollisionHandler = (playerInstance, scene) => {
@@ -13,7 +12,6 @@ const sidesCollisionHandler = (playerInstance, scene) => {
 
   const overlapHandler = (bodyA) => {
     if (leftSensor === bodyA) {
-      // console.log('probleminsidesColHan');
       canGoLeft = false;
     } else if (rightSensor === bodyA) {
       canGoRight = false;

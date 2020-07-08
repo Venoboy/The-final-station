@@ -1,10 +1,12 @@
 /* eslint-disable camelcase */
 import Phaser from 'phaser';
 
-import PlayerInteraction, { stairsArray } from '../Player/PlayerInteraction';
+import PlayerInteraction from '../Player/PlayerInteraction';
 import EnemyLoader from '../Enemies/EnemyLoader';
 import { setInteractionObjects } from '../setters/level0';
 import { stats } from '../Player/playerStates/stats';
+import groundCreation from '../objects/ground/groundCreation';
+import stairsCreation from '../objects/stairs/stairsCreation';
 
 import b_1 from '../../assets/level0/b_1.png';
 import b_2 from '../../assets/level0/b_2.png';
@@ -80,6 +82,10 @@ export default class Level extends Phaser.Scene {
 
     this.playerInteraction.create();
 
+    groundCreation(this);
+
+    stairsCreation(this);
+
     const startValues = {
       health: stats.aids,
       food: stats.food,
@@ -89,9 +95,7 @@ export default class Level extends Phaser.Scene {
 
     this.scene.launch('game-bar', startValues);
 
-    this.enemyLoader = new EnemyLoader(
-      this.scene.scene, this.playerInteraction.playerInstance, stairsArray,
-    );
+    this.enemyLoader = new EnemyLoader(this.scene.scene, this.playerInteraction.playerInstance);
     this.enemyLoader.create();
 
     this.camera = this.cameras.main;

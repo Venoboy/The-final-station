@@ -1,6 +1,7 @@
 import { setCanGoX } from '../../Player/playerStates/externalParams';
-// eslint-disable-next-line import/no-cycle
+import { sidePlayerSetter, updateCornersPosition } from './sidePlayerSetter';
 import sidesCollisionHandler from '../../Player/playerStates/sidesCollisionHandler';
+import { stairsArray } from './stairsCreation';
 
 export default class StairsInteraction {
   constructor(config) {
@@ -9,10 +10,9 @@ export default class StairsInteraction {
     this.playerHeight = this.player.height;
     this.cursors = config.cursors;
     this.scene = config.scene;
-    this.stairs = config.stairs;
     this.isPlayerOnPosition = false;
     this.lastStep = false;
-    this.stairsArray = config.stairsArray;
+    this.stairsArray = stairsArray;
     this.distanceMiddle = 100;
     this.st = '';
 

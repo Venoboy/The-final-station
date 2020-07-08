@@ -2,12 +2,13 @@ import EnemyConstructor from './EnemyConstructor';
 import enemyPositions from './enemyPositions';
 import enemySettings from './enemySettings';
 import { nextCategory } from '../world/collisionCategories';
+import { stairsArray } from '../objects/stairs/stairsCreation';
 
 export default class EnemyLoader {
-  constructor(scene, playerInstance, stairsArr) {
+  constructor(scene, playerInstance) {
     this.scene = scene;
     this.playerInstance = playerInstance;
-    this.stairsArray = stairsArr;
+    this.stairsArray = stairsArray;
     this.enemiesArray = [];
     this.ENEMY_SLEEP_DISTANCE = 240;
   }
