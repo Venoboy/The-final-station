@@ -14,7 +14,6 @@ import {
 } from '../data/level0';
 
 const doors = [];
-
 const setInteractionObjects = (context) => {
   const objects = [];
   doorsData.forEach((data) => {
