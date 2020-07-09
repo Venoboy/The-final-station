@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import PhaserMatterCollisionPlugin from 'phaser-matter-collision-plugin';
 
+import BootScene from './js/scenes/BootScene';
 import Level from './js/scenes/Level';
 import GameBar from './js/interface/GameBar';
 import OutlinePipeline from './js/objects/interactionObjects/OutlinePipeline';
@@ -34,7 +35,7 @@ const config = {
     ],
   },
   pixelArt: true,
-  scene: [Level, GameBar],
+  scene: [BootScene, Level, GameBar],
   scale: {
     mode: Phaser.Scale.RESIZE,
     width: window.innerWidth,
@@ -44,7 +45,8 @@ const config = {
     postBoot: game => {
       game.renderer.addPipeline('outline', new OutlinePipeline(game));
     }
-  }
+  },
+  backgroundColor: 0x000000,
 };
 
 const game = new Phaser.Game(config);

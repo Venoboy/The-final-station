@@ -52,6 +52,7 @@ export default class Level extends Phaser.Scene {
   }
 
   preload() {
+    this.cameras.main.fadeOut(0);
     this.load.image('moons', moons);
     this.load.image('b_123', b_123);
     this.load.image('f_123', f_123);
@@ -86,6 +87,7 @@ export default class Level extends Phaser.Scene {
   }
 
   create() {
+    this.cameras.main.fadeIn(2500);
     this.add.image(1020, 256, 'bak_2');
     this.add.image(648, 132, 'bak_1');
     this.add.image(695, 120, 'moons').setScrollFactor(1.15, 1);
@@ -125,7 +127,7 @@ export default class Level extends Phaser.Scene {
 
     this.music = this.sound.add('levelMusic');
     this.music.loop = true;
-    // this.music.play();
+    this.music.play();
 
     this.soundSensors = setSoundSensors(this, this.playerInteraction.player);
   }

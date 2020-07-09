@@ -39,12 +39,15 @@ export default class GameBar extends Phaser.Scene {
   }
 
   preload() {
+    this.cameras.main.fadeOut(0);
     this.load.image('gameBar', gameBar);
     this.load.image('bulletImg', bulletImg);
     this.load.image('bulletBG', bulletBG);
+    this.game.sound.context.resume();
   }
 
   create() {
+    this.cameras.main.fadeIn(2500);
     this.addItems();
     this.changePosition();
     this.scale.on('resize', this.changePosition, this);
