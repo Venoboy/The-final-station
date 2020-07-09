@@ -87,6 +87,7 @@ export default class Level extends Phaser.Scene {
   }
 
   create() {
+    this.game.config.pixelArt = true;
     this.add.image(1020, 256, 'bak_2');
     this.add.image(648, 132, 'bak_1');
     this.add.image(695, 120, 'moons').setScrollFactor(1.15, 1);
@@ -99,7 +100,6 @@ export default class Level extends Phaser.Scene {
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
-    
     this.playerInteraction.create();
 
     const startValues = {
@@ -134,13 +134,10 @@ export default class Level extends Phaser.Scene {
     this.pauseKey = this.input.keyboard.addKey(27);
     this.pauseKey.on('up', this.pause, this);
 
-    this.events.on('wake', () => {
+    this.events.on('resume', () => {
       this.music.play();
     });
     this.events.on('pause', () => {
-      this.music.pause();
-    });
-    this.events.on('sleep', () => {
       this.music.pause();
     });
     this.events.on('shutdown', () => {
@@ -150,7 +147,8 @@ export default class Level extends Phaser.Scene {
   }
 
   pause() {
-    this.scene.switch('pause-menu');
+    this.scene.pause();
+    this.scene.launch('pause-menu');
   }
 
   update() {

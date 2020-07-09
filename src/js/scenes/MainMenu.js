@@ -2,6 +2,8 @@
 /* eslint-disable camelcase */
 import Phaser from 'phaser';
 import MenuButton from '../objects/buttons/MenuButton';
+import { createSoundFadeIn, createSoundFadeOut } from '../effects/soundEffects';
+import { createMainMenuImageEffect } from '../effects/sceneEffects';
 
 export default class BootScene extends Phaser.Scene {
   constructor() {
@@ -27,57 +29,20 @@ export default class BootScene extends Phaser.Scene {
     logoImg.alpha = 0;
     playButton.button.alpha = 0;
 
-    const showMenuTimeline = this.tweens.createTimeline();
-    showMenuTimeline.add({
-      targets: bg,
-      alpha: 1,
-      duration: 1000,
-    });
-    showMenuTimeline.add({
-      targets: logoImg,
-      alpha: 1,
-      duration: 1000,
-    });
-    showMenuTimeline.add({
-      targets: playButton.button,
-      alpha: 1,
-      duration: 1000,
-    });
+    const showMenuTimeline = createMainMenuImageEffect(this, bg, logoImg, playButton.button);
     showMenuTimeline.play();
 
-    this.music = this.sound.add('menuSound');
-    this.soundFadeOut = this.tweens.createTimeline();
-    this.soundFadeOut.add({
-      targets: this.music,
-      volume: 0,
-      duration: 1000,
-    });
-    this.soundFadeIn = this.tweens.createTimeline();
-    this.soundFadeIn.add({
-      targets: this.music,
-      volume: 1,
-      duration: 1000,
-    });
+    this.music = this.sound.add('menuSound', { volume: 0, loop: true });
+    this.musicFadeOut = createSoundFadeOut(this, this.music, 1000, 0);
+    this.musicFadeOut.onComplete = () => { this.music.stop(); };
+    this.musicFadeIn = createSoundFadeIn(this, this.music, 1000, 0);
     this.music.play();
-    this.soundFadeIn.play();
-
-    this.events.on('start', () => {
-      this.music.play();
-    });
-    this.events.on('pause', () => {
-      this.music.pause();
-    });
-    this.events.on('sleep', () => {
-      this.music.pause();
-    });
-    this.events.on('shutdown', () => {
-      this.music.stop();
-    });
+    this.musicFadeIn.play();
   }
 
   startGame() {
     this.scene.cameras.main.fadeOut(1000);
-    this.scene.soundFadeOut.play();
+    this.scene.musicFadeOut.play();
     this.scene.cameras.main.on('camerafadeoutcomplete', () => {
       this.scene.scene.start('game-scene');
     });

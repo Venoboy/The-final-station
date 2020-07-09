@@ -48,7 +48,6 @@ const config = {
       game.renderer.addPipeline('outline', new OutlinePipeline(game));
     }
   },
-  backgroundColor: 0x000000,
 };
 
 const game = new Phaser.Game(config);

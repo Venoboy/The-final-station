@@ -8,6 +8,8 @@ import mainBG from '../../assets/menu/MainBG.png';
 import logo from '../../assets/menu/Logo.png';
 import menuButton from '../../assets/menu/MenuButton.png';
 import menuSound from '../../assets/audio/SoundtrackPorthWen.mp3';
+import keyboard from '../../assets/menu/keyboard_eng.png';
+import { createPreloadImageEffect } from '../effects/sceneEffects';
 
 export default class BootScene extends Phaser.Scene {
   constructor() {
@@ -20,6 +22,7 @@ export default class BootScene extends Phaser.Scene {
     this.load.image('mainBG', mainBG);
     this.load.image('logo', logo);
     this.load.image('menuButton', menuButton);
+    this.load.image('keyboard', keyboard);
     this.load.audio('menuSound', menuSound);
   }
 
@@ -35,35 +38,7 @@ export default class BootScene extends Phaser.Scene {
     title_logo_domy_img.alpha = 0;
     title_logo_tiny_img.alpha = 0;
 
-    const timeline = this.tweens.createTimeline();
-
-    timeline.add({
-      targets: title_logo_domy_img,
-      alpha: 1,
-      duration: 1000,
-    });
-    timeline.add({
-      targets: title_logo_domy_img,
-      alpha: 0,
-      duration: 1000,
-      delay: 2000,
-    });
-    timeline.add({
-      targets: title_logo_tiny_img,
-      alpha: 1,
-      duration: 1000,
-      delay: 1000,
-    });
-    timeline.add({
-      targets: title_logo_tiny_img,
-      alpha: 0,
-      duration: 1000,
-      delay: 2000,
-      onComplete: () => {
-        this.scene.start('main-menu');
-      },
-    });
-
+    const timeline = createPreloadImageEffect(this, title_logo_domy_img, title_logo_tiny_img);
     timeline.play();
   }
 }
