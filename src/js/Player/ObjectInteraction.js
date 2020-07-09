@@ -31,6 +31,9 @@ export default class ObjectInteraction {
 
     this.interactKey = this.scene.input.keyboard.addKey('E');
     this.interactKey.on('up', this.interact, this);
+    this.scene.events.on('shutdown', () => {
+      this.interactKey.off('up', this.interact, this);
+    });
   }
 
   onObjectCollide(object) {

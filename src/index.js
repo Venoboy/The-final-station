@@ -1,7 +1,9 @@
 import Phaser from 'phaser';
 import PhaserMatterCollisionPlugin from 'phaser-matter-collision-plugin';
 
-import BootScene from './js/scenes/BootScene';
+import PreloadScene from './js/scenes/PreloadScene';
+import MainMenu from './js/scenes/MainMenu';
+import PauseMenu from './js/scenes/PauseMenu';
 import Level from './js/scenes/Level';
 import GameBar from './js/interface/GameBar';
 import OutlinePipeline from './js/objects/interactionObjects/OutlinePipeline';
@@ -35,7 +37,7 @@ const config = {
     ],
   },
   pixelArt: true,
-  scene: [BootScene, Level, GameBar],
+  scene: [PreloadScene, MainMenu, Level, GameBar, PauseMenu],
   scale: {
     mode: Phaser.Scale.RESIZE,
     width: window.innerWidth,
@@ -52,7 +54,3 @@ const config = {
 const game = new Phaser.Game(config);
 
 export default game;
-
-// window.addEventListener('resize', () => {
-//   game.scale.resize(window.innerWidth, window.innerHeight);
-// }, false);

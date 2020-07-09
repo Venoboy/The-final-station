@@ -87,7 +87,6 @@ export default class Level extends Phaser.Scene {
   }
 
   create() {
-    this.cameras.main.fadeIn(2500);
     this.add.image(1020, 256, 'bak_2');
     this.add.image(648, 132, 'bak_1');
     this.add.image(695, 120, 'moons').setScrollFactor(1.15, 1);
@@ -110,8 +109,6 @@ export default class Level extends Phaser.Scene {
       bullets: stats.bullets,
     };
 
-    this.scene.launch('game-bar', startValues);
-
     this.enemyLoader = new EnemyLoader(
       this.scene.scene, this.playerInteraction.playerInstance, stairsArray,
     );
@@ -130,6 +127,30 @@ export default class Level extends Phaser.Scene {
     this.music.play();
 
     this.soundSensors = setSoundSensors(this, this.playerInteraction.player);
+
+    this.cameras.main.fadeIn(2500);
+    this.scene.launch('game-bar', startValues);
+
+    this.pauseKey = this.input.keyboard.addKey(27);
+    this.pauseKey.on('up', this.pause, this);
+
+    this.events.on('wake', () => {
+      this.music.play();
+    });
+    this.events.on('pause', () => {
+      this.music.pause();
+    });
+    this.events.on('sleep', () => {
+      this.music.pause();
+    });
+    this.events.on('shutdown', () => {
+      this.pauseKey.off('up', this.pause, this);
+      this.music.stop();
+    });
+  }
+
+  pause() {
+    this.scene.switch('pause-menu');
   }
 
   update() {

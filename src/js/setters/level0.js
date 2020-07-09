@@ -90,8 +90,9 @@ const setRooms = (context) => {
     rooms.push(room);
   });
   const roomManager = new RoomManager({
+    scene: context,
     rooms,
-    openers: openRoomsData,
+    openers: new Map(openRoomsData),
   });
   return roomManager;
 };
