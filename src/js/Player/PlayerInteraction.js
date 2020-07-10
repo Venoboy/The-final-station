@@ -15,7 +15,7 @@ export default class PlayerInteraction {
     this.movingKeysPressed = false;
     this.scene = scene;
 
-    this.PLAYER_SPEED_X = 1.8;
+    this.PLAYER_SPEED_X = 1.3;
   }
 
   preload() {

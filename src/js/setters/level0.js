@@ -1,70 +1,132 @@
-import Door from '../interactionObjects/Door';
-import Storage from '../interactionObjects/Storage';
-import Lid from '../interactionObjects/Lid';
+/* eslint-disable linebreak-style */
+import Door from '../objects/interactionObjects/Door';
+import Storage from '../objects/interactionObjects/Storage';
+import Lid from '../objects/interactionObjects/Lid';
+import Room from '../rooms/Room';
+import RoomManager from '../rooms/RoomManager';
+import TunnelSensor from '../objects/interactionObjects/TunnelSensor';
+import SoundSensor from '../objects/soundSensors/SoundSensor';
 
-
-import { interactionObjectsData } from '../data/level0';
+import {
+  interactionObjectsData, doorsData, lidsData,
+  lockersData, deadBody1Data, deadBody2Data,
+  roomsData, openRoomsData, soundSensorsData,
+} from '../data/level0';
 
 const doors = [];
 const lids = [];
 const setInteractionObjects = (context) => {
-  // eslint-disable-next-line no-unused-vars
-  let object;
-  doors.push(new Door({
-    scene: context, x: 189, y: 178, beforeTexture: 'door', afterTexture: 'door_',
-  }));
-  doors.push(new Door({
-    scene: context, x: 278, y: 193, beforeTexture: 'door', afterTexture: 'door_',
-  }));
-  doors.push(new Door({
-    scene: context, x: 398, y: 193, beforeTexture: 'door', afterTexture: 'door_',
-  }));
-  doors.push(new Door({
-    scene: context, x: 525, y: 193, beforeTexture: 'door', afterTexture: 'door_',
-  }));
-  doors.push(new Door({
-    scene: context, x: 526, y: 251, beforeTexture: 'door', afterTexture: 'door_',
-  }));
-  doors.push(new Door({
-    scene: context, x: 419, y: 251, beforeTexture: 'door', afterTexture: 'door_',
-  }));
-  doors.push(new Door({
-    scene: context, x: 775, y: 193, beforeTexture: 'door', afterTexture: 'door_',
-  }));
-  doors.push(new Door({
-    scene: context, x: 767, y: 251, beforeTexture: 'door', afterTexture: 'door_',
-  }));
-  doors.push(new Door({
-    scene: context, x: 858, y: 251, beforeTexture: 'door', afterTexture: 'door_',
-  }));
-  doors.push(new Door({
-    scene: context, x: 948, y: 280, beforeTexture: 'door', afterTexture: 'door_',
-  }));
-  doors.push(new Door({
-    scene: context, x: 958, y: 330, beforeTexture: 'door', afterTexture: 'door_',
-  }));
-  doors.push(new Door({
-    scene: context, x: 844, y: 330, beforeTexture: 'door', afterTexture: 'door_',
-  }));
-  lids.push(new Lid({
-    scene: context, x: 486, y: 206, beforeTexture: 'lid',
-  }));
-  lids.push(new Lid({
-    scene: context, x: 791, y: 264, beforeTexture: 'lid',
-  }));
-  lids.push(new Lid({
-    scene: context, x: 646, y: 293, beforeTexture: 'lid',
-  }));
-  object = new Storage({
-    scene: context, x: 165, y: 175, beforeTexture: 'locker', afterTexture: 'locker_', items: interactionObjectsData.locker1,
+  const objects = [];
+  doorsData.forEach((data) => {
+    const door = new Door({
+      scene: context,
+      id: data.id,
+      x: data.x,
+      y: data.y,
+      beforeTexture: 'door',
+      afterTexture: 'door_',
+      soundKey: data.soundKey,
+    });
+    objects.push(door);
+    doors.push(door);
   });
-  object = new Storage({
-    scene: context, x: 360, y: 202, beforeTexture: 'deadBody1', afterTexture: 'deadBody1', items: interactionObjectsData.deadBody1,
+  lidsData.forEach((data) => {
+    const lid = new Lid({
+      scene: context,
+      id: data.id,
+      x: data.x,
+      y: data.y,
+      beforeTexture: 'lid',
+      soundKey: data.soundKey,
+    });
+    objects.push(lid);
+    lids.push(lid);
   });
-  object = new Storage({
-    scene: context, x: 1100, y: 360, beforeTexture: 'deadBody2', afterTexture: 'deadBody2', items: interactionObjectsData.deadBody2,
+  lockersData.forEach((data) => {
+    const locker = new Storage({
+      scene: context,
+      x: data.x,
+      y: data.y,
+      beforeTexture: 'locker',
+      afterTexture: 'locker_',
+      items: interactionObjectsData.locker1,
+      soundKey: data.soundKey,
+    });
+    objects.push(locker);
   });
+  deadBody1Data.forEach((data) => {
+    const deadBody = new Storage({
+      scene: context,
+      x: data.x,
+      y: data.y,
+      beforeTexture: 'deadBody1',
+      afterTexture: 'deadBody1',
+      items: interactionObjectsData.deadBody1,
+      soundKey: data.soundKey,
+    });
+    objects.push(deadBody);
+  });
+  deadBody2Data.forEach((data) => {
+    const deadBody = new Storage({
+      scene: context,
+      x: data.x,
+      y: data.y,
+      beforeTexture: 'deadBody2',
+      afterTexture: 'deadBody2',
+      items: interactionObjectsData.deadBody2,
+      soundKey: data.soundKey,
+    });
+    objects.push(deadBody);
+  });
+  return objects;
 };
 
-// eslint-disable-next-line import/prefer-default-export
-export { setInteractionObjects, doors, lids };
+const setRooms = (context) => {
+  const rooms = [];
+  roomsData.forEach((config) => {
+    const room = new Room({
+      scene: context,
+      points: config.points,
+      id: config.id,
+    });
+    rooms.push(room);
+  });
+  const roomManager = new RoomManager({
+    scene: context,
+    rooms,
+    openers: new Map(openRoomsData),
+  });
+  return roomManager;
+};
+
+const setTunnel = (context, collisionBodies) => {
+  const tunnel = new TunnelSensor({
+    scene: context,
+    x: 650,
+    y: 455,
+    texture: 'tunnel',
+    collisionBodies,
+  });
+
+  return tunnel;
+};
+
+const setSoundSensors = (scene, sensorTrigger) => {
+  const soundSensors = [];
+  soundSensorsData.forEach((data) => {
+    const sensor = new SoundSensor({
+      scene,
+      x: data.x,
+      y: data.y,
+      soundKey: data.soundKey,
+      trigger: sensorTrigger,
+      distanceThreshold: data.distanceThreshold,
+    });
+    soundSensors.push(sensor);
+  });
+  return soundSensors;
+};
+
+export {
+  setInteractionObjects, setRooms, setTunnel, doors, lids, setSoundSensors,
+};

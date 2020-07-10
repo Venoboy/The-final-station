@@ -1,5 +1,5 @@
 import { updateUI } from '../interface/UIHelpers';
-import InteractionObject from '../interactionObjects/InteractionObject';
+import InteractionObject from '../objects/interactionObjects/InteractionObject';
 
 export default class ObjectInteraction {
   constructor(scene, player) {
@@ -31,6 +31,9 @@ export default class ObjectInteraction {
 
     this.interactKey = this.scene.input.keyboard.addKey('E');
     this.interactKey.on('up', this.interact, this);
+    this.scene.events.on('shutdown', () => {
+      this.interactKey.off('up', this.interact, this);
+    });
   }
 
   onObjectCollide(object) {

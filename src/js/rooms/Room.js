@@ -14,17 +14,6 @@ export default class Room {
       alpha: 0,
       duration: 1000,
     });
-    this.closeTween = config.scene.tweens.add({
-      targets: this.graphics,
-      paused: true,
-      alpha: 1,
-      duration: 1000,
-    });
-  }
-
-  close() {
-    this.closeTween.play();
-    this.opened = false;
   }
 
   open() {

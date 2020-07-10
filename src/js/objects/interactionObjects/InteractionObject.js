@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import Phaser from 'phaser';
 import collisionCategories from '../../world/collisionCategories';
 
@@ -11,6 +12,11 @@ export default class InteractionObject extends Phaser.Physics.Matter.Image {
         .setVisible(false);
     } else {
       this.afterActionImage = null;
+    }
+    if (config.soundKey) {
+      this.sound = this.scene.sound.add(config.soundKey);
+    } else {
+      this.sound = null;
     }
     this.activated = false;
     this.interactCallbacks = config.interactCallbacks || [];
@@ -63,6 +69,9 @@ export default class InteractionObject extends Phaser.Physics.Matter.Image {
 
   interact() {
     const info = this.interactionInfo;
+    if (this.sound) {
+      this.sound.play();
+    }
     if (this.afterActionImage) {
       this.afterActionImage.setVisible(true);
     }

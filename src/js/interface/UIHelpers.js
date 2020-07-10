@@ -47,25 +47,26 @@ const updateUI = (uiName, value) => {
   }
 };
 
-const switchEventListeners = (context) => {
+const onEventListeners = (context) => {
   eventsCenter.on('update-health', context.updateHealth, context);
   eventsCenter.on('update-health-bar', context.updateHealthBar, context);
   eventsCenter.on('update-bullets', context.updateBullets, context);
   eventsCenter.on('update-magazine', context.updateMagazine, context);
   eventsCenter.on('update-food', context.updateMagazine, context);
   eventsCenter.on('update-keys', context.updateMagazine, context);
+};
 
-  context.events.on(Phaser.Scenes.Events.SHUTDOWN, () => {
-    eventsCenter.off('update-health', this.updateHealth, this);
-    eventsCenter.off('update-health-bar', this.updateHealthBar, this);
-    eventsCenter.off('update-bullets', context.updateBullets, this);
-    eventsCenter.off('update-magazine', context.updateMagazine, this);
-    eventsCenter.off('update-food', context.updateFood, this);
-    eventsCenter.off('update-keys', context.updateKeys, this);
-  });
+const offEventListeners = (context) => {
+  eventsCenter.off('update-health', context.updateHealth, context);
+  eventsCenter.off('update-health-bar', context.updateHealthBar, context);
+  eventsCenter.off('update-bullets', context.updateBullets, context);
+  eventsCenter.off('update-magazine', context.updateMagazine, context);
+  eventsCenter.off('update-food', context.updateMagazine, context);
+  eventsCenter.off('update-keys', context.updateMagazine, context);
 };
 
 export {
   updateHealthUI, updateFoodUI, updateBulletsUI, updateKeysUI,
-  updateUI, updateMagazineUI, updateHealthBarUI, switchEventListeners,
+  updateUI, updateMagazineUI, updateHealthBarUI, onEventListeners,
+  offEventListeners,
 };

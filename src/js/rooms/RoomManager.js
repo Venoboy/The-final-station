@@ -6,6 +6,10 @@ export default class RoomManager {
     this.openers = config.openers;
     eventsCenter.on('door-opened', this.openRoom, this);
     eventsCenter.on('lid-opened', this.openRoom, this);
+    config.scene.events.on('shutdown', () => {
+      eventsCenter.off('door-opened', this.openRoom, this);
+      eventsCenter.off('lid-opened', this.openRoom, this);
+    });
   }
 
   findRoom(openerRoomsIDs) {

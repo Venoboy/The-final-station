@@ -6,6 +6,8 @@ import gunbackImage from '../../assets/Player/handswithgunback.png';
 import dudeImage from '../../assets/Player/spr.png';
 import dudeLegsImage from '../../assets/Player/AllLegs.png';
 import climb from '../../assets/Player/climb.png';
+import playerFootstep from '../../assets/audio/playerFootstep.mp3';
+import ladder from '../../assets/audio/ladder.mp3';
 
 let angle;
 let person;
@@ -55,6 +57,8 @@ export default class PersonAnimation {
       frameWidth: 32,
       frameHeight: 32,
     });
+    this.scene.load.audio('playerFootstep', playerFootstep);
+    this.scene.load.audio('ladder', ladder);
   }
 
   create() {
@@ -63,6 +67,7 @@ export default class PersonAnimation {
     gun = this.scene.add.image(0, 1, 'gun').setOrigin(0, 0.5);
     bullet = this.scene.matter.add.image(0, 0, 'bullet');
     climbDude = this.scene.add.sprite(0, 0, 'climbing').setVisible(false);
+    this.footstepSound = this.scene.sound.add('playerFootstep');
 
     person = this.scene.add.container(109.36, 185.5, [
       legs,
@@ -176,17 +181,17 @@ export default class PersonAnimation {
 
     this.scene.input.on(
       'pointermove',
-      function(pointer) {
+      function (pointer) {
         angle = Phaser.Math.Angle.Between(
           person.list[2].parentContainer.x,
           person.list[2].parentContainer.y,
           pointer.x + this.scene.cameras.main.scrollX,
-          pointer.y + this.scene.cameras.main.scrollY
+          pointer.y + this.scene.cameras.main.scrollY,
         );
 
         if (
-          this.playerInstance.mainBody.velocity.x === 0 &&
-          person.list[2].parentContainer.x > pointer.worldX
+          this.playerInstance.mainBody.velocity.x === 0
+          && person.list[2].parentContainer.x > pointer.worldX
         ) {
           turn = false;
           gunBack = this.scene.add.image(0, 1, 'gunback').setOrigin(1, 0.5);
@@ -195,8 +200,8 @@ export default class PersonAnimation {
           legs.anims.play('Rturnleg', true);
           person.list[2].setRotation(LeftAngle(angle) - Math.PI);
         } else if (
-          this.playerInstance.mainBody.velocity.x === 0 &&
-          person.list[2].parentContainer.x < pointer.worldX
+          this.playerInstance.mainBody.velocity.x === 0
+          && person.list[2].parentContainer.x < pointer.worldX
         ) {
           turn = true;
           person.replace(person.list[2], gun);
@@ -205,7 +210,7 @@ export default class PersonAnimation {
           person.list[2].setRotation(RightAngle(angle));
         }
       },
-      this
+      this,
     );
 
     cursors = this.scene.input.keyboard.createCursorKeys();
@@ -232,6 +237,23 @@ export default class PersonAnimation {
       personNotClimb();
     }
 
+    if (legs.anims.currentAnim) {
+      if (legs.anims.currentAnim.key === 'leftl'
+        && (
+          legs.anims.currentFrame.textureFrame === 15
+          || legs.anims.currentFrame.textureFrame === 8)
+      ) {
+        if (!this.footstepSound.isPlaying) {
+          this.footstepSound.play();
+        }
+      }
+      if (legs.anims.currentAnim.key === 'rightl' && legs.anims.currentFrame.textureFrame === 18) {
+        if (!this.footstepSound.isPlaying) {
+          this.footstepSound.play();
+        }
+      }
+    }
+
     if (cursors.left.isDown) {
       if (!turn) {
         legs.anims.play('leftl', true);
@@ -249,16 +271,16 @@ export default class PersonAnimation {
         body.anims.play('left', true);
       }
     } else if (
-      cursors.down.isDown &&
-      playerOnStairs &&
-      stairsInf.st.label === 'stairs-right'
+      cursors.down.isDown
+      && playerOnStairs
+      && stairsInf.st.label === 'stairs-right'
     ) {
       personClimb();
       climbDude.anims.play('Climb', true);
     } else if (
-      cursors.up.isDown &&
-      playerOnStairs &&
-      stairsInf.st.label === 'stairs-right'
+      cursors.up.isDown
+      && playerOnStairs
+      && stairsInf.st.label === 'stairs-right'
     ) {
       personClimb();
       climbDude.anims.play('Climb', true);
