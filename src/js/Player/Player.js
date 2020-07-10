@@ -1,74 +1,36 @@
 import Phaser from 'phaser';
 import ObjectInteraction from './ObjectInteraction';
-
-const defaultValues = {
-  health: 2,
-  bullets: 6,
-  food: 2,
-  keys: 0,
-  playerSizes: {
-    h: 40,
-    w: 32,
-  },
-};
+import { stats } from './playerStates/stats';
 
 export default class Player {
   constructor(scene, x, y, container) {
-    this.health = defaultValues.health;
-    this.bullets = defaultValues.bullets;
-    this.food = defaultValues.food;
-    this.keys = defaultValues.keys;
-    this.h = defaultValues.playerSizes.h;
-    this.w = defaultValues.playerSizes.w;
+    this.h = stats.playerSizes.h;
+    this.w = stats.playerSizes.w;
 
     const { Body, Bodies } = Phaser.Physics.Matter.Matter;
-    this.height = this.h;
-    this.width = this.w;
-    this.mainBody = Bodies.rectangle(
-      0,
-      this.height * 0.05,
-      this.width * 0.25,
-      this.height * 0.5,
-      { chamfer: { radius: 6 } },
-    );
+    this.mainBody = Bodies.rectangle(0, this.h * 0.09, this.w * 0.25, this.h * 0.5,
+      {
+        chamfer: { radius: 6 },
+        label: 'mainBody',
+      });
     this.sensors = {
-      bottom: Bodies.rectangle(1, this.height * 0.35, this.width * 0.25, 1, {
-        isSensor: true,
-      }),
-      left: Bodies.rectangle(-(this.width * 0.12), 1, 2, this.height * 0.15, {
-        isSensor: true,
-      }),
-      right: Bodies.rectangle(this.width * 0.12, 1, 2, this.height * 0.15, {
-        isSensor: true,
-      }),
-      objectSensor: Bodies.rectangle(
-        0,
-        0,
-        this.width,
-        this.height * 0.45,
-        {
-          isSensor: true,
-        },
-      ),
-      around: Bodies.rectangle(0, 0, this.width * 0.15, this.height * 0.3, {
-        isSensor: true,
-      }),
-      body: Bodies.rectangle(
-        0,
-        0,
-        this.width * 0.15,
-        this.height * 0.3,
-
+      bottom: Bodies.rectangle(0, this.h * 0.34, this.w * 0.1, 1, { isSensor: true }),
+      stairs: Bodies.rectangle(0, this.h * 0.33, this.w * 0.45, 1, { isSensor: true }),
+      left: Bodies.rectangle(-(this.w * 0.12), 1, 2, this.h * 0.15, { isSensor: true }),
+      right: Bodies.rectangle(this.w * 0.12, 1, 2, this.h * 0.15, { isSensor: true }),
+      objectSensor: Bodies.rectangle(0, 0, this.w * 0.3, this.h * 0.45, { isSensor: true }),
+      around: Bodies.rectangle(0, 0, this.w * 0.15, this.h * 0.3, { isSensor: true }),
+      body: Bodies.rectangle(0, 0, this.w * 0.15, this.h * 0.3,
         {
           chamfer: { radius: 6 },
           isSensor: true,
-        },
-      ),
+        }),
     };
     const compoundBody = Body.create({
       parts: [
         this.mainBody,
         this.sensors.bottom,
+        this.sensors.stairs,
         this.sensors.left,
         this.sensors.right,
         this.sensors.around,

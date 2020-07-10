@@ -62,14 +62,14 @@ export default class PersonAnimation {
     gun = this.scene.add.image(-1.5, 0.5, 'gun').setOrigin(0, 0.5);
     climbDude = this.scene.add.sprite(0, 0, 'climbing').setVisible(false);
 
-    person = this.scene.add.container(109.36, 180.5, [
+    person = this.scene.add.container(109.36, 185.5, [
       legs,
       body,
       gun,
       climbDude,
     ]);
 
-    this.playerInstance = new Player(this.scene, 109.36, 180.5, person);
+    this.playerInstance = new Player(this.scene, 109.36, 185.5, person);
 
     this.scene.anims.create({
       key: 'left',

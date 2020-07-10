@@ -6,7 +6,7 @@ const enemySettings = {
   },
   enemyFast: {
     speed: 2,
-    heightOffset: 0,
+    heightOffset: -1,
     height: 18,
   },
 };
