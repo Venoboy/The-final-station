@@ -26,6 +26,7 @@ let reload;
 let healing = false;
 let reloading = false;
 let isAlive = true;
+let corpse;
 
 
 function RightAngle(a) {
@@ -305,14 +306,13 @@ export default class PersonAnimation {
         if (legs.anims.currentAnim.key === 'Lturnleg') {
           anim = this.scene.anims.get('Dead');
           dead.anims.play('Dead', true);
+          corpse = true;
         } else if (legs.anims.currentAnim.key === 'Rturnleg') {
           anim = this.scene.anims.get('DeadR');
           dead.anims.play('DeadR', true);
+          corpse = false;
         }
         anim.on('complete', () => {
-          body.setVisible(false);
-          person.list[2].setVisible(false);
-          person.destroy();
           isAlive = false;
         });
       }
@@ -371,6 +371,13 @@ export default class PersonAnimation {
         }
         body.anims.play('Rturn', true);
         legs.anims.play('Rturnleg', true);
+      }
+    } else {
+      dead.setVisible(true);
+      if (corpse) {
+        dead.anims.play('end', true);
+      } else {
+        dead.anims.play('endR', true);
       }
     }
   }

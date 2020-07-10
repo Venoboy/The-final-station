@@ -36,6 +36,17 @@ export default class PersonDeadAnimation {
       showOnStart: false,
       hideOnComplete: true,
     });
+    this.scene.anims.create({
+      key: 'end',
+      frames: [{ key: 'dead', frame: 9 }],
+      frameRate: 20,
+    });
+    this.scene.anims.create({
+      key: 'endR',
+      frames: [{ key: 'dead', frame: 19 }],
+      frameRate: 20,
+    });
+
     return deadanim;
   }
 }
