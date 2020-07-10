@@ -5,6 +5,7 @@ import collisionCategories from '../world/collisionCategories';
 import StairsInteraction from '../objects/stairs/StairsInteraction';
 import sidesCollisionHandler from './playerStates/sidesCollisionHandler';
 
+// eslint-disable-next-line import/no-mutable-exports
 let stairsInteraction = {};
 
 export default class PlayerInteraction {

@@ -1,7 +1,7 @@
-import { setCanGoX } from '../../Player/playerStates/externalParams';
+import { setCanGoX, getCanGoX } from '../../Player/playerStates/externalParams';
 import sidesCollisionHandler from '../../Player/playerStates/sidesCollisionHandler';
 import positionStairsSetter from './positionStairsSetter';
-import { updateCornersPosition } from './sidePlayerSetter';
+import { updateCornersPosition } from './curvePlayerSetter';
 import { stairsArray } from './stairsCreation';
 import stairsParams from './stairsParams';
 
@@ -28,12 +28,12 @@ export default class StairsInteraction {
   };
 
   playerStairsOverlap = (bodyA, bodyB) => {
-    const playerA = bodyA;
+    const playerA = bodyA.parts.filter((part) => part.label === 'mainBody')[0];
     const stairs = bodyB;
     this.st = bodyB;
     this.distanceMiddle = Math.abs(playerA.position.x - stairs.position.x);
 
-    updateCornersPosition();
+    setCanGoX(true);
 
     const distanceRightSide = Math
       .abs(playerA.position.x - (stairs.bounds.max.x - stairsParams.WIDTH
@@ -51,10 +51,18 @@ export default class StairsInteraction {
     if ((this.distanceMiddle < stairsParams.ALLOWED_DISTANCE_MIDDLE && stairs.label === 'stairs-middle')
       || (distanceStairsLeft < stairsParams.ALLOWED_DISTANCE_SIDES && stairs.label === 'stairs-left')
       || (distanceStairsRight < stairsParams.ALLOWED_DISTANCE_SIDES && stairs.label === 'stairs-right')) {
-      positionStairsSetter(
-        this.player, playerA, stairs, this.distanceMiddle, this.cursors, this.scene,
-      );
+      const positionConfig = {
+        playerInstance: this.playerInstance,
+        playerContainer: this.player,
+        playerBody: playerA,
+        stairs,
+        distanceMiddle: this.distanceMiddle,
+        cursors: this.cursors,
+        scene: this.scene,
+      };
+      positionStairsSetter(positionConfig);
     }
+    updateCornersPosition();
     if (this.distanceMiddle === 0 || distanceRightSide === 0 || distanceLeftSide === 0) {
       this.isPlayerOnPosition = true;
     }
@@ -76,13 +84,11 @@ export default class StairsInteraction {
   };
 
   controlYMovement = () => {
+    const canPlayerDown = sidesCollisionHandler(this.playerInstance, this.scene).canDown;
     if (this.isPlayerOnPosition) {
       if (this.cursors.up.isDown && !stairsParams.lastStep) {
         this.player.setVelocityY(-this.PLAYER_SPEED_Y);
-      } else if (
-        this.cursors.down.isDown
-        && sidesCollisionHandler(this.playerInstance, this.scene).canDown
-      ) {
+      } else if (this.cursors.down.isDown && canPlayerDown) {
         this.player.setVelocityY(this.PLAYER_SPEED_Y);
       } else {
         this.player.setVelocityY(0);
@@ -91,5 +97,6 @@ export default class StairsInteraction {
 
     stairsParams.lastStep = false;
     this.isPlayerOnPosition = false;
+    // прочекать
   }
 }

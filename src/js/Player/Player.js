@@ -14,7 +14,8 @@ export default class Player {
         label: 'mainBody',
       });
     this.sensors = {
-      bottom: Bodies.rectangle(0, this.h * 0.32, this.w * 0.4, 1, { isSensor: true }),
+      bottom: Bodies.rectangle(0, this.h * 0.34, this.w * 0.1, 1, { isSensor: true }),
+      stairs: Bodies.rectangle(0, this.h * 0.33, this.w * 0.45, 1, { isSensor: true }),
       left: Bodies.rectangle(-(this.w * 0.12), 1, 2, this.h * 0.15, { isSensor: true }),
       right: Bodies.rectangle(this.w * 0.12, 1, 2, this.h * 0.15, { isSensor: true }),
       objectSensor: Bodies.rectangle(0, 0, this.w * 0.3, this.h * 0.45, { isSensor: true }),
@@ -29,6 +30,7 @@ export default class Player {
       parts: [
         this.mainBody,
         this.sensors.bottom,
+        this.sensors.stairs,
         this.sensors.left,
         this.sensors.right,
         this.sensors.around,

@@ -7,6 +7,7 @@ import { setInteractionObjects } from '../setters/level0';
 import { stats } from '../Player/playerStates/stats';
 import groundCreation from '../objects/ground/groundCreation';
 import stairsCreation from '../objects/stairs/stairsCreation';
+import { getCanGoX } from '../Player/playerStates/externalParams';
 
 import b_1 from '../../assets/level0/b_1.png';
 import b_2 from '../../assets/level0/b_2.png';

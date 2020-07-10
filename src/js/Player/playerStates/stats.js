@@ -12,6 +12,7 @@ const stats = {
     h: 40,
     w: 32,
   },
+  bodyContainerYOffset: 2.33,
 };
 
 const looseHealth = (amount) => {

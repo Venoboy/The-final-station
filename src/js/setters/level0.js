@@ -6,6 +6,7 @@ import Lid from '../interactionObjects/Lid';
 import { interactionObjectsData } from '../data/level0';
 
 const doors = [];
+const lids = [];
 const setInteractionObjects = (context) => {
   // eslint-disable-next-line no-unused-vars
   let object;
@@ -45,15 +46,15 @@ const setInteractionObjects = (context) => {
   doors.push(new Door({
     scene: context, x: 844, y: 330, beforeTexture: 'door', afterTexture: 'door_',
   }));
-  object = new Lid({
+  lids.push(new Lid({
     scene: context, x: 486, y: 206, beforeTexture: 'lid',
-  });
-  object = new Lid({
+  }));
+  lids.push(new Lid({
     scene: context, x: 791, y: 264, beforeTexture: 'lid',
-  });
-  object = new Lid({
+  }));
+  lids.push(new Lid({
     scene: context, x: 646, y: 293, beforeTexture: 'lid',
-  });
+  }));
   object = new Storage({
     scene: context, x: 165, y: 175, beforeTexture: 'locker', afterTexture: 'locker_', items: interactionObjectsData.locker1,
   });
@@ -66,4 +67,4 @@ const setInteractionObjects = (context) => {
 };
 
 // eslint-disable-next-line import/prefer-default-export
-export { setInteractionObjects, doors };
+export { setInteractionObjects, doors, lids };

@@ -1,5 +1,5 @@
 import { groundArray } from '../../objects/ground/groundCreation';
-import { doors } from '../../setters/level0';
+import { doors, lids } from '../../setters/level0';
 
 const sidesCollisionHandler = (playerInstance, scene) => {
   let canGoLeft = true;
@@ -22,7 +22,10 @@ const sidesCollisionHandler = (playerInstance, scene) => {
     canGoDown = false;
   };
 
-  scene.matter.overlap(groundSensor, groundArray, downHandler);
+  const currentLids = lids.filter((lid) => lid.body !== undefined);
+  const objectPreventDown = [...groundArray, ...currentLids];
+
+  scene.matter.overlap(groundSensor, objectPreventDown, downHandler);
 
   scene.matter.overlap(
     [leftSensor, rightSensor],

@@ -16,10 +16,10 @@ const config = {
       },
       debug: {
         renderFill: false,
-        showInternalEdges: true,
+        showInternalEdges: false,
         showConvexHulls: false,
-        showBody: true,
-        showStaticBody: true,
+        showBody: false,
+        showStaticBody: false,
       },
       enableSleeping: false,
     },
