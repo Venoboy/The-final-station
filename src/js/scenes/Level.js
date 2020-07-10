@@ -129,7 +129,7 @@ export default class Level extends Phaser.Scene {
 
     this.music = this.sound.add('levelMusic');
     this.music.loop = true;
-    this.music.play(); // откл. звук
+    // this.music.play(); // откл. звук
 
     this.soundSensors = setSoundSensors(this, this.playerInteraction.player);
 
