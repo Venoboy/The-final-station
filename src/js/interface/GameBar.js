@@ -3,10 +3,10 @@ import HealtBar from './HealthBar';
 import WeaponMagazine from './WeaponMagazine';
 
 import gameBar from '../../assets/interface/gameBarFrame.png';
-import bullet from '../../assets/interface/bullet.png';
+import bulletImg from '../../assets/interface/bullet.png';
 import bulletBG from '../../assets/interface/bulletBG.png';
 
-import { switchEventListeners } from './UIHelpers';
+import { onEventListeners, offEventListeners } from './UIHelpers';
 
 const magazineSize = 6;
 const textConfig = {
@@ -39,16 +39,23 @@ export default class GameBar extends Phaser.Scene {
   }
 
   preload() {
+    this.cameras.main.fadeOut(0);
     this.load.image('gameBar', gameBar);
-    this.load.image('bullet', bullet);
+    this.load.image('bulletImg', bulletImg);
     this.load.image('bulletBG', bulletBG);
+    this.game.sound.context.resume();
   }
 
   create() {
+    this.cameras.main.fadeIn(2500);
     this.addItems();
     this.changePosition();
     this.scale.on('resize', this.changePosition, this);
-    switchEventListeners(this);
+    onEventListeners(this);
+    this.events.on('shutdown', () => {
+      this.scale.off('resize', this.changePosition, this);
+      offEventListeners(this);
+    });
   }
 
   changePosition() {

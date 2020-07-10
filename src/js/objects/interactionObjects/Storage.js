@@ -41,11 +41,6 @@ export default class Storage extends InteractionObject {
   }
 
   interact() {
-    const info = this.interactionInfo;
-    if (this.afterActionImage) {
-      this.afterActionImage.setVisible(true);
-    }
-
     const textItems = this.generateText();
     const container = this.scene.add.container(this.x, this.y - 10, textItems);
     const timeline = this.scene.tweens.createTimeline();
@@ -65,7 +60,7 @@ export default class Storage extends InteractionObject {
     timeline.play();
     timeline.onComplete = () => { container.destroy(); };
 
-    this.destroy(this.scene);
+    const info = super.interact();
     return info;
   }
 }

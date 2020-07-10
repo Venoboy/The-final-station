@@ -44,7 +44,7 @@ export default class Player {
       objectSensor: Bodies.rectangle(
         0,
         0,
-        this.width * 0.3,
+        this.width,
         this.height * 0.45,
         {
           isSensor: true,

@@ -1,4 +1,4 @@
-const bulletTexture = 'bullet';
+const bulletTexture = 'bulletImg';
 const bulletBGTexture = 'bulletBG';
 
 export default class WeaponMagazine {

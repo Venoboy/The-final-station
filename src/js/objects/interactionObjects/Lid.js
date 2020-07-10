@@ -8,6 +8,9 @@ export default class Door extends InteractionObject {
     super(config);
     this.createCompoundBody(config.x, config.y);
     this.interactionInfo.type = 'door';
+    if (this.sound) {
+      this.sound.volume = 0.2;
+    }
   }
 
   createCompoundBody() {

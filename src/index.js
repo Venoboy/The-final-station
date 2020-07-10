@@ -1,9 +1,12 @@
 import Phaser from 'phaser';
 import PhaserMatterCollisionPlugin from 'phaser-matter-collision-plugin';
 
+import PreloadScene from './js/scenes/PreloadScene';
+import MainMenu from './js/scenes/MainMenu';
+import PauseMenu from './js/scenes/PauseMenu';
 import Level from './js/scenes/Level';
 import GameBar from './js/interface/GameBar';
-import OutlinePipeline from './js/interactionObjects/OutlinePipeline';
+import OutlinePipeline from './js/objects/interactionObjects/OutlinePipeline';
 
 const config = {
   type: Phaser.AUTO,
@@ -18,8 +21,8 @@ const config = {
         renderFill: false,
         showInternalEdges: true,
         showConvexHulls: false,
-        showBody: true,
-        showStaticBody: true,
+        showBody: false,
+        showStaticBody: false,
       },
       enableSleeping: false,
     },
@@ -34,23 +37,20 @@ const config = {
     ],
   },
   pixelArt: true,
-  scene: [Level, GameBar],
+  /* Чтобы отключить отбражение меню, поместите Level в начало массива */
+  scene: [PreloadScene, MainMenu, Level, GameBar, PauseMenu],
   scale: {
     mode: Phaser.Scale.RESIZE,
     width: window.innerWidth,
     height: window.innerHeight,
   },
   callbacks: {
-    postBoot: game => {
+    postBoot: (game) => {
       game.renderer.addPipeline('outline', new OutlinePipeline(game));
     }
-  }
+  },
 };
 
 const game = new Phaser.Game(config);
 
 export default game;
-
-// window.addEventListener('resize', () => {
-//   game.scale.resize(window.innerWidth, window.innerHeight);
-// }, false);
