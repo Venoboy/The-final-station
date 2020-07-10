@@ -20,6 +20,6 @@ const looseHealth = (amount) => {
 
 const setFullHealth = () => {
   stats.health = HERO_MAX_HEALTH;
-}
+};
 
 export { stats, looseHealth, setFullHealth };

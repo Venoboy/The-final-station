@@ -7,6 +7,8 @@ import dudeImage from '../../assets/Player/spr.png';
 import dudeLegsImage from '../../assets/Player/AllLegs.png';
 import climb from '../../assets/Player/climb.png';
 import PersonWithObjectAnimation from './PlayerWithStuffAnimation';
+import PersonDeadAnimation from './PlayerDeadAnim';
+import { stats } from './playerStates/stats';
 
 let angle;
 let person;
@@ -19,9 +21,12 @@ let cursors;
 let playerOnStairs;
 let turn;
 let heal;
+let dead;
 let reload;
 let healing = false;
 let reloading = false;
+let isAlive = true;
+
 
 function RightAngle(a) {
   let angleRight = a > 0.75 ? 0.75 : a;
@@ -45,7 +50,9 @@ export default class PersonAnimation {
 
   preload() {
     this.PersonWithObjectAnimation = new PersonWithObjectAnimation(this.scene);
+    this.PersonDeadAnimation = new PersonDeadAnimation(this.scene);
     this.PersonWithObjectAnimation.preload();
+    this.PersonDeadAnimation.preload();
     this.scene.load.image('gun', gunImage);
     this.scene.load.image('bullet', bulletImage);
     this.scene.load.image('gunback', gunbackImage);
@@ -66,6 +73,7 @@ export default class PersonAnimation {
   create() {
     const arrayWithAnimations = this.PersonWithObjectAnimation.create();
     [heal, reload] = arrayWithAnimations;
+    dead = this.PersonDeadAnimation.create();
     body = this.scene.add.sprite(0, 0, 'dude');
     legs = this.scene.add.sprite(0, 0, 'dudeLegs');
     gun = this.scene.add.image(-1.5, 0.5, 'gun').setOrigin(0, 0.5);
@@ -78,6 +86,7 @@ export default class PersonAnimation {
       climbDude,
       heal,
       reload,
+      dead,
     ]);
 
     this.playerInstance = new Player(this.scene, 109.36, 180.5, person);
@@ -185,48 +194,50 @@ export default class PersonAnimation {
     this.scene.input.on(
       'pointermove',
       function (pointer) {
-        if (!healing && !reloading) {
-          angle = Phaser.Math.Angle.Between(
-            person.list[2].parentContainer.x,
-            person.list[2].parentContainer.y,
-            pointer.x + this.scene.cameras.main.scrollX,
-            pointer.y + this.scene.cameras.main.scrollY,
-          );
+        if (isAlive) {
+          if (!healing && !reloading) {
+            angle = Phaser.Math.Angle.Between(
+              person.list[2].parentContainer.x,
+              person.list[2].parentContainer.y,
+              pointer.x + this.scene.cameras.main.scrollX,
+              pointer.y + this.scene.cameras.main.scrollY,
+            );
 
 
-          if (
-            person.list[2].parentContainer.x > pointer.worldX
-          ) {
-            turn = false;
-            gunBack = this.scene.add.image(1.5, 1, 'gunback').setOrigin(1, 0.5);
-            person.replace(gun, gunBack);
-            person.list[2].setRotation(LeftAngle(angle) - Math.PI);
-          } else if (
-            person.list[2].parentContainer.x < pointer.worldX
-          ) {
-            turn = true;
-            person.replace(person.list[2], gun);
-            person.list[2].setRotation(RightAngle(angle));
+            if (
+              person.list[2].parentContainer.x > pointer.worldX
+            ) {
+              turn = false;
+              gunBack = this.scene.add.image(1.5, 1, 'gunback').setOrigin(1, 0.5);
+              person.replace(gun, gunBack);
+              person.list[2].setRotation(LeftAngle(angle) - Math.PI);
+            } else if (
+              person.list[2].parentContainer.x < pointer.worldX
+            ) {
+              turn = true;
+              person.replace(person.list[2], gun);
+              person.list[2].setRotation(RightAngle(angle));
+            }
           }
         }
       },
       this,
     );
-    // this.scene.input.on(
-    //   'pointerdown',
-    //   function () {
 
-    //   },
-    //   this,
-    // );
     const keyObj = this.scene.input.keyboard.addKey('a');
     const keyObj2 = this.scene.input.keyboard.addKey('r');
     keyObj.on('down', () => {
-      if (!reloading) {
-        const anim = this.scene.anims.get('Heal');
+      if (isAlive && !reloading) {
+        let anim;
         healing = true;
         person.list[2].setVisible(false);
-        heal.anims.play('Heal', true);
+        if (legs.anims.currentAnim.key === 'Lturnleg') {
+          heal.anims.play('Heal', true);
+          anim = this.scene.anims.get('Heal');
+        } else if (legs.anims.currentAnim.key === 'Rturnleg') {
+          heal.anims.play('HealR', true);
+          anim = this.scene.anims.get('HealR');
+        }
         anim.on('complete', () => {
           healing = false;
           body.setVisible(true);
@@ -235,11 +246,17 @@ export default class PersonAnimation {
       }
     });
     keyObj2.on('down', () => {
-      if (!healing) {
-        const anim = this.scene.anims.get('Reload');
+      if (isAlive && !healing) {
+        let anim;
         reloading = true;
         person.list[2].setVisible(false);
-        reload.anims.play('Reload', true);
+        if (legs.anims.currentAnim.key === 'Lturnleg') {
+          reload.anims.play('Reload', true);
+          anim = this.scene.anims.get('Reload');
+        } else if (legs.anims.currentAnim.key === 'Rturnleg') {
+          reload.anims.play('ReloadR', true);
+          anim = this.scene.anims.get('ReloadR');
+        }
         anim.on('complete', () => {
           reloading = false;
           body.setVisible(true);
@@ -255,8 +272,6 @@ export default class PersonAnimation {
   }
 
   update(stairsInf) {
-    playerOnStairs = !stairsInf.playerInstance.isTouching.ground;
-    gunBack = this.scene.add.image(1.5, 1, 'gunback').setOrigin(1, 0.5);
     function personClimb() {
       body.setVisible(false);
       legs.setVisible(false);
@@ -269,70 +284,94 @@ export default class PersonAnimation {
       person.list[2].setVisible(true);
       climbDude.setVisible(false);
     }
-    if (!playerOnStairs && !healing && !reloading) {
-      personNotClimb();
-    }
-    if (healing) {
-      body.setVisible(false);
-    }
-    if (reloading) {
-      body.setVisible(false);
-    }
+    if (isAlive) {
+      playerOnStairs = !stairsInf.playerInstance.isTouching.ground;
+      gunBack = this.scene.add.image(1.5, 1, 'gunback').setOrigin(1, 0.5);
+      if (!playerOnStairs && !healing && !reloading) {
+        personNotClimb();
+      }
+      if (healing) {
+        body.setVisible(false);
+      }
+      if (reloading) {
+        body.setVisible(false);
+      }
+      if (stats.health === 0) {
+        let anim;
+        body.setVisible(false);
+        legs.setVisible(false);
+        person.list[2].setVisible(false);
+        dead.setVisible(true);
+        if (legs.anims.currentAnim.key === 'Lturnleg') {
+          anim = this.scene.anims.get('Dead');
+          dead.anims.play('Dead', true);
+        } else if (legs.anims.currentAnim.key === 'Rturnleg') {
+          anim = this.scene.anims.get('DeadR');
+          dead.anims.play('DeadR', true);
+        }
+        anim.on('complete', () => {
+          body.setVisible(false);
+          person.list[2].setVisible(false);
+          person.destroy();
+          isAlive = false;
+        });
+      }
 
-    if (cursors.left.isDown) {
-      if (!turn) {
-        legs.anims.play('backLeftl', true);
-        body.anims.play('left', true);
-      } else if (turn) {
-        body.anims.play('right', true);
-        legs.anims.play('backRightl', true);
-      }
-    } else if (cursors.right.isDown) {
-      if (turn) {
-        legs.anims.play('rightl', true);
-        body.anims.play('right', true);
-      } else if (!turn) {
+      if (cursors.left.isDown) {
+        if (!turn) {
+          legs.anims.play('backLeftl', true);
+          body.anims.play('left', true);
+        } else if (turn) {
+          body.anims.play('right', true);
+          legs.anims.play('backRightl', true);
+        }
+      } else if (cursors.right.isDown) {
+        if (turn) {
+          legs.anims.play('rightl', true);
+          body.anims.play('right', true);
+        } else if (!turn) {
+          legs.anims.play('leftl', true);
+          body.anims.play('left', true);
+        }
+      } else if (
+        cursors.down.isDown
+      && playerOnStairs
+      && stairsInf.st.label === 'stairs-right'
+      ) {
+        personClimb();
+        climbDude.anims.play('Climb', true);
+      } else if (
+        cursors.up.isDown
+      && playerOnStairs
+      && stairsInf.st.label === 'stairs-right'
+      ) {
+        personClimb();
+        climbDude.anims.play('Climb', true);
+      } else if (playerOnStairs && stairsInf.st.label === 'stairs-right') {
+        personClimb();
+        climbDude.anims.play('climbStay', true);
+      } else if (playerOnStairs && (cursors.down.isDown || cursors.up.isDown)) {
+        body.anims.play('Lturn', true);
         legs.anims.play('leftl', true);
-        body.anims.play('left', true);
+      } else if (person.list[2].texture.key === 'gun') {
+        if (healing) {
+          heal.setVisible(true);
+        }
+        if (reloading) {
+          reload.setVisible(true);
+        }
+        body.anims.play('Lturn', true);
+        legs.anims.play('Lturnleg', true);
+      } else {
+        if (healing) {
+          heal.setVisible(true);
+        }
+        if (reloading) {
+          reload.setVisible(true);
+        }
+        body.anims.play('Rturn', true);
+        legs.anims.play('Rturnleg', true);
       }
-    } else if (
-      cursors.down.isDown
-      && playerOnStairs
-      && stairsInf.st.label === 'stairs-right'
-    ) {
-      personClimb();
-      climbDude.anims.play('Climb', true);
-    } else if (
-      cursors.up.isDown
-      && playerOnStairs
-      && stairsInf.st.label === 'stairs-right'
-    ) {
-      personClimb();
-      climbDude.anims.play('Climb', true);
-    } else if (playerOnStairs && stairsInf.st.label === 'stairs-right') {
-      personClimb();
-      climbDude.anims.play('climbStay', true);
-    } else if (playerOnStairs && (cursors.down.isDown || cursors.up.isDown)) {
-      body.anims.play('Lturn', true);
-      legs.anims.play('leftl', true);
-    } else if (person.list[2].texture.key === 'gun') {
-      if (healing) {
-        heal.setVisible(true);
-      }
-      if (reloading) {
-        reload.setVisible(true);
-      }
-      body.anims.play('Lturn', true);
-      legs.anims.play('Lturnleg', true);
-    } else {
-      if (healing) {
-        heal.setVisible(true);
-      }
-      if (reloading) {
-        reload.setVisible(true);
-      }
-      body.anims.play('Rturn', true);
-      legs.anims.play('Rturnleg', true);
     }
   }
 }
