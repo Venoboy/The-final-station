@@ -226,8 +226,6 @@ export default class PersonAnimation {
     if (cursors.left.isDown) {
       if (!turn) {
         legs.anims.play('backLeftl', true);
-
-
         body.anims.play('left', true);
       } else if (turn) {
         body.anims.play('right', true);
@@ -260,7 +258,7 @@ export default class PersonAnimation {
       climbDude.anims.play('climbStay', true);
     } else if (playerOnStairs && (cursors.down.isDown || cursors.up.isDown)) {
       body.anims.play('Lturn', true);
-      legs.anims.play('leftl', true);
+      legs.anims.play('backLeftl', true);
     } else if (person.list[2].texture.key === 'gun') {
       body.anims.play('Lturn', true);
       legs.anims.play('Lturnleg', true);

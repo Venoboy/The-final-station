@@ -29,7 +29,7 @@ export default class Player {
       this.height * 0.05,
       this.width * 0.25,
       this.height * 0.5,
-      { chamfer: { radius: 6 } }
+      { chamfer: { radius: 6 } },
     );
     this.sensors = {
       bottom: Bodies.rectangle(1, this.height * 0.35, this.width * 0.25, 1, {
@@ -48,7 +48,7 @@ export default class Player {
         this.height * 0.45,
         {
           isSensor: true,
-        }
+        },
       ),
       around: Bodies.rectangle(0, 0, this.width * 0.15, this.height * 0.3, {
         isSensor: true,
@@ -62,7 +62,7 @@ export default class Player {
         {
           chamfer: { radius: 6 },
           isSensor: true,
-        }
+        },
       ),
     };
     const compoundBody = Body.create({
