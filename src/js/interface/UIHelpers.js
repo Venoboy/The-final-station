@@ -1,4 +1,3 @@
-import Phaser from 'phaser';
 import eventsCenter from '../eventsCenter';
 
 const updateHealthUI = (health) => {
@@ -25,28 +24,6 @@ const updateKeysUI = (keys) => {
   eventsCenter.emit('update-keys', keys);
 };
 
-const updateUI = (uiName, value) => {
-  // eslint-disable-next-line default-case
-  switch (uiName) {
-    case 'health': {
-      updateHealthUI(value);
-      break;
-    }
-    case 'bullets': {
-      updateBulletsUI(value);
-      break;
-    }
-    case 'food': {
-      updateFoodUI(value);
-      break;
-    }
-    case 'keys': {
-      updateKeysUI(value);
-      break;
-    }
-  }
-};
-
 const onEventListeners = (context) => {
   eventsCenter.on('update-health', context.updateHealth, context);
   eventsCenter.on('update-health-bar', context.updateHealthBar, context);
@@ -67,6 +44,6 @@ const offEventListeners = (context) => {
 
 export {
   updateHealthUI, updateFoodUI, updateBulletsUI, updateKeysUI,
-  updateUI, updateMagazineUI, updateHealthBarUI, onEventListeners,
+  updateMagazineUI, updateHealthBarUI, onEventListeners,
   offEventListeners,
 };
