@@ -5,6 +5,7 @@ import PreloadScene from './js/scenes/PreloadScene';
 import MainMenu from './js/scenes/MainMenu';
 import PauseMenu from './js/scenes/PauseMenu';
 import Level from './js/scenes/Level';
+import FinalScene from './js/scenes/FinalScene';
 import GameBar from './js/interface/GameBar';
 import OutlinePipeline from './js/objects/interactionObjects/OutlinePipeline';
 
@@ -38,7 +39,7 @@ const config = {
   },
   pixelArt: true,
   /* Чтобы отключить отбражение меню, поместите Level в начало массива */
-  scene: [PreloadScene, MainMenu, Level, GameBar, PauseMenu],
+  scene: [Level, PreloadScene, MainMenu, GameBar, PauseMenu, FinalScene],
   scale: {
     mode: Phaser.Scale.RESIZE,
     width: window.innerWidth,

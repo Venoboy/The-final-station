@@ -49,6 +49,39 @@ const createMainMenuImageEffect = (scene, bg, logo, button) => {
   return timeline;
 };
 
+const createFinalSceneEffects = (scene, text, showScene) => {
+  const timeline = scene.tweens.createTimeline();
+  timeline.add({
+    targets: text,
+    alpha: 1,
+    duration: 2500,
+    inComplete: () => {
+      scene.cameras.main.fadeIn(2500);
+    },
+  });
+  timeline.add({
+    targets: text,
+    alpha: 1,
+    duration: 2000,
+    inComplete: () => {
+      scene.cameras.main.fadeOut(2500);
+    },
+    delay: 2500,
+  });
+  timeline.add({
+    targets: text,
+    alpha: 1,
+    duration: 0,
+    inComplete: () => {
+      text.destroy();
+      showScene(scene);
+    },
+    delay: 2500,
+  });
+  return timeline;
+};
+
 export {
   createPreloadImageEffect, createMainMenuImageEffect,
+  createFinalSceneEffects,
 };

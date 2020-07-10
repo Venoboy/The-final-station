@@ -38,6 +38,8 @@ import levelMusic from '../../assets/audio/levelMusic.mp3';
 import crowdTalks from '../../assets/audio/crowd_talks.mp3';
 import stream from '../../assets/audio/stream.mp3';
 
+import eventsCenter from '../eventsCenter';
+
 const heightPerScreen = 450;
 
 export default class Level extends Phaser.Scene {
@@ -135,6 +137,8 @@ export default class Level extends Phaser.Scene {
     this.pauseKey = this.input.keyboard.addKey(27);
     this.pauseKey.on('up', this.pause, this);
 
+    eventsCenter.on('player-died', this.levelOver, this);
+
     this.events.on('resume', () => {
       this.music.play();
     });
@@ -143,6 +147,7 @@ export default class Level extends Phaser.Scene {
     });
     this.events.on('shutdown', () => {
       this.pauseKey.off('up', this.pause, this);
+      eventsCenter.off('player-died', this.levelOver, this);
       this.music.stop();
     });
   }
@@ -156,5 +161,13 @@ export default class Level extends Phaser.Scene {
     this.playerInteraction.update();
     this.enemyLoader.update();
     this.soundSensors.forEach((soundSensor) => soundSensor.checkDistance());
+  }
+
+  levelOver() {
+    this.cameras.main.fadeOut(2500);
+    this.cameras.main.on('camerafadeoutcomplete', () => {
+      this.scene.stop('game-bar');
+      this.scene.start('final-scene');
+    });
   }
 }

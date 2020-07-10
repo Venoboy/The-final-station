@@ -1,4 +1,5 @@
 import { updateHealthBarUI } from '../../interface/UIHelpers';
+import eventsCenter from '../../eventsCenter';
 
 const HERO_MAX_HEALTH = 100;
 
@@ -11,11 +12,16 @@ const stats = {
 };
 
 const looseHealth = (amount) => {
-  stats.health -= amount;
-  if (stats.health < 0) {
-    stats.health = 0;
+  if (stats.health > 0) {
+    stats.health -= amount;
+    if (stats.health < 0) {
+      stats.health = 0;
+    }
+    updateHealthBarUI(stats.health);
+    if (stats.health === 0) {
+      eventsCenter.emit('player-died');
+    }
   }
-  updateHealthBarUI(stats.health);
 };
 
 const setFullHealth = () => {
