@@ -69,7 +69,7 @@ export default class PersonAnimation {
     climbDude = this.scene.add.sprite(0, 0, 'climbing').setVisible(false);
     this.footstepSound = this.scene.sound.add('playerFootstep');
 
-    person = this.scene.add.container(109.36, 180.5, [
+    person = this.scene.add.container(109.36, 185.5, [
       legs,
       body,
       gun,
@@ -77,7 +77,7 @@ export default class PersonAnimation {
       climbDude,
     ]);
 
-    this.playerInstance = new Player(this.scene, 109.36, 180.5, person);
+    this.playerInstance = new Player(this.scene, 109.36, 185.5, person);
 
     this.scene.anims.create({
       key: 'left',

@@ -19,7 +19,7 @@ const config = {
       },
       debug: {
         renderFill: false,
-        showInternalEdges: true,
+        showInternalEdges: false,
         showConvexHulls: false,
         showBody: false,
         showStaticBody: false,
@@ -47,7 +47,7 @@ const config = {
   callbacks: {
     postBoot: (game) => {
       game.renderer.addPipeline('outline', new OutlinePipeline(game));
-    }
+    },
   },
 };
 

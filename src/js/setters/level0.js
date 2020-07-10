@@ -14,6 +14,7 @@ import {
 } from '../data/level0';
 
 const doors = [];
+const lids = [];
 const setInteractionObjects = (context) => {
   const objects = [];
   doorsData.forEach((data) => {
@@ -39,6 +40,7 @@ const setInteractionObjects = (context) => {
       soundKey: data.soundKey,
     });
     objects.push(lid);
+    lids.push(lid);
   });
   lockersData.forEach((data) => {
     const locker = new Storage({
@@ -126,5 +128,5 @@ const setSoundSensors = (scene, sensorTrigger) => {
 };
 
 export {
-  setInteractionObjects, setRooms, setTunnel, doors, setSoundSensors,
+  setInteractionObjects, setRooms, setTunnel, doors, lids, setSoundSensors,
 };
