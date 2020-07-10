@@ -1,4 +1,5 @@
 /* eslint-disable camelcase */
+/* Для отключения музыки уровня закомменте строку 128 */
 import Phaser from 'phaser';
 
 import PlayerInteraction, { stairsArray } from '../Player/PlayerInteraction';
@@ -124,7 +125,7 @@ export default class Level extends Phaser.Scene {
 
     this.music = this.sound.add('levelMusic');
     this.music.loop = true;
-    this.music.play();
+    this.music.play(); // откл. звук
 
     this.soundSensors = setSoundSensors(this, this.playerInteraction.player);
 
