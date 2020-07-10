@@ -21,7 +21,7 @@ export default class PlayerInteraction {
     this.scene = scene;
     this.stairsInteraction = {};
 
-    this.PLAYER_SPEED_X = 1.8;
+    this.PLAYER_SPEED_X = 1.3;
   }
 
   preload() {

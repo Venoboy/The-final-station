@@ -24,9 +24,13 @@ export default class Player {
     const { Body, Bodies } = Phaser.Physics.Matter.Matter;
     this.height = this.h;
     this.width = this.w;
-    this.mainBody = Bodies.rectangle(0, this.height * 0.05, this.width * 0.25, this.height * 0.5, {
-      chamfer: { radius: 6 },
-    });
+    this.mainBody = Bodies.rectangle(
+      0,
+      this.height * 0.05,
+      this.width * 0.25,
+      this.height * 0.5,
+      { chamfer: { radius: 6 } }
+    );
     this.sensors = {
       bottom: Bodies.rectangle(1, this.height * 0.35, this.width * 0.25, 1, {
         isSensor: true,
@@ -37,9 +41,15 @@ export default class Player {
       right: Bodies.rectangle(this.width * 0.12, 1, 2, this.height * 0.15, {
         isSensor: true,
       }),
-      objectSensor: Bodies.rectangle(0, 0, this.width * 0.75, this.height * 0.5, {
-        isSensor: true,
-      }),
+      objectSensor: Bodies.rectangle(
+        0,
+        0,
+        this.width,
+        this.height * 0.45,
+        {
+          isSensor: true,
+        }
+      ),
       around: Bodies.rectangle(0, 0, this.width * 0.15, this.height * 0.3, {
         isSensor: true,
       }),
@@ -52,7 +62,7 @@ export default class Player {
         {
           chamfer: { radius: 6 },
           isSensor: true,
-        },
+        }
       ),
     };
     const compoundBody = Body.create({
@@ -86,12 +96,22 @@ export default class Player {
     scene.matter.world.on('beforeupdate', this.resetTouching, this);
 
     scene.matterCollision.addOnCollideStart({
-      objectA: [this.sensors.bottom, this.sensors.left, this.sensors.right, this.mainBody],
+      objectA: [
+        this.sensors.bottom,
+        this.sensors.left,
+        this.sensors.right,
+        this.mainBody,
+      ],
       callback: this.onSensorCollide,
       context: this,
     });
     scene.matterCollision.addOnCollideActive({
-      objectA: [this.sensors.bottom, this.sensors.left, this.sensors.right, this.mainBody],
+      objectA: [
+        this.sensors.bottom,
+        this.sensors.left,
+        this.sensors.right,
+        this.mainBody,
+      ],
       callback: this.onSensorCollide,
       context: this,
     });
