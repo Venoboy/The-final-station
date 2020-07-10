@@ -11,6 +11,7 @@ import bak_1 from '../../assets/level0/bak_1.png';
 import bak_2 from '../../assets/level0/bak_2.png';
 import bak_3 from '../../assets/level0/bak_3.png';
 import bak_5 from '../../assets/level0/bak_5.png';
+import tunnel from '../../assets/level0/tunnel.png';
 import moons from '../../assets/level0/backgr_3.png';
 import hunterPath from '../../assets/level0/hunter_1_0.png';
 import bigEnemyPic from '../../assets/level0/enemies/BigZombie Idle_02.png';
@@ -36,15 +37,13 @@ import levelMusic from '../../assets/audio/levelMusic.mp3';
 import crowdTalks from '../../assets/audio/crowd_talks.mp3';
 import stream from '../../assets/audio/stream.mp3';
 
-
-const heightPerScreen = 350;
+const heightPerScreen = 450;
 
 export default class Level extends Phaser.Scene {
   constructor() {
     super('game-scene');
     this.playerInteraction = {};
     this.enemyLoader = {};
-    
   }
 
   init() {
@@ -56,6 +55,7 @@ export default class Level extends Phaser.Scene {
     this.load.image('moons', moons);
     this.load.image('b_123', b_123);
     this.load.image('f_123', f_123);
+    this.load.image('tunnel', tunnel);
     this.load.image('bak_1', bak_1);
     this.load.image('bak_2', bak_2);
     this.load.image('bak_3', bak_3);
@@ -87,10 +87,10 @@ export default class Level extends Phaser.Scene {
   }
 
   create() {
-    this.game.config.pixelArt = true;
+    const moonsOffset = 130 + window.innerWidth * 0.4;
     this.add.image(1020, 256, 'bak_2');
     this.add.image(648, 132, 'bak_1');
-    this.add.image(695, 120, 'moons').setScrollFactor(1.15, 1);
+    this.add.image(moonsOffset, 120, 'moons').setScrollFactor(0.2, 1);
     this.add.image(900, 315, 'bak_5').setScrollFactor(0.9, 1);
     this.add.image(263, 280, 'bak_1').setScrollFactor(0.9, 1);
     this.add.image(950, 350, 'bak_3').setScrollFactor(0.9, 1);

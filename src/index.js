@@ -44,7 +44,7 @@ const config = {
     height: window.innerHeight,
   },
   callbacks: {
-    postBoot: game => {
+    postBoot: (game) => {
       game.renderer.addPipeline('outline', new OutlinePipeline(game));
     }
   },
