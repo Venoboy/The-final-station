@@ -41,6 +41,7 @@ import crowdTalks from '../../assets/audio/crowd_talks.mp3';
 import stream from '../../assets/audio/stream.mp3';
 
 import eventsCenter from '../eventsCenter';
+import { createSoundFadeOut } from '../effects/soundEffects';
 
 const heightPerScreen = 450;
 
@@ -132,7 +133,6 @@ export default class Level extends Phaser.Scene {
     this.music = this.sound.add('levelMusic');
     this.music.loop = true;
     this.music.play(); // откл. звук
-
     this.soundSensors = setSoundSensors(this, this.playerInteraction.player);
 
     this.cameras.main.fadeIn(2500);
@@ -145,14 +145,17 @@ export default class Level extends Phaser.Scene {
 
     this.events.on('resume', () => {
       this.music.play();
+      this.soundSensors.forEach((sensor) => sensor.sound.play());
     });
     this.events.on('pause', () => {
       this.music.pause();
+      this.soundSensors.forEach((sensor) => sensor.sound.pause());
     });
     this.events.on('shutdown', () => {
       this.pauseKey.off('up', this.pause, this);
       eventsCenter.off('player-died', this.levelOver, this);
       this.music.stop();
+      this.soundSensors.forEach((sensor) => sensor.sound.stop());
     });
   }
 
@@ -168,6 +171,8 @@ export default class Level extends Phaser.Scene {
   }
 
   levelOver() {
+    const soundFadeOut = createSoundFadeOut(this, this.music, 2500);
+    soundFadeOut.play();
     this.cameras.main.fadeOut(2500);
     this.cameras.main.on('camerafadeoutcomplete', () => {
       this.scene.stop('game-bar');
