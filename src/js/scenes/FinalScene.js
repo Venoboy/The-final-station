@@ -1,5 +1,3 @@
-/* eslint-disable class-methods-use-this */
-/* eslint-disable linebreak-style */
 /* eslint-disable camelcase */
 import Phaser from 'phaser';
 import gg_sleep from '../../assets/finalScene/gg_sleep.png';
@@ -57,10 +55,10 @@ export default class BootScene extends Phaser.Scene {
     const musics = [];
     const players = [];
 
-    const text1 = this.add.text(centerX, centerY, '106th year since the FIRST VISITATION', textConfig)
+    const text1 = this.add.text(centerX, centerY, '106th year since the FIRST VISIT', textConfig)
       .setOrigin(0.5)
       .setResolution(10);
-    const text2 = this.add.text(centerX, centerY, 'To be continue ...', textConfig)
+    const text2 = this.add.text(centerX, centerY, 'To be continued ...', textConfig)
       .setOrigin(0.5)
       .setResolution(10);
     texts.push(text1, text2);

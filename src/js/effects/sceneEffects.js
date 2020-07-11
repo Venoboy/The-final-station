@@ -5,24 +5,16 @@ const createPreloadImageEffect = (scene, image1, image2) => {
     targets: image1,
     alpha: 1,
     duration: 1000,
-  });
-  timeline.add({
-    targets: image1,
-    alpha: 0,
-    duration: 1000,
-    delay: 2000,
+    yoyo: true,
+    hold: 2000,
   });
   timeline.add({
     targets: image2,
     alpha: 1,
     duration: 1000,
     delay: 1000,
-  });
-  timeline.add({
-    targets: image2,
-    alpha: 0,
-    duration: 1000,
-    delay: 2000,
+    yoyo: true,
+    hold: 2000,
     onComplete: () => {
       scene.scene.start('main-menu');
     },
@@ -59,13 +51,11 @@ const createFinalSceneEffects = (scene, texts, bg, musics, players) => {
   const subscene3 = scene.tweens.createTimeline();
   const subscene4 = scene.tweens.createTimeline();
   const subscene5 = scene.tweens.createTimeline();
-  /* 1 */
   subscene1.add({
     targets: texts[0],
     alpha: 1,
     duration: 2500,
   });
-  /* 2 */
   subscene1.add({
     targets: musics[0],
     duration: 0,
@@ -74,7 +64,6 @@ const createFinalSceneEffects = (scene, texts, bg, musics, players) => {
       musics[0].play();
     },
   });
-  /* 3 */
   subscene1.add({
     targets: texts[0],
     alpha: 0,
@@ -85,7 +74,6 @@ const createFinalSceneEffects = (scene, texts, bg, musics, players) => {
       subscene2.play();
     },
   });
-  /* 4 */
   subscene2.add({
     targets: scene,
     duration: 2500,
@@ -98,7 +86,6 @@ const createFinalSceneEffects = (scene, texts, bg, musics, players) => {
       scene.cameras.main.fadeIn(2500);
     },
   });
-  /* 5 */
   subscene2.add({
     targets: musics[0],
     duration: 0,
@@ -108,7 +95,6 @@ const createFinalSceneEffects = (scene, texts, bg, musics, players) => {
       subscene3.play();
     },
   });
-  /* 6 */
   subscene3.add({
     targets: scene,
     duration: 2500,
@@ -117,7 +103,6 @@ const createFinalSceneEffects = (scene, texts, bg, musics, players) => {
       scene.cameras.main.fadeOut(2500);
     },
   });
-  /* 7 */
   subscene3.add({
     targets: musics[1],
     duration: 1000,
@@ -129,7 +114,6 @@ const createFinalSceneEffects = (scene, texts, bg, musics, players) => {
       subscene4.play();
     },
   });
-  /* 8 */
   subscene4.add({
     targets: scene,
     duration: 2500,
@@ -152,7 +136,6 @@ const createFinalSceneEffects = (scene, texts, bg, musics, players) => {
       });
     },
   });
-  /* 9 */
   subscene5.add({
     targets: texts[1],
     alpha: 1,
