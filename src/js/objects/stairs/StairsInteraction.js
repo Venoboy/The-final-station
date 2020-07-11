@@ -86,9 +86,9 @@ export default class StairsInteraction {
   controlYMovement = () => {
     const canPlayerDown = sidesCollisionHandler(this.playerInstance, this.scene).canDown;
     if (this.isPlayerOnPosition) {
-      if (this.cursors.up.isDown && !stairsParams.lastStep) {
+      if (this.cursors.up.isDown() && !stairsParams.lastStep) {
         this.player.setVelocityY(-this.PLAYER_SPEED_Y);
-      } else if (this.cursors.down.isDown && canPlayerDown) {
+      } else if (this.cursors.down.isDown() && canPlayerDown) {
         this.player.setVelocityY(this.PLAYER_SPEED_Y);
       } else {
         this.player.setVelocityY(0);
