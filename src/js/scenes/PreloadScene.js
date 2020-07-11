@@ -28,16 +28,28 @@ export default class BootScene extends Phaser.Scene {
   create() {
     const centerX = window.innerWidth / 2;
     const centerY = window.innerHeight / 2;
-    const title_logo_domy_img = this.add.image(centerX, centerY, 'title_logo_domy')
+    this.title_logo_domy_img = this.add.image(centerX, centerY, 'title_logo_domy')
       .setOrigin(0.5);
 
-    const title_logo_tiny_img = this.add.image(centerX, centerY, 'title_logo_tiny')
+    this.title_logo_tiny_img = this.add.image(centerX, centerY, 'title_logo_tiny')
       .setOrigin(0.5);
 
-    title_logo_domy_img.alpha = 0;
-    title_logo_tiny_img.alpha = 0;
+    this.title_logo_domy_img.alpha = 0;
+    this.title_logo_tiny_img.alpha = 0;
 
-    const timeline = createPreloadImageEffect(this, title_logo_domy_img, title_logo_tiny_img);
+    const timeline = createPreloadImageEffect(this, this.title_logo_domy_img, this.title_logo_tiny_img);
     timeline.play();
+
+    this.scale.on('resize', this.resize, this);
+    this.events.on('shutdown', () => {
+      this.scale.off('resize', this.resize, this);
+    });
+  }
+
+  resize() {
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+    this.title_logo_domy_img.setPosition(centerX, centerY);
+    this.title_logo_tiny_img.setPosition(centerX, centerY);
   }
 }
