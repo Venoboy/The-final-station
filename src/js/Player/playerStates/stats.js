@@ -26,9 +26,9 @@ const looseHealth = (amount) => {
       stats.health = 0;
     }
     updateHealthBarUI(stats.health);
-    if (stats.health === 0) {
-      eventsCenter.emit('player-died');
-    }
+    // if (stats.health === 0) {
+    //   eventsCenter.emit('player-died');
+    // }
   }
 };
 

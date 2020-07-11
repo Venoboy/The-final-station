@@ -39,7 +39,7 @@ const config = {
   },
   pixelArt: true,
   /* Чтобы отключить отбражение меню, поместите Level в начало массива */
-  scene: [PreloadScene, MainMenu, Level, GameBar, PauseMenu, FinalScene],
+  scene: [Level, PreloadScene, MainMenu, GameBar, PauseMenu, FinalScene],
   scale: {
     mode: Phaser.Scale.RESIZE,
     width: window.innerWidth,

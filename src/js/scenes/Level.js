@@ -131,7 +131,7 @@ export default class Level extends Phaser.Scene {
 
     this.music = this.sound.add('levelMusic');
     this.music.loop = true;
-    this.music.play(); // откл. звук
+    // this.music.play(); // откл. звук
 
     this.soundSensors = setSoundSensors(this, this.playerInteraction.player);
 
@@ -144,17 +144,17 @@ export default class Level extends Phaser.Scene {
     eventsCenter.on('player-died', this.levelOver, this);
 
     this.events.on('resume', () => {
-      this.music.play();
+      // this.music.play();
       this.soundSensors.forEach((sensor) => sensor.sound.play());
     });
     this.events.on('pause', () => {
-      this.music.pause();
+      // this.music.pause();
       this.soundSensors.forEach((sensor) => sensor.sound.pause());
     });
     this.events.on('shutdown', () => {
       this.pauseKey.off('up', this.pause, this);
       eventsCenter.off('player-died', this.levelOver, this);
-      this.music.stop();
+      // this.music.stop();
       this.soundSensors.forEach((sensor) => sensor.sound.stop());
     });
   }
