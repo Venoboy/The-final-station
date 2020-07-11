@@ -7,6 +7,7 @@ import EnemyLoader from '../Enemies/EnemyLoader';
 import { stats } from '../Player/playerStates/stats';
 import groundCreation from '../objects/ground/groundCreation';
 import stairsCreation from '../objects/stairs/stairsCreation';
+import createControls from '../Player/controls/controls';
 
 import b_123 from '../../assets/level0/b_123.png';
 import f_123 from '../../assets/level0/f_123.png';
@@ -26,9 +27,7 @@ import locker from '../../assets/interaction-objects/Locker.png';
 import locker_ from '../../assets/interaction-objects/Locker_.png';
 import deadBody1 from '../../assets/interaction-objects/DeadBody1.png';
 import deadBody2 from '../../assets/interaction-objects/DeadBody2.png';
-import {
-  setInteractionObjects, setRooms, setTunnel, setSoundSensors,
-} from '../setters/level0';
+import { setInteractionObjects, setRooms, setSoundSensors, setTunnel, } from '../setters/level0';
 
 import doorSound1 from '../../assets/audio/door_met_1.mp3';
 import doorSound3 from '../../assets/audio/door_met_3.mp3';
@@ -39,6 +38,7 @@ import pickUpSound from '../../assets/audio/pickUp.mp3';
 import levelMusic from '../../assets/audio/levelMusic.mp3';
 import crowdTalks from '../../assets/audio/crowd_talks.mp3';
 import stream from '../../assets/audio/stream.mp3';
+import animationPreload from '../Player/animation/animationPreload';
 
 const heightPerScreen = 450;
 
@@ -85,8 +85,7 @@ export default class Level extends Phaser.Scene {
     this.load.audio('crowdTalks', crowdTalks);
     this.load.audio('stream', stream);
 
-    this.playerInteraction = new PlayerInteraction(this.scene.scene);
-    this.playerInteraction.preload();
+    animationPreload(this.scene.scene);
   }
 
   create() {
@@ -101,8 +100,9 @@ export default class Level extends Phaser.Scene {
 
     setInteractionObjects(this);
 
-    this.cursors = this.input.keyboard.createCursorKeys();
+    this.cursors = createControls(this);
 
+    this.playerInteraction = new PlayerInteraction(this);
     this.playerInteraction.create();
 
     groundCreation(this);
