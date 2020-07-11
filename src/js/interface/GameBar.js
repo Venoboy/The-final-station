@@ -52,6 +52,7 @@ export default class GameBar extends Phaser.Scene {
     this.changePosition();
     this.scale.on('resize', this.changePosition, this);
     onEventListeners(this);
+
     this.events.on('shutdown', () => {
       this.scale.off('resize', this.changePosition, this);
       offEventListeners(this);

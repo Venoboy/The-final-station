@@ -31,6 +31,9 @@ const onEventListeners = (context) => {
   eventsCenter.on('update-magazine', context.updateMagazine, context);
   eventsCenter.on('update-food', context.updateMagazine, context);
   eventsCenter.on('update-keys', context.updateMagazine, context);
+  eventsCenter.on('player-died', () => {
+    context.cameras.main.fadeOut(2500);
+  });
 };
 
 const offEventListeners = (context) => {
@@ -40,6 +43,9 @@ const offEventListeners = (context) => {
   eventsCenter.off('update-magazine', context.updateMagazine, context);
   eventsCenter.off('update-food', context.updateMagazine, context);
   eventsCenter.off('update-keys', context.updateMagazine, context);
+  eventsCenter.off('player-died', () => {
+    context.cameras.main.fadeOut(2500);
+  });
 };
 
 export {
