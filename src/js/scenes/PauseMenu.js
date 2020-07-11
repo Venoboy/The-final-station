@@ -8,7 +8,7 @@ export default class BootScene extends Phaser.Scene {
   }
 
   create() {
-    this.cameras.main.setBackgroundColor('rgba(0, 0, 0, 0.6)');
+    this.cameras.main.setBackgroundColor('rgba(0, 0, 0, 0.8)');
 
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
