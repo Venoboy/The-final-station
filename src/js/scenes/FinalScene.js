@@ -15,7 +15,6 @@ const textConfig = {
   fontFamily: 'font2',
   fontSize: 30,
 };
-const heightPerScreen = 450;
 
 export default class BootScene extends Phaser.Scene {
   constructor() {
