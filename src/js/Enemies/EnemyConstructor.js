@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import collisionCategories from '../world/collisionCategories';
 import { doors } from '../setters/level0';
 import { looseHealth } from '../Player/playerStates/stats';
-import { groundArray } from '../Player/PlayerInteraction';
+import { groundArray } from '../objects/ground/groundCreation';
 
 
 export default class EnemyConstructor {

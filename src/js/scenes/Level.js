@@ -2,9 +2,11 @@
 /* Для отключения музыки уровня закомменте строку 128 */
 import Phaser from 'phaser';
 
-import PlayerInteraction, { stairsArray } from '../Player/PlayerInteraction';
+import PlayerInteraction from '../Player/PlayerInteraction';
 import EnemyLoader from '../Enemies/EnemyLoader';
 import { stats } from '../Player/playerStates/stats';
+import groundCreation from '../objects/ground/groundCreation';
+import stairsCreation from '../objects/stairs/stairsCreation';
 
 import b_123 from '../../assets/level0/b_123.png';
 import f_123 from '../../assets/level0/f_123.png';
@@ -105,6 +107,10 @@ export default class Level extends Phaser.Scene {
 
     this.playerInteraction.create();
 
+    groundCreation(this);
+
+    stairsCreation(this);
+
     const startValues = {
       health: stats.aids,
       food: stats.food,
@@ -112,9 +118,7 @@ export default class Level extends Phaser.Scene {
       bullets: stats.bullets,
     };
 
-    this.enemyLoader = new EnemyLoader(
-      this.scene.scene, this.playerInteraction.playerInstance, stairsArray,
-    );
+    this.enemyLoader = new EnemyLoader(this.scene.scene, this.playerInteraction.playerInstance);
     this.enemyLoader.create();
 
     this.camera = this.cameras.main;

@@ -1,5 +1,8 @@
-import { updateHealthBarUI } from '../../interface/UIHelpers';
 import eventsCenter from '../../eventsCenter';
+import {
+  updateHealthBarUI, updateBulletsUI, updateFoodUI,
+  updateKeysUI, updateHealthUI,
+} from '../../interface/UIHelpers';
 
 const HERO_MAX_HEALTH = 100;
 
@@ -9,6 +12,11 @@ const stats = {
   food: 2,
   keys: 0,
   health: HERO_MAX_HEALTH,
+  playerSizes: {
+    h: 40,
+    w: 32,
+  },
+  bodyContainerYOffset: 2.33,
 };
 
 const looseHealth = (amount) => {
@@ -28,4 +36,36 @@ const setFullHealth = () => {
   stats.health = HERO_MAX_HEALTH;
 }
 
-export { stats, looseHealth, setFullHealth };
+const updateStats = (statName, value) => {
+  switch (statName) {
+    case 'health': {
+      stats[statName] += value;
+      updateHealthUI(stats[statName]);
+      break;
+    }
+    case 'bullets': {
+      stats[statName] += value;
+      updateBulletsUI(stats[statName]);
+      break;
+    }
+    case 'food': {
+      stats[statName] += value;
+      updateFoodUI(stats[statName]);
+      break;
+    }
+    case 'keys': {
+      stats[statName] += value;
+      updateKeysUI(stats[statName]);
+      break;
+    }
+    default: {
+      if (stats[statName]) {
+        stats[statName] += value;
+      } else {
+        stats[statName] = value;
+      }
+    }
+  }
+}
+
+export { stats, looseHealth, setFullHealth, updateStats };
