@@ -1,20 +1,61 @@
-/* eslint-disable linebreak-style */
-import Door from '../objects/interactionObjects/Door';
-import Storage from '../objects/interactionObjects/Storage';
-import Lid from '../objects/interactionObjects/Lid';
-import Room from '../rooms/Room';
-import RoomManager from '../rooms/RoomManager';
-import TunnelSensor from '../objects/interactionObjects/TunnelSensor';
-import SoundSensor from '../objects/soundSensors/SoundSensor';
+import Door from '../../objects/interactionObjects/Door';
+import Storage from '../../objects/interactionObjects/Storage';
+import Lid from '../../objects/interactionObjects/Lid';
+import Room from '../../rooms/Room';
+import RoomManager from '../../rooms/RoomManager';
+import TunnelSensor from '../../objects/interactionObjects/TunnelSensor';
+import SoundSensor from '../../objects/soundSensors/SoundSensor';
 
 import {
   interactionObjectsData, doorsData, lidsData,
   lockersData, deadBody1Data, deadBody2Data,
   roomsData, openRoomsData, soundSensorsData,
-} from '../data/level0';
+} from './data';
 
 const doors = [];
 const lids = [];
+
+const setBackgroundImages = (scene) => {
+  const moonsOffset = 130 + window.innerWidth * 0.4;
+  scene.add.image(1020, 256, 'bak_2');
+  scene.add.image(648, 132, 'bak_1');
+  scene.add.image(moonsOffset, 120, 'moons').setScrollFactor(0.2, 1);
+  scene.add.image(900, 315, 'bak_5').setScrollFactor(0.9, 1);
+  scene.add.image(263, 280, 'bak_1').setScrollFactor(0.9, 1);
+  scene.add.image(950, 350, 'bak_3').setScrollFactor(0.9, 1);
+  scene.add.image(768, 256, 'b_123');
+};
+
+const setFrontImages = (scene) => {
+  scene.add.image(768, 256, 'f_123');
+};
+
+const setAnimationedObjects = (scene) => {
+  scene.anims.create({
+    key: 'blink',
+    frames: scene.anims.generateFrameNumbers('crowd_man'),
+    frameRate: 1,
+    repeat: -1,
+  });
+  scene.anims.create({
+    key: 'smoke',
+    frames: scene.anims.generateFrameNumbers('hunter'),
+    frameRate: 2,
+    repeat: -1,
+  });
+  scene.anims.create({
+    key: 'fly',
+    frames: scene.anims.generateFrameNumbers('flies'),
+    frameRate: 8,
+    repeat: -1,
+  });
+
+  scene.add.sprite(649, 195, 'crowd_man').anims.play('blink');
+  scene.add.sprite(393, 329, 'hunter').anims.play('smoke');
+  scene.add.sprite(363, 195, 'flies').anims.play('fly');
+  scene.add.sprite(1100, 350, 'flies').anims.play('fly');
+};
+
 const setInteractionObjects = (context) => {
   const objects = [];
   doorsData.forEach((data) => {
@@ -129,4 +170,5 @@ const setSoundSensors = (scene, sensorTrigger) => {
 
 export {
   setInteractionObjects, setRooms, setTunnel, doors, lids, setSoundSensors,
+  setAnimationedObjects, setBackgroundImages, setFrontImages,
 };

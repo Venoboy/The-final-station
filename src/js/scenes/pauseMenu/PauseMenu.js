@@ -1,6 +1,6 @@
-/* eslint-disable camelcase */
 import Phaser from 'phaser';
-import MenuButton from '../objects/buttons/MenuButton';
+import MenuButton from '../sceneObjects/MenuButton';
+import addSceneListeners from './sceneListeners';
 
 export default class BootScene extends Phaser.Scene {
   constructor() {
@@ -33,32 +33,12 @@ export default class BootScene extends Phaser.Scene {
     this.keyboard = this.add.image(windowWidth / 2, windowHeight * 0.8, 'keyboard');
 
     this.continueKey = this.input.keyboard.addKey(27);
-    this.continueKey.on('up', this.continueGame, this);
-
-    this.scale.on('resize', this.resize, this);
-    this.events.on('shutdown', () => {
-      this.scale.off('resize', this.resize, this);
-    });
-  }
-
-  resize() {
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
-
-    this.continueButton.button.setPosition(centerX - 5, centerY * 0.9);
-    this.returnToMainMenuButtom.button.setPosition(centerX, centerY * 0.9 + 50);
-    this.pauseLogo.setPosition(centerX, centerY * 0.4);
-    this.keyboard.setPosition(centerX, centerY * 1.6);
+    addSceneListeners(this);
   }
 
   continueGameButtonPress() {
     this.scene.scene.resume('game-scene');
     this.scene.scene.stop();
-  }
-
-  continueGame() {
-    this.scene.resume('game-scene');
-    this.scene.stop();
   }
 
   returnToMainMenu() {

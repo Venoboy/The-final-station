@@ -1,48 +1,4 @@
-/* eslint-disable linebreak-style */
-const createPreloadImageEffect = (scene, image1, image2) => {
-  const timeline = scene.tweens.createTimeline();
-  timeline.add({
-    targets: image1,
-    alpha: 1,
-    duration: 1000,
-    yoyo: true,
-    hold: 2000,
-  });
-  timeline.add({
-    targets: image2,
-    alpha: 1,
-    duration: 1000,
-    delay: 1000,
-    yoyo: true,
-    hold: 2000,
-    onComplete: () => {
-      scene.scene.start('main-menu');
-    },
-  });
-  return timeline;
-};
-
-const createMainMenuImageEffect = (scene, bg, logo, button) => {
-  const timeline = scene.tweens.createTimeline();
-  timeline.add({
-    targets: bg,
-    alpha: 1,
-    duration: 1000,
-  });
-  timeline.add({
-    targets: logo,
-    alpha: 1,
-    duration: 1000,
-  });
-  timeline.add({
-    targets: button,
-    alpha: 1,
-    duration: 1000,
-  });
-  return timeline;
-};
-
-const createFinalSceneEffects = (scene, texts, bg, musics, players) => {
+const addSceneEffect = (scene, texts, bg, musics, players) => {
   texts.forEach((text) => text.setAlpha(0));
   bg.forEach((bgImg) => bgImg.setAlpha(0));
   players.forEach((player) => player.setAlpha(0));
@@ -154,7 +110,4 @@ const createFinalSceneEffects = (scene, texts, bg, musics, players) => {
   return subscene1;
 };
 
-export {
-  createPreloadImageEffect, createMainMenuImageEffect,
-  createFinalSceneEffects,
-};
+export default addSceneEffect;
