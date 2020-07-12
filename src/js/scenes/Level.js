@@ -39,6 +39,10 @@ import crowdTalks from '../../assets/audio/crowd_talks.mp3';
 import stream from '../../assets/audio/stream.mp3';
 import animationPreload from '../Player/animation/animationPreload';
 
+import crowd_man from '../../assets/level0/animationed-objects/crowd_man.png';
+import hunter from '../../assets/level0/animationed-objects/hunter.png';
+import flies from '../../assets/level0/animationed-objects/flies.png';
+
 import eventsCenter from '../eventsCenter';
 import { createSoundFadeOut } from '../effects/soundEffects';
 
@@ -87,6 +91,19 @@ export default class Level extends Phaser.Scene {
     this.load.audio('crowdTalks', crowdTalks);
     this.load.audio('stream', stream);
 
+    this.load.spritesheet('crowd_man', crowd_man, {
+      frameWidth: 14,
+      frameHeight: 26,
+    });
+    this.load.spritesheet('hunter', hunter, {
+      frameWidth: 24,
+      frameHeight: 26,
+    });
+    this.load.spritesheet('flies', flies, {
+      frameWidth: 32,
+      frameHeight: 32,
+    });
+
     animationPreload(this.scene.scene);
   }
 
@@ -99,6 +116,31 @@ export default class Level extends Phaser.Scene {
     this.add.image(263, 280, 'bak_1').setScrollFactor(0.9, 1);
     this.add.image(950, 350, 'bak_3').setScrollFactor(0.9, 1);
     this.add.image(768, 256, 'b_123');
+
+    /* animationed objects */
+    this.anims.create({
+      key: 'blink',
+      frames: this.anims.generateFrameNumbers('crowd_man'),
+      frameRate: 1,
+      repeat: -1,
+    });
+    this.anims.create({
+      key: 'smoke',
+      frames: this.anims.generateFrameNumbers('hunter'),
+      frameRate: 2,
+      repeat: -1,
+    });
+    this.anims.create({
+      key: 'fly',
+      frames: this.anims.generateFrameNumbers('flies'),
+      frameRate: 6,
+      repeat: -1,
+    });
+
+    this.add.sprite(649, 195, 'crowd_man').anims.play('blink');
+    this.add.sprite(393, 329, 'hunter').anims.play('smoke');
+    this.add.sprite(363, 195, 'flies').anims.play('fly');
+    this.add.sprite(1100, 350, 'flies').anims.play('fly');
 
     setInteractionObjects(this);
 
