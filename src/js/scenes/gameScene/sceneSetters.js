@@ -30,7 +30,7 @@ const setFrontImages = (scene) => {
   scene.add.image(768, 256, 'f_123');
 };
 
-const setAnimationedObjects = (scene) => {
+const setAnimatedObjects = (scene) => {
   scene.anims.create({
     key: 'blink',
     frames: scene.anims.generateFrameNumbers('crowd_man'),
@@ -170,5 +170,5 @@ const setSoundSensors = (scene, sensorTrigger) => {
 
 export {
   setInteractionObjects, setRooms, setTunnel, doors, lids, setSoundSensors,
-  setAnimationedObjects, setBackgroundImages, setFrontImages,
+  setAnimatedObjects, setBackgroundImages, setFrontImages,
 };

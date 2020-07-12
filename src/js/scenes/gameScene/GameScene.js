@@ -11,7 +11,7 @@ import stairsCreation from '../../objects/stairs/stairsCreation';
 import createControls from '../../Player/controls/controls';
 import {
   setInteractionObjects, setRooms, setSoundSensors, setTunnel,
-  setAnimationedObjects, setBackgroundImages, setFrontImages,
+  setAnimatedObjects, setBackgroundImages, setFrontImages,
 } from './sceneSetters';
 
 const heightPerScreen = 450;
@@ -34,7 +34,7 @@ export default class GameScene extends Phaser.Scene {
 
   create() {
     setBackgroundImages(this);
-    setAnimationedObjects(this);
+    setAnimatedObjects(this);
     setInteractionObjects(this);
 
     this.cursors = createControls(this);
