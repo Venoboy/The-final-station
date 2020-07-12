@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import Phaser from 'phaser';
 import Player from '../Player';
 
@@ -178,6 +179,27 @@ export default class PersonAnimation {
 
     cursors = this.scene.cursors;
 
+    const { scene } = this;
+
+    /* animation sounds */
+    this.sounds = {
+      footstep: scene.sound.add('playerFootstep', { volume: 0.5 }),
+      ladder: [
+        scene.sound.add('ladder', { volume: 0.1 }),
+        scene.sound.add('ladder2', { volume: 0.1 }),
+        scene.sound.add('ladder3', { volume: 0.1 }),
+        scene.sound.add('ladder4', { volume: 0.1 }),
+        scene.sound.add('ladder5', { volume: 0.1 }),
+        scene.sound.add('ladder6', { volume: 0.1 }),
+      ],
+    };
+
+    this.currentAnim = [];
+    this.changeCurrentAnims = (...anims) => {
+      this.currentAnim = [];
+      this.currentAnim.push(...anims);
+    };
+
     return this.playerInstance;
   }
 
@@ -203,21 +225,50 @@ export default class PersonAnimation {
       personNotClimb();
     }
 
+    /* sounds update */
+    if (legs.anims.currentAnim) {
+      if (legs.anims.currentAnim.key === 'rightl'
+        && (
+          legs.anims.currentFrame.textureFrame === 24
+          || legs.anims.currentFrame.textureFrame === 27)
+        && this.currentAnim.includes('rightl')
+      ) {
+        if (!this.sounds.footstep.isPlaying) {
+          this.sounds.footstep.play();
+        }
+      }
+    }
+
+    if (climbDude.anims.currentAnim) {
+      if (climbDude.anims.currentAnim.key === 'Climb'
+        && this.currentAnim.includes('Climb')
+      ) {
+        const ladderIndex = climbDude.anims.currentFrame.textureFrame;
+        if (ladderIndex >= 0 && !this.sounds.ladder[ladderIndex].isPlaying) {
+          this.sounds.ladder[ladderIndex].play();
+        }
+      }
+    }
+
     if (cursors.left.isDown()) {
       if (!turn) {
         legs.anims.play('backLeftl', true);
         body.anims.play('left', true);
+        this.changeCurrentAnims('backLeftl', 'left');
       } else if (turn) {
         body.anims.play('right', true);
         legs.anims.play('backRightl', true);
+        this.changeCurrentAnims('right', 'backRightl');
       }
     } else if (cursors.right.isDown()) {
       if (turn) {
         legs.anims.play('rightl', true);
         body.anims.play('right', true);
+        this.changeCurrentAnims('rightl', 'right');
       } else if (!turn) {
         legs.anims.play('leftl', true);
         body.anims.play('left', true);
+        this.changeCurrentAnims('leftl', 'left');
       }
     } else if (
       cursors.down.isDown()
@@ -226,6 +277,7 @@ export default class PersonAnimation {
     ) {
       personClimb();
       climbDude.anims.play('Climb', true);
+      this.changeCurrentAnims('Climb');
     } else if (
       cursors.up.isDown()
       && playerOnStairs
@@ -233,18 +285,23 @@ export default class PersonAnimation {
     ) {
       personClimb();
       climbDude.anims.play('Climb', true);
+      this.changeCurrentAnims('Climb');
     } else if (playerOnStairs && stairsInf.st.label === 'stairs-right') {
       personClimb();
       climbDude.anims.play('climbStay', true);
+      this.changeCurrentAnims('climbStay');
     } else if (playerOnStairs && (cursors.down.isDown() || cursors.up.isDown())) {
       body.anims.play('Lturn', true);
       legs.anims.play('backLeftl', true);
+      this.changeCurrentAnims('Lturn', 'backLeftl');
     } else if (person.list[2].texture.key === 'gun') {
       body.anims.play('Lturn', true);
       legs.anims.play('Lturnleg', true);
+      this.changeCurrentAnims('Lturn', 'Lturnleg');
     } else {
       body.anims.play('Rturn', true);
       legs.anims.play('Rturnleg', true);
+      this.changeCurrentAnims('Rturn', 'Rturnleg');
     }
   }
 }
