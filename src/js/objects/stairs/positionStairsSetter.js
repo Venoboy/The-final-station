@@ -2,7 +2,7 @@ import stairsParams from './stairsParams';
 import { curvePlayerSetter } from './curvePlayerSetter';
 import { setCanGoX } from '../../Player/playerStates/externalParams';
 import { stats } from '../../Player/playerStates/stats';
-import { lids } from '../../setters/level0';
+import { lids } from '../../scenes/gameScene/sceneSetters';
 
 
 const positionStairsSetter = (config) => {

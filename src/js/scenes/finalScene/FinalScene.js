@@ -1,13 +1,7 @@
 /* eslint-disable camelcase */
 import Phaser from 'phaser';
-import gg_sleep from '../../assets/finalScene/gg_sleep.png';
-import gg_stay from '../../assets/finalScene/gg_stay.png';
-import house from '../../assets/finalScene/house.png';
-import b0 from '../../assets/finalScene/b0.png';
-import b1 from '../../assets/finalScene/b1.png';
-import alarm from '../../assets/audio/alarm clock.mp3';
-import getReadySound from '../../assets/audio/pickUp.mp3';
-import { createFinalSceneEffects } from '../effects/sceneEffects';
+import preloadScene from './scenePreload';
+import addSceneEffect from './sceneEffect';
 
 const textConfig = {
   fontFamily: 'font2',
@@ -20,19 +14,7 @@ export default class BootScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.spritesheet('gg_sleep', gg_sleep, {
-      frameWidth: 34,
-      frameHeight: 27,
-    });
-    this.load.spritesheet('gg_stay', gg_stay, {
-      frameWidth: 32,
-      frameHeight: 35,
-    });
-    this.load.image('gg_house', house);
-    this.load.image('b1', b1);
-    this.load.image('b0', b0);
-    this.load.audio('alarm', alarm);
-    this.load.audio('getReadySound', getReadySound);
+    preloadScene(this);
   }
 
   create() {
@@ -76,7 +58,7 @@ export default class BootScene extends Phaser.Scene {
     const player2 = this.add.sprite(300, 195, 'gg_stay');
     players.push(player1, player2);
 
-    const timeline = createFinalSceneEffects(this, texts, bg, musics, players);
+    const timeline = addSceneEffect(this, texts, bg, musics, players);
     timeline.play();
   }
 }
