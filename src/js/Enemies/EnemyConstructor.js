@@ -18,6 +18,7 @@ export default class EnemyConstructor {
     this.position = config.position;
     this.collisionCategory = config.collisionCategory;
     this.speed = config.settings.speed;
+    this.health = config.settings.health;
     this.currentSpeed = 0;
     this.blockDoor = false;
     this.x = config.position.x;
@@ -65,6 +66,7 @@ export default class EnemyConstructor {
       .setCollisionCategory(this.collisionCategory)
       .setCollisionGroup(config.collisionGroup)
       .setCollidesWith([collisionCategories.ground]);
+    this.enemy.setData('health', this.health);
   }
 
   onDetectDoors = (sensor, door) => {

@@ -1,13 +1,17 @@
 import Phaser from 'phaser';
 
-import { groundArray } from '../../objects/ground/groundCreation';
-import { enemiesArray } from '../../Enemies/EnemyLoader';
+import defineEndPoint from './defineEndPoint';
 
-import overlapHandler from './overlapHandler';
-import raycast from './matter-raycast';
 
-const SHOOT_DISTANCE = 20;
+const SHOOT_DISTANCE = 220;
+const SHOOT_LINE_START_ALPHA = 0.4;
+const SHOOT_LINE_END_ALPHA = 0.1;
+const SHOOT_DURATION = 300;
+const SHOOT_LINE_WIDTH = 0.3;
+const SHOOT_LINE_COLOR = 0xffffff;
+
 const getBetween = Phaser.Math.Distance.Between;
+
 
 const getResultPoint = (startX, startY, finishX, finishY) => {
   const mouseDistance = getBetween(startX, startY, finishX, finishY) || 1;
@@ -29,50 +33,32 @@ const createShootLine = (scene, person) => {
     const startX = player.x;
     const startY = player.y;
     const resultPoint = getResultPoint(startX, startY, pointer.worldX, pointer.worldY);
-    // const line = new Phaser.Curves.Line([startX, startY, resultPoint.x, resultPoint.y]);
-    // const lineVector = line.getTangent();
-    const lineAngleRads = Phaser.Math.Angle.Between(startX, startY, pointer.worldX, pointer.worldY);
 
-    // const centerX = (startX + resultPoint.x) / 2;
-    // const centerY = (startY + resultPoint.y) / 2;
-    // console.log(lineVector);
+    // вставить функцию проверки обоймы
 
-    // const bullet = scene.matter.add.rectangle(startX, startY, 1, 1,
-    //   {
-    //     isSensor: false,
-    //     ignoreGravity: true,
-    //     label: 'bullet',
-    //     frictionAir: 0,
-    //   });
-    // bullet.collisionFilter.group = 1;
+    const { endX, endY } = defineEndPoint(scene, startX, startY, resultPoint);
 
-    // const worldBodiesArr = scene.matter.getMatterBodies(undefined);
-    // console.log(worldBodiesArr);
-    const worldBodiesArr = [...groundArray, ...enemiesArray];
-    let grounds = [];
-    groundArray.forEach((elem) => {
-      grounds.push(...elem.vertices);
+    graphics.lineStyle(SHOOT_LINE_WIDTH, SHOOT_LINE_COLOR, SHOOT_LINE_START_ALPHA);
+    const line = graphics.lineBetween(startX, startY, endX, endY);
+    const updateShootLine = (tween) => {
+      const value = tween.getValue();
+      line.setAlpha(value);
+      if (value === SHOOT_LINE_END_ALPHA) {
+        graphics.clear();
+      }
+    };
+    scene.tweens.addCounter({
+      from: SHOOT_LINE_START_ALPHA,
+      to: SHOOT_LINE_END_ALPHA,
+      duration: SHOOT_DURATION,
+      onUpdate: updateShootLine,
     });
-    grounds = grounds.map((elem) => elem.body);
-    console.log(grounds);
-    const enemies = worldBodiesArr.filter((body) => body.label === 'enemy body sensor');
-    // console.log(enemies);
-    const worldBodies = worldBodiesArr.filter((body) => body.label !== 'mainBody'
-      && body.label !== 'bullet' && body.isSensor === false);
-    let raycols = raycast(grounds, { x: startX, y: startY }, { x: resultPoint.x, y: resultPoint.y });
-    raycols = raycols.filter((ray) => ray.body.label !== 'mainBody');
-    // console.log(raycols);
 
-    const endX = raycols.length === 0 ? startX : raycols[0].point.x;
-    const endY = raycols.length === 0 ? startY : raycols[0].point.y;
-    // const { endX, endY } = await overlapHandler(scene, player, bullet, lineAngleRads);
-    graphics.lineStyle(1, 0xffffff, 0.4);
-    graphics.lineBetween(startX, startY, endX, endY);
 
     setTimeout(() => {
       // scene.matter.world.remove(shoot);
       // shoot.visible = false;
-      graphics.clear();
+      // graphics.clear();
     }, 200);
   };
   scene.input.on('pointerdown', (pointer) => construct(pointer));

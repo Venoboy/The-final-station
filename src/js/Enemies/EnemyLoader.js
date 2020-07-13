@@ -11,11 +11,10 @@ export default class EnemyLoader {
     this.scene = scene;
     this.playerInstance = playerInstance;
     this.stairsArray = stairsArray;
-    this.ENEMY_SLEEP_DISTANCE = 240;
   }
 
   create = () => {
-    const collisionGroup = 1;
+    const collisionGroup = 0;
     Object.entries(enemyPositions.default)
       .filter((elem) => elem[0] !== 'default')
       .forEach((entry) => {
@@ -42,7 +41,10 @@ export default class EnemyLoader {
   update = () => {
     enemiesArray.forEach((enemyType) => {
       enemyType.forEach((enemy) => {
-        enemy.update();
+        const isAlive = enemy.enemy.getData('health') > 0;
+        if (enemy.enemy.body && isAlive) {
+          enemy.update();
+        }
       });
     });
   };

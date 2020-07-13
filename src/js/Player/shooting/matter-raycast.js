@@ -46,7 +46,6 @@ function raycast(bodies, start, end, sort = true) {
       cols.push(bcols[k]);
     }
   }
-   console.log(cols);
 
   // if desired, we then sort the collisions based on the
   // disance from the ray's start
