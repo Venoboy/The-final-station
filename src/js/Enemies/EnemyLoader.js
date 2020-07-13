@@ -1,20 +1,21 @@
 import EnemyConstructor from './EnemyConstructor';
 import enemyPositions from './enemyPositions';
 import enemySettings from './enemySettings';
-import { nextCategory } from '../world/collisionCategories';
+import collisionCategories from '../world/collisionCategories';
 import { stairsArray } from '../objects/stairs/stairsCreation';
+
+const enemiesArray = [];
 
 export default class EnemyLoader {
   constructor(scene, playerInstance) {
     this.scene = scene;
     this.playerInstance = playerInstance;
     this.stairsArray = stairsArray;
-    this.enemiesArray = [];
     this.ENEMY_SLEEP_DISTANCE = 240;
   }
 
   create = () => {
-    const collisionGroup = 0;
+    const collisionGroup = 1;
     Object.entries(enemyPositions.default)
       .filter((elem) => elem[0] !== 'default')
       .forEach((entry) => {
@@ -29,20 +30,22 @@ export default class EnemyLoader {
           config.scene = this.scene;
           config.settings = enemySettings[type];
           config.playerInstance = this.playerInstance;
-          config.collisionCategory = nextCategory();
+          config.collisionCategory = collisionCategories.enemies;
           config.collisionGroup = collisionGroup;
 
           return new EnemyConstructor(config);
         });
-        this.enemiesArray.push(enemiesArr);
+        enemiesArray.push(enemiesArr);
       });
   };
 
   update = () => {
-    this.enemiesArray.forEach((enemyType) => {
+    enemiesArray.forEach((enemyType) => {
       enemyType.forEach((enemy) => {
         enemy.update();
       });
     });
   };
 }
+
+export { enemiesArray };

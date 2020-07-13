@@ -19,10 +19,10 @@ const config = {
       },
       debug: {
         renderFill: false,
-        showInternalEdges: false,
+        showInternalEdges: true,
         showConvexHulls: false,
-        showBody: false,
-        showStaticBody: false,
+        showBody: true,
+        showStaticBody: true,
       },
       enableSleeping: false,
     },

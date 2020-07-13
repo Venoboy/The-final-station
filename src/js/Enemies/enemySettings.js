@@ -1,6 +1,6 @@
 const enemySettings = {
   enemyBig: {
-    speed: 1,
+    speed: 0.1,
     heightOffset: 3,
     height: 26,
   },
