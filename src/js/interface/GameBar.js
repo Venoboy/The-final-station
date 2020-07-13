@@ -5,21 +5,12 @@ import WeaponMagazine from './WeaponMagazine';
 import gameBar from '../../assets/interface/gameBarFrame.png';
 import bulletImg from '../../assets/interface/bullet.png';
 import bulletBG from '../../assets/interface/bulletBG.png';
-
-import { onEventListeners, offEventListeners } from './UIHelpers';
+import addSceneListeners from './sceneListeners';
 
 const magazineSize = 6;
 const textConfig = {
   fontFamily: 'font1',
   fontSize: 24,
-};
-const percentageXOffsets = {
-  healthText: 0.1206,
-  healthBar: 0.1447,
-  weaponText: 0.4984,
-  weaponMagazine: 0.5305,
-  foodText: 0.7797,
-  keysText: 0.9566,
 };
 /* default values of game bar items */
 const defaultValues = {
@@ -47,35 +38,9 @@ export default class GameBar extends Phaser.Scene {
   }
 
   create() {
-    this.cameras.main.fadeIn(2500);
     this.addItems();
-    this.changePosition();
-    this.scale.on('resize', this.changePosition, this);
-    onEventListeners(this);
-
-    this.events.on('shutdown', () => {
-      this.scale.off('resize', this.changePosition, this);
-      offEventListeners(this);
-    });
-  }
-
-  changePosition() {
-    const YOffset = this.cameras.main.height - (this.frame.displayHeight / 2);
-
-    const healthOffset = this.calculateOffset(percentageXOffsets.healthText);
-    const healthBarOffset = this.calculateOffset(percentageXOffsets.healthBar);
-    const bulletsOffset = this.calculateOffset(percentageXOffsets.weaponText);
-    const magazineOffset = this.calculateOffset(percentageXOffsets.weaponMagazine);
-    const foodOffset = this.calculateOffset(percentageXOffsets.foodText);
-    const keysOffset = this.calculateOffset(percentageXOffsets.keysText);
-
-    this.frame.setPosition(this.cameras.main.centerX, YOffset);
-    this.health.setPosition(healthOffset, YOffset + 3);
-    this.healthBar.setPosition(healthBarOffset, YOffset - 10);
-    this.bullets.setPosition(bulletsOffset, YOffset + 3);
-    this.magazine.setPosition(magazineOffset, YOffset + 2);
-    this.food.setPosition(foodOffset, YOffset + 3);
-    this.keys.setPosition(keysOffset, YOffset + 3);
+    addSceneListeners(this);
+    this.cameras.main.fadeIn(2500);
   }
 
   addItems() {
