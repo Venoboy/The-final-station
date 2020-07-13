@@ -2,7 +2,7 @@
 import Phaser from 'phaser';
 import MenuButton from '../sceneObjects/MenuButton';
 import addSceneEffect from './sceneEffects';
-import addListeners from './sceneListeners';
+import addSceneListeners from './sceneListeners';
 import { createSoundFadeOut } from '../../objects/soundSensors/soundEffects';
 
 export default class BootScene extends Phaser.Scene {
@@ -30,7 +30,7 @@ export default class BootScene extends Phaser.Scene {
     showMenuTimeline.play();
     this.music = this.sound.add('menuSound', { volume: 0, loop: true });
 
-    addListeners(this);
+    addSceneListeners(this);
   }
 
   startGame() {
