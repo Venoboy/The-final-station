@@ -1,16 +1,12 @@
 import Phaser from 'phaser';
-import Player from './Player';
-import gunImage from '../../assets/Player/handwithgun.png';
-import bulletImage from '../../assets/Player/bullet.png';
-import gunbackImage from '../../assets/Player/handswithgunback.png';
-import dudeImage from '../../assets/Player/spr.png';
-import dudeLegsImage from '../../assets/Player/AllLegs.png';
-import climb from '../../assets/Player/climb.png';
-import PersonWithObjectAnimation from './PlayerWithStuffAnimation';
-import PersonDeadAnimation from './PlayerDeadAnim';
-import { stats } from './playerStates/stats';
-import PersonStartClimbAnimation from './PlayerRightStairClimbAnim';
-import { AnimationActivity } from '../objects/stairs/curvePlayerSetter';
+
+// import PersonWithObjectAnimation from './PlayerWithStuffAnimation';
+// import PersonDeadAnimation from './PlayerDeadAnim';
+import { stats } from '../playerStates/stats';
+
+// import PersonStartClimbAnimation from './PlayerRightStairClimbAnim';
+import { AnimationActivity } from '../../objects/stairs/curvePlayerSetter';
+import Player from '../Player';
 
 let angle;
 let person;
@@ -40,6 +36,7 @@ function RightAngle(a) {
 
   return angleRight;
 }
+
 function LeftAngle(a) {
 
 
@@ -61,29 +58,6 @@ export default class PersonAnimation {
 
   }
 
-  preload() {
-    this.PersonWithObjectAnimation = new PersonWithObjectAnimation(this.scene);
-    this.PersonDeadAnimation = new PersonDeadAnimation(this.scene);
-    this.PersonStartClimbAnimation = new PersonStartClimbAnimation(this.scene);
-    this.PersonWithObjectAnimation.preload();
-    this.PersonDeadAnimation.preload();
-    this.PersonStartClimbAnimation.preload();
-    this.scene.load.image('gun', gunImage);
-    this.scene.load.image('bullet', bulletImage);
-    this.scene.load.image('gunback', gunbackImage);
-    this.scene.load.spritesheet('dude', dudeImage, {
-      frameWidth: 32,
-      frameHeight: 32,
-    });
-    this.scene.load.spritesheet('dudeLegs', dudeLegsImage, {
-      frameWidth: 32,
-      frameHeight: 32,
-    });
-    this.scene.load.spritesheet('climbing', climb, {
-      frameWidth: 32,
-      frameHeight: 32,
-    });
-  }
 
   create() {
     const arrayWithAnimations = this.PersonWithObjectAnimation.create();
@@ -91,9 +65,13 @@ export default class PersonAnimation {
     dead = this.PersonDeadAnimation.create();
     startClimb = this.PersonStartClimbAnimation.create();
     body = this.scene.add.sprite(0, 0, 'dude');
+    body.name = 'dudeBody';
     legs = this.scene.add.sprite(0, 0, 'dudeLegs');
+    legs.name = 'dudeLegs';
     gun = this.scene.add.image(-1.5, 0.5, 'gun').setOrigin(0, 0.5);
+    gun.name = 'dudeGun';
     climbDude = this.scene.add.sprite(0, 0, 'climbing').setVisible(false);
+    climbDude.name = 'climbDude';
 
     person = this.scene.add.container(109.36, 180.5, [
       legs,
@@ -294,13 +272,15 @@ export default class PersonAnimation {
       }
     });
 
-
-    cursors = this.scene.input.keyboard.createCursorKeys();
+    cursors = this.scene.cursors;
 
     return this.playerInstance;
   }
 
   update(stairsInf) {
+
+    playerOnStairs = !stairsInf.playerInstance.isTouching.ground;
+    gunBack = this.scene.add.image(1.5, 1, 'gunback').setOrigin(1, 0.5);
 
     function personClimb() {
       body.setVisible(false);
@@ -325,6 +305,9 @@ export default class PersonAnimation {
       climbDude.setVisible(false);
       startClimb.setVisible(true);
 
+
+    if (!playerOnStairs) {
+      personNotClimb();
     }
     if (isAlive) {
       playerOnStairs = !stairsInf.playerInstance.isTouching.ground;
@@ -404,6 +387,19 @@ export default class PersonAnimation {
         climbDude.anims.play('climbStay', true);
       } else if (playerOnStairs && (cursors.down.isDown || cursors.up.isDown)) {
         body.anims.play('Lturn', true);
+    if (cursors.left.isDown()) {
+      if (!turn) {
+        legs.anims.play('backLeftl', true);
+        body.anims.play('left', true);
+      } else if (turn) {
+        body.anims.play('right', true);
+        legs.anims.play('backRightl', true);
+      }
+    } else if (cursors.right.isDown()) {
+      if (turn) {
+        legs.anims.play('rightl', true);
+        body.anims.play('right', true);
+      } else if (!turn) {
         legs.anims.play('leftl', true);
       }
       else if (person.list[2].texture.key === 'gun') {
@@ -425,6 +421,29 @@ export default class PersonAnimation {
         body.anims.play('Rturn', true);
         legs.anims.play('Rturnleg', true);
       }
+    } else if (
+      cursors.down.isDown()
+      && playerOnStairs
+      && stairsInf.st.label === 'stairs-right'
+    ) {
+      personClimb();
+      climbDude.anims.play('Climb', true);
+    } else if (
+      cursors.up.isDown()
+      && playerOnStairs
+      && stairsInf.st.label === 'stairs-right'
+    ) {
+      personClimb();
+      climbDude.anims.play('Climb', true);
+    } else if (playerOnStairs && stairsInf.st.label === 'stairs-right') {
+      personClimb();
+      climbDude.anims.play('climbStay', true);
+    } else if (playerOnStairs && (cursors.down.isDown() || cursors.up.isDown())) {
+      body.anims.play('Lturn', true);
+      legs.anims.play('backLeftl', true);
+    } else if (person.list[2].texture.key === 'gun') {
+      body.anims.play('Lturn', true);
+      legs.anims.play('Lturnleg', true);
     } else {
       dead.setVisible(true);
       if (corpse) {

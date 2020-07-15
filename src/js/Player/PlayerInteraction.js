@@ -1,9 +1,10 @@
-import PersonAnimation from './PlayerAnimation';
+import PersonAnimation from './animation/PlayerAnimation';
 import { getCanGoX, setCanGoX } from './playerStates/externalParams';
 import collisionCategories from '../world/collisionCategories';
 
 import StairsInteraction from '../objects/stairs/StairsInteraction';
 import sidesCollisionHandler from './playerStates/sidesCollisionHandler';
+import createShootLine from './shooting/createShootLine';
 
 // eslint-disable-next-line import/no-mutable-exports
 let stairsInteraction = {};
@@ -18,12 +19,8 @@ export default class PlayerInteraction {
     this.PLAYER_SPEED_X = 1.3;
   }
 
-  preload() {
-    this.playerAnimation = new PersonAnimation(this.scene);
-    this.playerAnimation.preload();
-  }
-
   create() {
+    this.playerAnimation = new PersonAnimation(this.scene);
     this.playerInstance = this.playerAnimation.create();
 
     this.player = this.playerInstance.matterEnabledContainer;
@@ -33,7 +30,7 @@ export default class PlayerInteraction {
     this.camera = this.scene.cameras.main;
     this.camera.startFollow(this.player, false, 0.1, 0.1);
 
-    this.cursors = this.scene.input.keyboard.createCursorKeys();
+    this.cursors = this.scene.cursors;
 
     const playerInteractionConfig = {
       scene: this.scene,
@@ -41,6 +38,7 @@ export default class PlayerInteraction {
       playerInstance: this.playerInstance,
     };
     stairsInteraction = new StairsInteraction(playerInteractionConfig);
+    createShootLine(this.scene, this.player);
   }
 
   update() {
@@ -55,10 +53,10 @@ export default class PlayerInteraction {
 
     stairsInteraction.setStairsOverlap();
 
-    if (this.cursors.left.isDown && getCanGoX() && canLeft) {
+    if (this.cursors.left.isDown() && getCanGoX() && canLeft) {
       this.movingKeysPressed = true;
       this.player.setVelocityX(-this.PLAYER_SPEED_X);
-    } else if (this.cursors.right.isDown && getCanGoX() && canRight) {
+    } else if (this.cursors.right.isDown() && getCanGoX() && canRight) {
       this.movingKeysPressed = true;
       this.player.setVelocityX(this.PLAYER_SPEED_X);
     } else {

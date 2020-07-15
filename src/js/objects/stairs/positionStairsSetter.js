@@ -2,7 +2,7 @@ import stairsParams from './stairsParams';
 import { curvePlayerSetter } from './curvePlayerSetter';
 import { setCanGoX } from '../../Player/playerStates/externalParams';
 import { stats } from '../../Player/playerStates/stats';
-import { lids } from '../../setters/level0';
+import { lids } from '../../scenes/gameScene/sceneSetters';
 
 
 
@@ -67,7 +67,7 @@ const positionStairsSetter = (config) => {
   };
 
   // залезть на лесницу снизу
-  if (goStairsFromBottom && cursors.up.isDown) {
+  if (goStairsFromBottom && cursors.up.isDown()) {
     if (stairs.label === 'stairs-middle') {
       pC.setPosition(stairs.position.x, pB.position.y - stats.bodyContainerYOffset);
       setCanGoX(false);
@@ -81,7 +81,7 @@ const positionStairsSetter = (config) => {
   // залезть на центральную лестницу сверху
   const isPlayerOverMiddleStairs = playerLowBoundOverStairs
     && stairs.label === 'stairs-middle'
-    && cursors.down.isDown;
+    && cursors.down.isDown();
   if (isPlayerOverMiddleStairs && !isLidsOverlap()) {
     const yPosition = pB.position.y - stats.bodyContainerYOffset + stairsParams.LAST_STEP_LENGTH;
     pC.setPosition(stairs.position.x, yPosition);
@@ -90,7 +90,7 @@ const positionStairsSetter = (config) => {
 
   // залезть на боковую лестницу сверху
   const isPlReadyAnimateDown = playerLowBoundOverStairs
-    && cursors.down.isDown
+    && cursors.down.isDown()
     && stairs.label === 'stairs-right';
   if (isPlReadyAnimateDown) {
     goDownSidesStairs();
@@ -98,7 +98,7 @@ const positionStairsSetter = (config) => {
   // вылезти наверх боковой лестницы
   const isPlReadyAnimateUp = (pB.bounds.max.y - downDeep >= stairs.bounds.min.y - 1
     && pB.bounds.max.y - downDeep <= stairs.bounds.min.y + 1)
-    && cursors.up.isDown;
+    && cursors.up.isDown();
   if (isPlReadyAnimateUp) {
     goUpSideStairs();
     setCanGoX(false);

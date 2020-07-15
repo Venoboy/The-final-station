@@ -1,5 +1,5 @@
 import { groundArray } from '../../objects/ground/groundCreation';
-import { doors, lids } from '../../setters/level0';
+import { doors, lids } from '../../scenes/gameScene/sceneSetters';
 
 const sidesCollisionHandler = (playerInstance, scene) => {
   let canGoLeft = true;

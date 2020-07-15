@@ -1,5 +1,5 @@
-import { updateUI } from '../interface/UIHelpers';
 import InteractionObject from '../objects/interactionObjects/InteractionObject';
+import { updateStats } from './playerStates/stats';
 
 export default class ObjectInteraction {
   constructor(scene, player) {
@@ -75,11 +75,11 @@ export default class ObjectInteraction {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
   processInteraction(info) {
     if (info.type === 'storage') {
       info.items.forEach((item) => {
-        this.player[item.name] += item.quantity;
-        updateUI(item.name, this.player[item.name]);
+        updateStats(item.name, item.quantity);
       });
     }
   }
