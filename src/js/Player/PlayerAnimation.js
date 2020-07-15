@@ -9,6 +9,8 @@ import climb from '../../assets/Player/climb.png';
 import PersonWithObjectAnimation from './PlayerWithStuffAnimation';
 import PersonDeadAnimation from './PlayerDeadAnim';
 import { stats } from './playerStates/stats';
+import PersonStartClimbAnimation from './PlayerRightStairClimbAnim';
+import { AnimationActivity } from '../objects/stairs/curvePlayerSetter';
 
 let angle;
 let person;
@@ -27,19 +29,28 @@ let healing = false;
 let reloading = false;
 let isAlive = true;
 let corpse;
+let startClimb;
 
 
 function RightAngle(a) {
+
   let angleRight = a > 0.75 ? 0.75 : a;
+
   angleRight = angleRight < -0.75 ? -0.75 : angleRight;
+
   return angleRight;
 }
 function LeftAngle(a) {
+
+
   let angleLeft = a;
-  if (a > -2.45 && a < 0) {
-    angleLeft = -2.45;
-  } else if (a < 2.45 && a > 0) {
-    angleLeft = 2.45;
+
+  if (a > -2.39 && a < 0) {
+    angleLeft = -2.39;
+
+  } else if (a < 2.39 && a > 0) {
+    angleLeft = 2.39;
+
   }
   return angleLeft;
 }
@@ -47,13 +58,16 @@ function LeftAngle(a) {
 export default class PersonAnimation {
   constructor(scene) {
     this.scene = scene;
+
   }
 
   preload() {
     this.PersonWithObjectAnimation = new PersonWithObjectAnimation(this.scene);
     this.PersonDeadAnimation = new PersonDeadAnimation(this.scene);
+    this.PersonStartClimbAnimation = new PersonStartClimbAnimation(this.scene);
     this.PersonWithObjectAnimation.preload();
     this.PersonDeadAnimation.preload();
+    this.PersonStartClimbAnimation.preload();
     this.scene.load.image('gun', gunImage);
     this.scene.load.image('bullet', bulletImage);
     this.scene.load.image('gunback', gunbackImage);
@@ -75,6 +89,7 @@ export default class PersonAnimation {
     const arrayWithAnimations = this.PersonWithObjectAnimation.create();
     [heal, reload] = arrayWithAnimations;
     dead = this.PersonDeadAnimation.create();
+    startClimb = this.PersonStartClimbAnimation.create();
     body = this.scene.add.sprite(0, 0, 'dude');
     legs = this.scene.add.sprite(0, 0, 'dudeLegs');
     gun = this.scene.add.image(-1.5, 0.5, 'gun').setOrigin(0, 0.5);
@@ -88,7 +103,9 @@ export default class PersonAnimation {
       heal,
       reload,
       dead,
+      startClimb
     ]);
+
 
     this.playerInstance = new Player(this.scene, 109.36, 180.5, person);
 
@@ -197,26 +214,37 @@ export default class PersonAnimation {
       function (pointer) {
         if (isAlive) {
           if (!healing && !reloading) {
-            angle = Phaser.Math.Angle.Between(
-              person.list[2].parentContainer.x,
-              person.list[2].parentContainer.y,
-              pointer.x + this.scene.cameras.main.scrollX,
-              pointer.y + this.scene.cameras.main.scrollY,
-            );
-
-
             if (
               person.list[2].parentContainer.x > pointer.worldX
             ) {
+              if (person.list[2].texture.key !== 'gunback') {
+                gunBack = this.scene.add.image(1.5, 1, 'gunback').setOrigin(1, 0.5);
+                person.replace(gun, gunBack);
+              }
               turn = false;
-              gunBack = this.scene.add.image(1.5, 1, 'gunback').setOrigin(1, 0.5);
-              person.replace(gun, gunBack);
+              let gunCenter = person.list[2].getTopCenter();
+              angle = Phaser.Math.Angle.Between(
+                person.list[2].parentContainer.x + gunCenter.x,
+                person.list[2].parentContainer.y + gunCenter.y,
+                pointer.worldX,
+                pointer.worldY,
+              );
               person.list[2].setRotation(LeftAngle(angle) - Math.PI);
             } else if (
               person.list[2].parentContainer.x < pointer.worldX
             ) {
+              if (person.list[2].texture.key !== 'gun') {
+                person.replace(person.list[2], gun);
+              }
+
+              let gunCenter = person.list[2].getTopCenter();
+              angle = Phaser.Math.Angle.Between(
+                person.list[2].parentContainer.x + gunCenter.x,
+                person.list[2].parentContainer.y + gunCenter.y,
+                pointer.worldX,
+                pointer.worldY,
+              );
               turn = true;
-              person.replace(person.list[2], gun);
               person.list[2].setRotation(RightAngle(angle));
             }
           }
@@ -225,7 +253,7 @@ export default class PersonAnimation {
       this,
     );
 
-    const keyObj = this.scene.input.keyboard.addKey('a');
+    const keyObj = this.scene.input.keyboard.addKey('q');
     const keyObj2 = this.scene.input.keyboard.addKey('r');
     keyObj.on('down', () => {
       if (isAlive && !reloading) {
@@ -273,17 +301,30 @@ export default class PersonAnimation {
   }
 
   update(stairsInf) {
+
     function personClimb() {
       body.setVisible(false);
       legs.setVisible(false);
       person.list[2].setVisible(false);
+      startClimb.setVisible(false);
       climbDude.setVisible(true);
+
     }
+
     function personNotClimb() {
       body.setVisible(true);
       legs.setVisible(true);
       person.list[2].setVisible(true);
       climbDude.setVisible(false);
+      startClimb.setVisible(false);
+    }
+    function personStartClimb() {
+      body.setVisible(false);
+      legs.setVisible(false);
+      person.list[2].setVisible(false);
+      climbDude.setVisible(false);
+      startClimb.setVisible(true);
+
     }
     if (isAlive) {
       playerOnStairs = !stairsInf.playerInstance.isTouching.ground;
@@ -333,27 +374,39 @@ export default class PersonAnimation {
           legs.anims.play('leftl', true);
           body.anims.play('left', true);
         }
-      } else if (
+      }
+
+      else if (AnimationActivity.isAnimationActive && !AnimationActivity.directionUp) {
+        personStartClimb();
+        startClimb.anims.play('Down', true);
+      }
+      else if (
         cursors.down.isDown
-      && playerOnStairs
-      && stairsInf.st.label === 'stairs-right'
+        && playerOnStairs
+        && stairsInf.st.label === 'stairs-right'
       ) {
         personClimb();
         climbDude.anims.play('Climb', true);
+      }
+      else if (AnimationActivity.isAnimationActive && AnimationActivity.directionUp) {
+        personStartClimb();
+        startClimb.anims.play('Up', true);
       } else if (
         cursors.up.isDown
-      && playerOnStairs
-      && stairsInf.st.label === 'stairs-right'
+        && playerOnStairs
+        && stairsInf.st.label === 'stairs-right'
       ) {
         personClimb();
         climbDude.anims.play('Climb', true);
+        console.log(AnimationActivity);
       } else if (playerOnStairs && stairsInf.st.label === 'stairs-right') {
         personClimb();
         climbDude.anims.play('climbStay', true);
       } else if (playerOnStairs && (cursors.down.isDown || cursors.up.isDown)) {
         body.anims.play('Lturn', true);
         legs.anims.play('leftl', true);
-      } else if (person.list[2].texture.key === 'gun') {
+      }
+      else if (person.list[2].texture.key === 'gun') {
         if (healing) {
           heal.setVisible(true);
         }

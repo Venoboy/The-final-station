@@ -4,9 +4,9 @@ const stairsParams = {
   ALLOWED_DISTANCE_SIDES: 10,
   LAST_STEP_LENGTH: 1.5,
   lastStep: false,
-  MIDDLE_POINT_X_OFFSET: 4,
-  MIDDLE_POINT_Y_OFFSET: 4,
-  GO_DOWN_TIME: 700,
+  MIDDLE_POINT_X_OFFSET: 3,
+  MIDDLE_POINT_Y_OFFSET: 3,
+  GO_DOWN_TIME: 1200,
 };
 
 export default stairsParams;
