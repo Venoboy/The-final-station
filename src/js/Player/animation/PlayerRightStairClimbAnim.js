@@ -25,7 +25,7 @@ export default class PersonStartClimbAnimation {
         start: 9,
         end: 15,
       }),
-      frameRate: 7,
+      frameRate: 6,
       repeat: 0,
       showOnStart: false,
       hideOnComplete: true,

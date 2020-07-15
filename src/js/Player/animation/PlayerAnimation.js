@@ -26,31 +26,6 @@ let isAlive = true;
 let corpse;
 let startClimb;
 
-
-// function rightAngle(a) {
-
-//   let angleRight = a > 0.75 ? 0.75 : a;
-
-//   angleRight = angleRight < -0.75 ? -0.75 : angleRight;
-
-//   return angleRight;
-// }
-
-// function LeftAngle(a) {
-
-
-//   let angleLeft = a;
-
-//   if (a > -2.39 && a < 0) {
-//     angleLeft = -2.39;
-
-//   } else if (a < 2.39 && a > 0) {
-//     angleLeft = 2.39;
-
-//   }
-//   return angleLeft;
-// }
-// =======
 const { PI } = Math;
 
 export default class PersonAnimation {
@@ -189,6 +164,27 @@ export default class PersonAnimation {
       frames: [{ key: 'climbing', frame: 3 }],
       frameRate: 20,
     });
+    function reloadFunc(t) {
+      if (isAlive && !healing) {
+        let anim;
+        reloading = true;
+        person.list[2].setVisible(false);
+        if (legs.anims.currentAnim.key === 'Lturnleg') {
+          reload.anims.play('Reload', true);
+
+          anim = t.scene.anims.get('Reload');
+        } else if (legs.anims.currentAnim.key === 'Rturnleg') {
+          reload.anims.play('ReloadR', true);
+          anim = t.scene.anims.get('ReloadR');
+        }
+        anim.on('complete', () => {
+          reloading = false;
+          body.setVisible(true);
+          person.list[2].setVisible(true);
+        });
+      }
+    }
+
 
     this.scene.input.on(
       'pointermove',
@@ -217,6 +213,15 @@ export default class PersonAnimation {
       },
       this,
     );
+    this.scene.input.on(
+      'pointerdown',
+      function () {
+        if (stats.bullets === 0 && stats.bulletsInReserve !== 0) {
+          reloadFunc(this);
+        }
+      },
+      this,
+    );
 
     const keyObj = this.scene.input.keyboard.addKey('q');
     const keyObj2 = this.scene.input.keyboard.addKey('r');
@@ -240,23 +245,7 @@ export default class PersonAnimation {
       }
     });
     keyObj2.on('down', () => {
-      if (isAlive && !healing) {
-        let anim;
-        reloading = true;
-        person.list[2].setVisible(false);
-        if (legs.anims.currentAnim.key === 'Lturnleg') {
-          reload.anims.play('Reload', true);
-          anim = this.scene.anims.get('Reload');
-        } else if (legs.anims.currentAnim.key === 'Rturnleg') {
-          reload.anims.play('ReloadR', true);
-          anim = this.scene.anims.get('ReloadR');
-        }
-        anim.on('complete', () => {
-          reloading = false;
-          body.setVisible(true);
-          person.list[2].setVisible(true);
-        });
-      }
+      reloadFunc(this);
     });
 
     cursors = this.scene.cursors;
@@ -355,7 +344,6 @@ export default class PersonAnimation {
       ) {
         personClimb();
         climbDude.anims.play('Climb', true);
-        console.log(AnimationActivity);
       } else if (playerOnStairs && stairsInf.st.label === 'stairs-right') {
         personClimb();
         climbDude.anims.play('climbStay', true);
