@@ -4,6 +4,7 @@ import collisionCategories from '../world/collisionCategories';
 
 import StairsInteraction from '../objects/stairs/StairsInteraction';
 import sidesCollisionHandler from './playerStates/sidesCollisionHandler';
+import createShootLine from './shooting/createShootLine';
 
 // eslint-disable-next-line import/no-mutable-exports
 let stairsInteraction = {};
@@ -37,6 +38,7 @@ export default class PlayerInteraction {
       playerInstance: this.playerInstance,
     };
     stairsInteraction = new StairsInteraction(playerInteractionConfig);
+    createShootLine(this.scene, this.player);
   }
 
   update() {

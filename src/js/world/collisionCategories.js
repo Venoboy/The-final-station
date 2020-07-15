@@ -19,6 +19,7 @@ collisionCategories.player = nextCategory();
 collisionCategories.playerBodySensor = nextCategory();
 collisionCategories.ground = nextCategory();
 collisionCategories.stairs = nextCategory();
+collisionCategories.enemies = nextCategory();
 
 
 export default collisionCategories;

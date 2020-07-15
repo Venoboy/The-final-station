@@ -1,10 +1,17 @@
 import eventsCenter from '../../eventsCenter';
 import {
-  updateHealthBarUI, updateBulletsUI, updateFoodUI,
-  updateKeysUI, updateHealthUI,
+  updateBulletsUI,
+  updateFoodUI,
+  updateHealthBarUI,
+  updateHealthUI,
+  updateKeysUI,
 } from '../../interface/UIHelpers';
 
 const HERO_MAX_HEALTH = 100;
+
+const STAT_NAME = {
+  bullets: 'bullets',
+};
 
 const stats = {
   aids: 2,
@@ -34,7 +41,7 @@ const looseHealth = (amount) => {
 
 const setFullHealth = () => {
   stats.health = HERO_MAX_HEALTH;
-}
+};
 
 const updateStats = (statName, value) => {
   switch (statName) {
@@ -43,7 +50,7 @@ const updateStats = (statName, value) => {
       updateHealthUI(stats[statName]);
       break;
     }
-    case 'bullets': {
+    case STAT_NAME.bullets: {
       stats[statName] += value;
       updateBulletsUI(stats[statName]);
       break;
@@ -66,6 +73,8 @@ const updateStats = (statName, value) => {
       }
     }
   }
-}
+};
 
-export { stats, looseHealth, setFullHealth, updateStats };
+export {
+  stats, looseHealth, setFullHealth, updateStats, STAT_NAME,
+};
