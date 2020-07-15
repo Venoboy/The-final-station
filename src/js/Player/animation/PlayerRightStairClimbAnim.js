@@ -1,16 +1,10 @@
-import startClimb from '../../assets/Player/GoRightStair.png';
+
 
 export default class PersonStartClimbAnimation {
   constructor(scene) {
     this.scene = scene;
   }
 
-  preload() {
-    this.scene.load.spritesheet('startClimb', startClimb, {
-      frameWidth: 32,
-      frameHeight: 32,
-    });
-  }
 
   create() {
     const stairClimbAnim = this.scene.add.sprite(0, 0, 'startClimb').setVisible(false);

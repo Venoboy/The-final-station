@@ -1,10 +1,8 @@
 import Phaser from 'phaser';
-
-// import PersonWithObjectAnimation from './PlayerWithStuffAnimation';
-// import PersonDeadAnimation from './PlayerDeadAnim';
+import PersonWithObjectAnimation from './PlayerWithStuffAnimation';
+import PersonDeadAnimation from './PlayerDeadAnim';
 import { stats } from '../playerStates/stats';
-
-// import PersonStartClimbAnimation from './PlayerRightStairClimbAnim';
+import PersonStartClimbAnimation from './PlayerRightStairClimbAnim';
 import { AnimationActivity } from '../../objects/stairs/curvePlayerSetter';
 import Player from '../Player';
 
@@ -28,7 +26,7 @@ let corpse;
 let startClimb;
 
 
-function RightAngle(a) {
+function rightAngle(a) {
 
   let angleRight = a > 0.75 ? 0.75 : a;
 
@@ -60,6 +58,9 @@ export default class PersonAnimation {
 
 
   create() {
+    this.PersonWithObjectAnimation = new PersonWithObjectAnimation(this.scene);
+    this.PersonDeadAnimation = new PersonDeadAnimation(this.scene);
+    this.PersonStartClimbAnimation = new PersonStartClimbAnimation(this.scene);
     const arrayWithAnimations = this.PersonWithObjectAnimation.create();
     [heal, reload] = arrayWithAnimations;
     dead = this.PersonDeadAnimation.create();
@@ -223,7 +224,7 @@ export default class PersonAnimation {
                 pointer.worldY,
               );
               turn = true;
-              person.list[2].setRotation(RightAngle(angle));
+              person.list[2].setRotation(rightAngle(angle));
             }
           }
         }
@@ -234,6 +235,7 @@ export default class PersonAnimation {
     const keyObj = this.scene.input.keyboard.addKey('q');
     const keyObj2 = this.scene.input.keyboard.addKey('r');
     keyObj.on('down', () => {
+      console.log(legs.anims.currentAnim.key)
       if (isAlive && !reloading) {
         let anim;
         healing = true;
@@ -279,9 +281,6 @@ export default class PersonAnimation {
 
   update(stairsInf) {
 
-    playerOnStairs = !stairsInf.playerInstance.isTouching.ground;
-    gunBack = this.scene.add.image(1.5, 1, 'gunback').setOrigin(1, 0.5);
-
     function personClimb() {
       body.setVisible(false);
       legs.setVisible(false);
@@ -305,9 +304,6 @@ export default class PersonAnimation {
       climbDude.setVisible(false);
       startClimb.setVisible(true);
 
-
-    if (!playerOnStairs) {
-      personNotClimb();
     }
     if (isAlive) {
       playerOnStairs = !stairsInf.playerInstance.isTouching.ground;
@@ -341,7 +337,7 @@ export default class PersonAnimation {
         });
       }
 
-      if (cursors.left.isDown) {
+      if (cursors.left.isDown()) {
         if (!turn) {
           legs.anims.play('backLeftl', true);
           body.anims.play('left', true);
@@ -349,7 +345,7 @@ export default class PersonAnimation {
           body.anims.play('right', true);
           legs.anims.play('backRightl', true);
         }
-      } else if (cursors.right.isDown) {
+      } else if (cursors.right.isDown()) {
         if (turn) {
           legs.anims.play('rightl', true);
           body.anims.play('right', true);
@@ -364,7 +360,7 @@ export default class PersonAnimation {
         startClimb.anims.play('Down', true);
       }
       else if (
-        cursors.down.isDown
+        cursors.down.isDown()
         && playerOnStairs
         && stairsInf.st.label === 'stairs-right'
       ) {
@@ -375,7 +371,7 @@ export default class PersonAnimation {
         personStartClimb();
         startClimb.anims.play('Up', true);
       } else if (
-        cursors.up.isDown
+        cursors.up.isDown()
         && playerOnStairs
         && stairsInf.st.label === 'stairs-right'
       ) {
@@ -385,21 +381,8 @@ export default class PersonAnimation {
       } else if (playerOnStairs && stairsInf.st.label === 'stairs-right') {
         personClimb();
         climbDude.anims.play('climbStay', true);
-      } else if (playerOnStairs && (cursors.down.isDown || cursors.up.isDown)) {
+      } else if (playerOnStairs && (cursors.down.isDown() || cursors.up.isDown())) {
         body.anims.play('Lturn', true);
-    if (cursors.left.isDown()) {
-      if (!turn) {
-        legs.anims.play('backLeftl', true);
-        body.anims.play('left', true);
-      } else if (turn) {
-        body.anims.play('right', true);
-        legs.anims.play('backRightl', true);
-      }
-    } else if (cursors.right.isDown()) {
-      if (turn) {
-        legs.anims.play('rightl', true);
-        body.anims.play('right', true);
-      } else if (!turn) {
         legs.anims.play('leftl', true);
       }
       else if (person.list[2].texture.key === 'gun') {
@@ -421,29 +404,6 @@ export default class PersonAnimation {
         body.anims.play('Rturn', true);
         legs.anims.play('Rturnleg', true);
       }
-    } else if (
-      cursors.down.isDown()
-      && playerOnStairs
-      && stairsInf.st.label === 'stairs-right'
-    ) {
-      personClimb();
-      climbDude.anims.play('Climb', true);
-    } else if (
-      cursors.up.isDown()
-      && playerOnStairs
-      && stairsInf.st.label === 'stairs-right'
-    ) {
-      personClimb();
-      climbDude.anims.play('Climb', true);
-    } else if (playerOnStairs && stairsInf.st.label === 'stairs-right') {
-      personClimb();
-      climbDude.anims.play('climbStay', true);
-    } else if (playerOnStairs && (cursors.down.isDown() || cursors.up.isDown())) {
-      body.anims.play('Lturn', true);
-      legs.anims.play('backLeftl', true);
-    } else if (person.list[2].texture.key === 'gun') {
-      body.anims.play('Lturn', true);
-      legs.anims.play('Lturnleg', true);
     } else {
       dead.setVisible(true);
       if (corpse) {

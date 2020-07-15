@@ -5,7 +5,6 @@ import { stats } from '../../Player/playerStates/stats';
 import { lids } from '../../scenes/gameScene/sceneSetters';
 
 
-
 const positionStairsSetter = (config) => {
   const {
     playerInstance,
@@ -16,7 +15,6 @@ const positionStairsSetter = (config) => {
     cursors,
     scene,
   } = config;
-
   const pC = playerContainer;
   // pB - физическое тело
   const pB = playerBody.parts.filter((part) => part.label === 'mainBody')[0];
@@ -24,7 +22,7 @@ const positionStairsSetter = (config) => {
     + stairsParams.LAST_STEP_LENGTH;
   const playerAtSideStairsX = stairs.bounds.min.x + pB.centerOffset.x + stairsParams.WIDTH;
 
-  const DEEP_COEFFICIENT = 0.55; // (0-2) глубина спуска анимации. >1 ниже, <1 выше
+  const DEEP_COEFFICIENT = 1.25; // (0-2) глубина спуска анимации. >1 ниже, <1 выше
   const downDeep = pB.centerOffset.y * DEEP_COEFFICIENT;
 
   const isLidsOverlap = () => {

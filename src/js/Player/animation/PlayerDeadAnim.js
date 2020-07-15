@@ -1,15 +1,8 @@
-import dead from '../../assets/Player/Dead.png';
+
 
 export default class PersonDeadAnimation {
   constructor(scene) {
     this.scene = scene;
-  }
-
-  preload() {
-    this.scene.load.spritesheet('dead', dead, {
-      frameWidth: 32,
-      frameHeight: 32,
-    });
   }
 
   create() {

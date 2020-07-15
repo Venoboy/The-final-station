@@ -1,21 +1,10 @@
-import heal from '../../assets/Player/Heal.png';
-import reload from '../../assets/Player/Reload.png';
+
 
 export default class PersonWithObjectAnimation {
   constructor(scene) {
     this.scene = scene;
   }
 
-  preload() {
-    this.scene.load.spritesheet('heal', heal, {
-      frameWidth: 32,
-      frameHeight: 32,
-    });
-    this.scene.load.spritesheet('reload', reload, {
-      frameWidth: 32,
-      frameHeight: 32,
-    });
-  }
 
   create() {
     const array = [this.scene.add.sprite(0, 0, 'heal').setVisible(false), this.scene.add.sprite(0, 0, 'reload').setVisible(false)];

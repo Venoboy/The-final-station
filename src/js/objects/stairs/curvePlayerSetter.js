@@ -67,7 +67,7 @@ const updateCornersPosition = () => {
   graphics.clear();
   graphics.lineStyle(2, 0xffffff, 1);
 
-  path.draw(graphics);
+  // path.draw(graphics);
 
   path.getPoint(follower.t, follower.vec);
 
