@@ -1,7 +1,8 @@
 import Phaser from 'phaser';
 import Player from '../Player';
+import { stats } from '../playerStates/stats';
+import { rightAngle, leftAngle } from '../../helpers/setMaxAngle';
 
-let angle;
 let person;
 let body;
 let climbDude;
@@ -11,22 +12,7 @@ let gunBack;
 let cursors;
 let playerOnStairs;
 let turn;
-
-function RightAngle(a) {
-  let angleRight = a > 0.75 ? 0.75 : a;
-  angleRight = angleRight < -0.75 ? -0.75 : angleRight;
-  return angleRight;
-}
-
-function LeftAngle(a) {
-  let angleLeft = a;
-  if (a > -2.45 && a < 0) {
-    angleLeft = -2.45;
-  } else if (a < 2.45 && a > 0) {
-    angleLeft = 2.45;
-  }
-  return angleLeft;
-}
+const { PI } = Math;
 
 export default class PersonAnimation {
   constructor(scene) {
@@ -155,15 +141,12 @@ export default class PersonAnimation {
     this.scene.input.on(
       'pointermove',
       function (pointer) {
-        angle = Phaser.Math.Angle.Between(
+        const angle = Phaser.Math.Angle.Between(
           pointer.worldX,
           pointer.worldY,
-          person.list[2].parentContainer.x,
-          person.list[2].parentContainer.y,
+          person.body.position.x,
+          person.body.position.y,
         );
-        // pointer.x + this.scene.cameras.main.scrollX,
-        //           pointer.y + this.scene.cameras.main.scrollY,
-        console.log(Math.PI);
 
         if (
           person.list[2].parentContainer.x > pointer.worldX
@@ -171,14 +154,13 @@ export default class PersonAnimation {
           turn = false;
           gunBack = this.scene.add.image(1.5, 1, 'gunback').setOrigin(1, 0.5);
           person.replace(gun, gunBack);
-          person.list[2].setRotation(angle);
-          // person.list[2].setRotation(LeftAngle(angle) - Math.PI);
+          person.list[2].setRotation(leftAngle(angle, stats.MAX_ANGLE));
         } else if (
           person.list[2].parentContainer.x < pointer.worldX
         ) {
           turn = true;
           person.replace(person.list[2], gun);
-          person.list[2].setRotation(RightAngle(angle));
+          person.list[2].setRotation(rightAngle(angle, stats.MAX_ANGLE) - PI);
         }
       },
       this,

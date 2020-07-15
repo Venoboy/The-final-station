@@ -1,7 +1,7 @@
 import EnemyConstructor from './EnemyConstructor';
 import enemyPositions from './enemyPositions';
 import enemySettings from './enemySettings';
-import collisionCategories from '../world/collisionCategories';
+import collisionCategories from '../helpers/collisionCategories';
 import { stairsArray } from '../objects/stairs/stairsCreation';
 
 const enemiesArray = [];

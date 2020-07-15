@@ -1,6 +1,8 @@
 import Phaser from 'phaser';
 
 import defineEndPoint from './defineEndPoint';
+import { stats } from '../playerStates/stats';
+import { leftAngle, rightAngle } from '../../helpers/setMaxAngle';
 
 
 const SHOOT_DISTANCE = 220;
@@ -9,6 +11,8 @@ const SHOOT_LINE_END_ALPHA = 0.1;
 const SHOOT_DURATION = 300;
 const SHOOT_LINE_WIDTH = 0.3;
 const SHOOT_LINE_COLOR = 0xffffff;
+const GUN_OFFSET = 1.2;
+const { MAX_ANGLE } = stats;
 
 const getBetween = Phaser.Math.Distance.Between;
 
@@ -18,12 +22,22 @@ const getResultPoint = (startX, startY, finishX, finishY) => {
   const sizeCoeff = SHOOT_DISTANCE / mouseDistance;
   const diffX = finishX - startX;
   const diffY = finishY - startY;
-  const x = startX + diffX * sizeCoeff;
-  const y = startY + diffY * sizeCoeff;
-  return {
-    x,
-    y,
+  const resultPoint = {
+    x: startX + diffX * sizeCoeff,
+    y: startY + diffY * sizeCoeff,
   };
+  const radius = getBetween(startX, startY, resultPoint.x, resultPoint.y);
+  const currentAngle = Phaser.Math.Angle.Between(startX, startY, resultPoint.x, resultPoint.y);
+  const testCircle = new Phaser.Geom.Circle(startX, startY, radius);
+  let angle;
+  if (startX < finishX) {
+    angle = leftAngle(currentAngle, MAX_ANGLE);
+  } else {
+    angle = rightAngle(currentAngle, MAX_ANGLE);
+  }
+  Phaser.Geom.Circle.CircumferencePoint(testCircle, angle, resultPoint);
+
+  return resultPoint;
 };
 
 const createShootLine = (scene, person) => {
@@ -31,7 +45,7 @@ const createShootLine = (scene, person) => {
     const graphics = scene.add.graphics();
     const player = person;
     const startX = player.x;
-    const startY = player.y;
+    const startY = player.y - GUN_OFFSET;
     const resultPoint = getResultPoint(startX, startY, pointer.worldX, pointer.worldY);
 
     // вставить функцию проверки обоймы
@@ -53,14 +67,8 @@ const createShootLine = (scene, person) => {
       duration: SHOOT_DURATION,
       onUpdate: updateShootLine,
     });
-
-
-    setTimeout(() => {
-      // scene.matter.world.remove(shoot);
-      // shoot.visible = false;
-      // graphics.clear();
-    }, 200);
   };
+
   scene.input.on('pointerdown', (pointer) => construct(pointer));
 };
 
