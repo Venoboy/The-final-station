@@ -16,6 +16,8 @@ const STAT_NAME = {
 const stats = {
   aids: 2,
   bullets: 6,
+  bulletsInReserve: 6,
+  magazineSize: 6,
   food: 2,
   keys: 0,
   health: HERO_MAX_HEALTH,
@@ -51,8 +53,8 @@ const updateStats = (statName, value) => {
       break;
     }
     case STAT_NAME.bullets: {
-      stats[statName] += value;
-      updateBulletsUI(stats[statName]);
+      stats.bulletsInReserve += value;
+      updateBulletsUI(stats.bulletsInReserve);
       break;
     }
     case 'food': {
