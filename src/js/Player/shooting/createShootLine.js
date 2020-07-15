@@ -3,6 +3,7 @@ import Phaser from 'phaser';
 import defineEndPoint from './defineEndPoint';
 import { stats } from '../playerStates/stats';
 import { leftAngle, rightAngle } from '../../helpers/setMaxAngle';
+import ShootDisplay from '../ShootDisplay';
 
 
 const SHOOT_DISTANCE = 220;
@@ -49,6 +50,11 @@ const createShootLine = (scene, person) => {
     const resultPoint = getResultPoint(startX, startY, pointer.worldX, pointer.worldY);
 
     // вставить функцию проверки обоймы
+    const holder = new ShootDisplay(scene, player);
+    const canShoot = holder.shoot();
+    if (!canShoot) {
+      return;
+    }
 
     const { endX, endY } = defineEndPoint(scene, startX, startY, resultPoint);
 
