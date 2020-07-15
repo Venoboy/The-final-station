@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import collisionCategories from '../world/collisionCategories';
-import { doors } from '../setters/level0';
+import { doors } from '../scenes/gameScene/sceneSetters';
 import { looseHealth } from '../Player/playerStates/stats';
 import { groundArray } from '../objects/ground/groundCreation';
 
@@ -18,6 +18,7 @@ export default class EnemyConstructor {
     this.position = config.position;
     this.collisionCategory = config.collisionCategory;
     this.speed = config.settings.speed;
+    this.health = config.settings.health;
     this.currentSpeed = 0;
     this.blockDoor = false;
     this.x = config.position.x;
@@ -41,13 +42,13 @@ export default class EnemyConstructor {
 
     const { Body, Bodies } = Phaser.Physics.Matter.Matter;
     const { width: w, height: h } = this.enemy;
-    this.mainBody = Bodies.rectangle(w * 0.5, h * 0.5 + 1, 6, 18, { chamfer: { radius: 2 }, label: 'main body' });
+    this.mainBody = Bodies.rectangle(w * 0.5, h * 0.5 + 1, 6, 18, { chamfer: { radius: 2 }, label: 'enemy body' });
     this.sensors = {
       detect: Bodies.rectangle(w * 0.5, h * 0.5, 270, h * 0.5, { isSensor: true }),
       left: Bodies.rectangle(w * 0.4, h * 0.5, 2, 4, { isSensor: true, label: 'sensor left' }),
       right: Bodies.rectangle(w * 0.6, h * 0.5, 2, 4, { isSensor: true, label: 'sensor right' }),
       body: Bodies.rectangle(w * 0.5, h * 0.5 - this.heightOffset, 6, this.height,
-        { chamfer: { radius: 2 }, isSensor: true, label: 'body sensor' }),
+        { chamfer: { radius: 2 }, isSensor: true, label: 'enemy body sensor' }),
     };
     const compoundBody = Body.create({
       parts: [this.mainBody, this.sensors.detect, this.sensors.body,
@@ -65,6 +66,7 @@ export default class EnemyConstructor {
       .setCollisionCategory(this.collisionCategory)
       .setCollisionGroup(config.collisionGroup)
       .setCollidesWith([collisionCategories.ground]);
+    this.enemy.setData('health', this.health);
   }
 
   onDetectDoors = (sensor, door) => {

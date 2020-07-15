@@ -35,9 +35,13 @@ export default class PersonAnimation {
 
   create() {
     body = this.scene.add.sprite(0, 0, 'dude');
+    body.name = 'dudeBody';
     legs = this.scene.add.sprite(0, 0, 'dudeLegs');
+    legs.name = 'dudeLegs';
     gun = this.scene.add.image(-1.5, 0.5, 'gun').setOrigin(0, 0.5);
+    gun.name = 'dudeGun';
     climbDude = this.scene.add.sprite(0, 0, 'climbing').setVisible(false);
+    climbDude.name = 'climbDude';
 
     person = this.scene.add.container(109.36, 185.5, [
       legs,

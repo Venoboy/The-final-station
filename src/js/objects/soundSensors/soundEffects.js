@@ -1,4 +1,4 @@
-const createSoundFadeIn = (scene, sound, duration, delay) => {
+const createSoundFadeIn = (scene, sound, duration, delay = 0) => {
   return scene.tweens.add({
     targets: sound,
     volume: 1,
@@ -8,7 +8,7 @@ const createSoundFadeIn = (scene, sound, duration, delay) => {
   });
 };
 
-const createSoundFadeOut = (scene, sound, duration, delay) => {
+const createSoundFadeOut = (scene, sound, duration, delay = 0) => {
   return scene.tweens.add({
     targets: sound,
     volume: 0,

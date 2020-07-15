@@ -1,6 +1,6 @@
-/* eslint-disable camelcase */
 import Phaser from 'phaser';
-import MenuButton from '../objects/buttons/MenuButton';
+import MenuButton from '../sceneObjects/MenuButton';
+import addSceneListeners from './sceneListeners';
 
 export default class BootScene extends Phaser.Scene {
   constructor() {
@@ -8,7 +8,7 @@ export default class BootScene extends Phaser.Scene {
   }
 
   create() {
-    this.cameras.main.setBackgroundColor('rgba(0, 0, 0, 0.6)');
+    this.cameras.main.setBackgroundColor('rgba(0, 0, 0, 0.8)');
 
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
@@ -28,22 +28,17 @@ export default class BootScene extends Phaser.Scene {
       callback: this.returnToMainMenu,
     });
 
-    const pauseLogo = this.add.image(windowWidth / 2, windowHeight * 0.2, 'logo');
-    pauseLogo.setScale((windowWidth * 0.3) / pauseLogo.width);
-    this.add.image(windowWidth / 2, windowHeight * 0.8, 'keyboard');
+    this.pauseLogo = this.add.image(windowWidth / 2, windowHeight * 0.2, 'logo');
+    this.pauseLogo.setScale((windowWidth * 0.3) / this.pauseLogo.width);
+    this.keyboard = this.add.image(windowWidth / 2, windowHeight * 0.8, 'keyboard');
 
     this.continueKey = this.input.keyboard.addKey(27);
-    this.continueKey.on('up', this.continueGame, this);
+    addSceneListeners(this);
   }
 
   continueGameButtonPress() {
     this.scene.scene.resume('game-scene');
     this.scene.scene.stop();
-  }
-
-  continueGame() {
-    this.scene.resume('game-scene');
-    this.scene.stop();
   }
 
   returnToMainMenu() {
