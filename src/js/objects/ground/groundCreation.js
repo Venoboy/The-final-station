@@ -1,4 +1,4 @@
-import collisionCategories from '../../world/collisionCategories';
+import collisionCategories from '../../helpers/collisionCategories';
 import level0json from '../../../assets/level0Physics/level-start.xml.json';
 import level0MiddleJson from '../../../assets/level0Physics/level-middle.xml.json';
 import level0EndJson from '../../../assets/level0Physics/level-end.xml.json';

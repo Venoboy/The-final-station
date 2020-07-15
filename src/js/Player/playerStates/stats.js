@@ -1,4 +1,3 @@
-import eventsCenter from '../../eventsCenter';
 import {
   updateBulletsUI,
   updateFoodUI,
@@ -26,6 +25,7 @@ const stats = {
     w: 32,
   },
   bodyContainerYOffset: 2.33,
+  MAX_ANGLE: Math.PI / 6,
 };
 
 const looseHealth = (amount) => {

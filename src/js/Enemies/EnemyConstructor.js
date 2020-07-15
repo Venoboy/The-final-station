@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import collisionCategories from '../world/collisionCategories';
+import collisionCategories from '../helpers/collisionCategories';
 import { doors } from '../scenes/gameScene/sceneSetters';
 import { looseHealth } from '../Player/playerStates/stats';
 import { groundArray } from '../objects/ground/groundCreation';

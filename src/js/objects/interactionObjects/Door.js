@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import InteractionObject from './InteractionObject';
 import eventsCenter from '../../eventsCenter';
-import collisionCategories from '../../world/collisionCategories';
+import collisionCategories from '../../helpers/collisionCategories';
 
 export default class Door extends InteractionObject {
   constructor(config) {

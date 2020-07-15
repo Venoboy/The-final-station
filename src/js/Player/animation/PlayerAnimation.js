@@ -5,8 +5,9 @@ import { stats } from '../playerStates/stats';
 import PersonStartClimbAnimation from './PlayerRightStairClimbAnim';
 import { AnimationActivity } from '../../objects/stairs/curvePlayerSetter';
 import Player from '../Player';
+import { stats } from '../playerStates/stats';
+import { rightAngle, leftAngle } from '../../helpers/setMaxAngle';
 
-let angle;
 let person;
 let body;
 let climbDude;
@@ -26,29 +27,31 @@ let corpse;
 let startClimb;
 
 
-function rightAngle(a) {
+// function rightAngle(a) {
 
-  let angleRight = a > 0.75 ? 0.75 : a;
+//   let angleRight = a > 0.75 ? 0.75 : a;
 
-  angleRight = angleRight < -0.75 ? -0.75 : angleRight;
+//   angleRight = angleRight < -0.75 ? -0.75 : angleRight;
 
-  return angleRight;
-}
+//   return angleRight;
+// }
 
-function LeftAngle(a) {
+// function LeftAngle(a) {
 
 
-  let angleLeft = a;
+//   let angleLeft = a;
 
-  if (a > -2.39 && a < 0) {
-    angleLeft = -2.39;
+//   if (a > -2.39 && a < 0) {
+//     angleLeft = -2.39;
 
-  } else if (a < 2.39 && a > 0) {
-    angleLeft = 2.39;
+//   } else if (a < 2.39 && a > 0) {
+//     angleLeft = 2.39;
 
-  }
-  return angleLeft;
-}
+//   }
+//   return angleLeft;
+// }
+// =======
+const { PI } = Math;
 
 export default class PersonAnimation {
   constructor(scene) {
@@ -191,6 +194,7 @@ export default class PersonAnimation {
     this.scene.input.on(
       'pointermove',
       function (pointer) {
+
         if (isAlive) {
           if (!healing && !reloading) {
             if (
@@ -208,7 +212,8 @@ export default class PersonAnimation {
                 pointer.worldX,
                 pointer.worldY,
               );
-              person.list[2].setRotation(LeftAngle(angle) - Math.PI);
+              person.list[2].setRotation(leftAngle(angle, stats.MAX_ANGLE));
+              // person.list[2].setRotation(LeftAngle(angle) - Math.PI);
             } else if (
               person.list[2].parentContainer.x < pointer.worldX
             ) {
@@ -224,9 +229,32 @@ export default class PersonAnimation {
                 pointer.worldY,
               );
               turn = true;
-              person.list[2].setRotation(rightAngle(angle));
+              person.list[2].setRotation(rightAngle(angle, stats.MAX_ANGLE) - PI);
+              // person.list[2].setRotation(rightAngle(angle));
             }
           }
+// =======
+//         const angle = Phaser.Math.Angle.Between(
+//           pointer.worldX,
+//           pointer.worldY,
+//           person.body.position.x,
+//           person.body.position.y,
+//         );
+
+//         if (
+//           person.list[2].parentContainer.x > pointer.worldX
+//         ) {
+//           turn = false;
+//           gunBack = this.scene.add.image(1.5, 1, 'gunback').setOrigin(1, 0.5);
+//           person.replace(gun, gunBack);
+//           person.list[2].setRotation(leftAngle(angle, stats.MAX_ANGLE));
+//         } else if (
+//           person.list[2].parentContainer.x < pointer.worldX
+//         ) {
+//           turn = true;
+//           person.replace(person.list[2], gun);
+//           person.list[2].setRotation(rightAngle(angle, stats.MAX_ANGLE) - PI);
+// >>>>>>> master
         }
       },
       this,

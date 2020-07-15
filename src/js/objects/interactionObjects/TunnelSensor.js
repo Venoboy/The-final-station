@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import collisionCategories from '../../world/collisionCategories';
+import collisionCategories from '../../helpers/collisionCategories';
 
 export default class TunnelSensor extends Phaser.Physics.Matter.Image {
   constructor(config) {

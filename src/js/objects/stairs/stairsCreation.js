@@ -1,5 +1,5 @@
 import level0stairsJson from '../../../assets/level0Physics/level-start-stairs.xml.json';
-import collisionCategories from '../../world/collisionCategories';
+import collisionCategories from '../../helpers/collisionCategories';
 import level0stairsMiddleJson from '../../../assets/level0Physics/level-middle-stairs.xml.json';
 
 const stairsArray = [];

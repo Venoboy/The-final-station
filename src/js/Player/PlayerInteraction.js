@@ -1,6 +1,6 @@
 import PersonAnimation from './animation/PlayerAnimation';
 import { getCanGoX, setCanGoX } from './playerStates/externalParams';
-import collisionCategories from '../world/collisionCategories';
+import collisionCategories from '../helpers/collisionCategories';
 
 import StairsInteraction from '../objects/stairs/StairsInteraction';
 import sidesCollisionHandler from './playerStates/sidesCollisionHandler';
