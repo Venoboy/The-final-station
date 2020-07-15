@@ -152,11 +152,14 @@ export default class PersonAnimation {
       'pointermove',
       function (pointer) {
         angle = Phaser.Math.Angle.Between(
+          pointer.worldX,
+          pointer.worldY,
           person.list[2].parentContainer.x,
           person.list[2].parentContainer.y,
-          pointer.x + this.scene.cameras.main.scrollX,
-          pointer.y + this.scene.cameras.main.scrollY,
         );
+        // pointer.x + this.scene.cameras.main.scrollX,
+        //           pointer.y + this.scene.cameras.main.scrollY,
+        console.log(Math.PI);
 
         if (
           person.list[2].parentContainer.x > pointer.worldX
@@ -164,7 +167,8 @@ export default class PersonAnimation {
           turn = false;
           gunBack = this.scene.add.image(1.5, 1, 'gunback').setOrigin(1, 0.5);
           person.replace(gun, gunBack);
-          person.list[2].setRotation(LeftAngle(angle) - Math.PI);
+          person.list[2].setRotation(angle);
+          // person.list[2].setRotation(LeftAngle(angle) - Math.PI);
         } else if (
           person.list[2].parentContainer.x < pointer.worldX
         ) {
