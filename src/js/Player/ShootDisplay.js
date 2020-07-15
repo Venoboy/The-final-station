@@ -50,8 +50,8 @@ class ShootDisplay {
       activeWarning.warning.destroy();
     }
     const warning = this.scene.add.text(
-      this.player.matterEnabledContainer.x,
-      this.player.matterEnabledContainer.y - 15, 'EMPTY', textConfig,
+      this.player.x,
+      this.player.y - 15, 'EMPTY', textConfig,
     ).setOrigin(0.5)
       .setResolution(10);
 

@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-import collisionCategories from '../../world/collisionCategories';
+import collisionCategories from '../../helpers/collisionCategories';
 import { stats } from '../../Player/playerStates/stats';
 import { setCanGoX } from '../../Player/playerStates/externalParams';
 import stairsParams from './stairsParams';
