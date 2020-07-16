@@ -22,7 +22,7 @@ const positionStairsSetter = (config) => {
     + stairsParams.LAST_STEP_LENGTH;
   const playerAtSideStairsX = stairs.bounds.min.x + pB.centerOffset.x + stairsParams.WIDTH;
 
-  const DEEP_COEFFICIENT = 1.5; // (0-2) глубина спуска анимации. >1 ниже, <1 выше
+  const DEEP_COEFFICIENT = 1.25; // (0-2) глубина спуска анимации. >1 ниже, <1 выше
   const downDeep = pB.centerOffset.y * DEEP_COEFFICIENT;
 
   const isLidsOverlap = () => {

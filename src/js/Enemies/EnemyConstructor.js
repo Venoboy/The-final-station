@@ -52,7 +52,7 @@ export default class EnemyConstructor {
     };
     const compoundBody = Body.create({
       parts: [this.mainBody, this.sensors.detect, this.sensors.body,
-        this.sensors.left, this.sensors.right],
+      this.sensors.left, this.sensors.right],
       frictionStatic: 0.1,
       frictionAir: 0.02,
       friction: 0.1,
