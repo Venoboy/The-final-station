@@ -3,6 +3,7 @@ import collisionCategories from '../helpers/collisionCategories';
 import { doors } from '../scenes/gameScene/sceneSetters';
 import { looseHealth } from '../Player/playerStates/stats';
 import { groundArray } from '../objects/ground/groundCreation';
+import { stats } from '../Player/playerStates/stats';
 
 
 export default class EnemyConstructor {
@@ -85,14 +86,15 @@ export default class EnemyConstructor {
     this.attackCounter += 1;
     if (this.attackCounter === framesDelay) {
       this.attackCounter = 0;
-      looseHealth(10);
+      looseHealth(this.config.settings.damage);
     }
   };
 
   onDetect = () => {
     this.activeDoors = doors.filter((door) => door.body !== undefined);
     this.scene.matter.overlap(this.sensors.detect, this.activeDoors, this.onDetectDoors);
-    if (!this.blockDoor) {
+    const isHeroDead = stats.health <= 0;
+    if (!this.blockDoor && !isHeroDead) {
       if (this.player.x < this.enemy.x - this.ATTACK_DISTANCE) {
         this.currentSpeed = -this.speed;
         this.attackCounter = 0;
@@ -167,9 +169,10 @@ export default class EnemyConstructor {
   };
 
   enemyCheckingPlayer = () => {
+    const isHeroDead = stats.health <= 0;
     const sensorPlayerOverlap = this.scene.matter
       .overlap(this.sensors.detect, this.playerInstance.sensors.body, this.onDetect);
-    this.isEnemySeePlayer = sensorPlayerOverlap && !this.blockDoor;
+    this.isEnemySeePlayer = sensorPlayerOverlap && !this.blockDoor && !isHeroDead;
     if (this.isEnemySawPlayer && !this.isEnemySeePlayer) {
       this.enemySearchingPlayer();
     }

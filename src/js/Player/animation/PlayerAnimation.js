@@ -6,7 +6,7 @@ import { stats } from '../playerStates/stats';
 import PersonStartClimbAnimation from './PlayerRightStairClimbAnim';
 import { AnimationActivity } from '../../objects/stairs/curvePlayerSetter';
 import Player from '../Player';
-import { rightAngle, leftAngle } from '../../helpers/setMaxAngle';
+import { leftAngle, rightAngle } from '../../helpers/setMaxAngle';
 
 
 let person;
@@ -192,15 +192,17 @@ export default class PersonAnimation {
           person.body.position.y,
         );
 
+        const isHeroAlive = stats.health > 0;
+
         if (
-          person.list[2].parentContainer.x > pointer.worldX
+          person.list[2].parentContainer.x > pointer.worldX && isHeroAlive
         ) {
           turn = false;
           gunBack = this.scene.add.image(1.5, 1, 'gunback').setOrigin(1, 0.5);
           person.replace(gun, gunBack);
           person.list[2].setRotation(leftAngle(angle, stats.MAX_ANGLE));
         } else if (
-          person.list[2].parentContainer.x < pointer.worldX
+          person.list[2].parentContainer.x < pointer.worldX && isHeroAlive
         ) {
           turn = true;
           person.replace(person.list[2], gun);
@@ -284,6 +286,7 @@ export default class PersonAnimation {
       climbDude.setVisible(false);
       startClimb.setVisible(false);
     }
+
     function personStartClimb() {
       body.setVisible(false);
       legs.setVisible(false);
@@ -305,30 +308,30 @@ export default class PersonAnimation {
         }
       }
       if (legs.anims.currentAnim.key === 'leftl'
-      && (
-        legs.anims.currentFrame.textureFrame === 10
-        || legs.anims.currentFrame.textureFrame === 13)
-      && this.currentAnim.includes('leftl')
+        && (
+          legs.anims.currentFrame.textureFrame === 10
+          || legs.anims.currentFrame.textureFrame === 13)
+        && this.currentAnim.includes('leftl')
       ) {
         if (!this.sounds.footstep.isPlaying) {
           this.sounds.footstep.play();
         }
       }
       if (legs.anims.currentAnim.key === 'backRightl'
-      && (
-        legs.anims.currentFrame.textureFrame === 18
-        || legs.anims.currentFrame.textureFrame === 22)
-      && this.currentAnim.includes('backRightl')
+        && (
+          legs.anims.currentFrame.textureFrame === 18
+          || legs.anims.currentFrame.textureFrame === 22)
+        && this.currentAnim.includes('backRightl')
       ) {
         if (!this.sounds.footstep.isPlaying) {
           this.sounds.footstep.play();
         }
       }
       if (legs.anims.currentAnim.key === 'backLeftl'
-      && (
-        legs.anims.currentFrame.textureFrame === 4
-        || legs.anims.currentFrame.textureFrame === 8)
-      && this.currentAnim.includes('backLeftl')
+        && (
+          legs.anims.currentFrame.textureFrame === 4
+          || legs.anims.currentFrame.textureFrame === 8)
+        && this.currentAnim.includes('backLeftl')
       ) {
         if (!this.sounds.footstep.isPlaying) {
           this.sounds.footstep.play();

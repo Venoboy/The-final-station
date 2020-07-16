@@ -52,7 +52,8 @@ const createShootLine = (scene, person) => {
     const resultPoint = getResultPoint(startX, startY, pointer.worldX, pointer.worldY);
 
     // вставить функцию проверки обоймы
-    const canShoot = holder.shoot();
+    const isHeroDead = stats.health <= 0;
+    const canShoot = !isHeroDead && holder.shoot();
     if (!canShoot) {
       return;
     }
@@ -75,6 +76,7 @@ const createShootLine = (scene, person) => {
       onUpdate: updateShootLine,
     });
   };
+
   scene.input.on('pointerdown', (pointer) => construct(pointer));
   const reloadKey = scene.input.keyboard.addKey('R');
   reloadKey.on('up', holder.reload, holder);

@@ -5,6 +5,7 @@ import collisionCategories from '../helpers/collisionCategories';
 import StairsInteraction from '../objects/stairs/StairsInteraction';
 import sidesCollisionHandler from './playerStates/sidesCollisionHandler';
 import createShootLine from './shooting/createShootLine';
+import { stats } from './playerStates/stats';
 import createHealing from './healing/createHealing';
 
 // eslint-disable-next-line import/no-mutable-exports
@@ -55,10 +56,11 @@ export default class PlayerInteraction {
 
     stairsInteraction.setStairsOverlap();
 
-    if (this.cursors.left.isDown() && getCanGoX() && canLeft) {
+    const isHeroDead = stats.health <= 0;
+    if (this.cursors.left.isDown() && getCanGoX() && canLeft && !isHeroDead) {
       this.movingKeysPressed = true;
       this.player.setVelocityX(-this.PLAYER_SPEED_X);
-    } else if (this.cursors.right.isDown() && getCanGoX() && canRight) {
+    } else if (this.cursors.right.isDown() && getCanGoX() && canRight && !isHeroDead) {
       this.movingKeysPressed = true;
       this.player.setVelocityX(this.PLAYER_SPEED_X);
     } else {
