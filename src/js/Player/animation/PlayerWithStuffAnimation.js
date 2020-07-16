@@ -1,5 +1,3 @@
-
-
 export default class PersonWithObjectAnimation {
   constructor(scene) {
     this.scene = scene;

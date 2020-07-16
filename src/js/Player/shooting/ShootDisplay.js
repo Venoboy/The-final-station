@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 import {
   useBullet, setBullets, isMagazineFull, canShoot, canReload,
 } from '../playerStates/stats';

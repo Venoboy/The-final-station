@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 import { setFullHealth, canHeal } from '../playerStates/stats';
 import PersonAnimation from '../animation/PlayerAnimation';
 
