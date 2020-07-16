@@ -1,5 +1,3 @@
-
-
 export default class PersonWithObjectAnimation {
   constructor(scene) {
     this.scene = scene;
@@ -14,7 +12,7 @@ export default class PersonWithObjectAnimation {
         start: 0,
         end: 25,
       }),
-      frameRate: 8,
+      frameRate: 14,
       repeat: 0,
       showOnStart: false,
       hideOnComplete: true,
@@ -25,7 +23,7 @@ export default class PersonWithObjectAnimation {
         start: 26,
         end: 51,
       }),
-      frameRate: 8,
+      frameRate: 14,
       repeat: 0,
       showOnStart: false,
       hideOnComplete: true,
@@ -36,7 +34,7 @@ export default class PersonWithObjectAnimation {
         start: 0,
         end: 15,
       }),
-      frameRate: 8,
+      frameRate: 16,
       repeat: 0,
       showOnStart: false,
       hideOnComplete: true,
@@ -47,7 +45,7 @@ export default class PersonWithObjectAnimation {
         start: 16,
         end: 30,
       }),
-      frameRate: 8,
+      frameRate: 16,
       repeat: 0,
       showOnStart: false,
       hideOnComplete: true,

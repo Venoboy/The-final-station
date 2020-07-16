@@ -1,7 +1,7 @@
 import eventsCenter from '../eventsCenter';
 
-const updateHealthUI = (health) => {
-  eventsCenter.emit('update-health', health);
+const updateAidsUI = (health) => {
+  eventsCenter.emit('update-aids', health);
 };
 
 const updateHealthBarUI = (health) => {
@@ -25,6 +25,6 @@ const updateKeysUI = (keys) => {
 };
 
 export {
-  updateHealthUI, updateFoodUI, updateBulletsUI, updateKeysUI,
+  updateAidsUI, updateFoodUI, updateBulletsUI, updateKeysUI,
   updateMagazineUI, updateHealthBarUI,
 };
