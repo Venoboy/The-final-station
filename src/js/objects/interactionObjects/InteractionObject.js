@@ -1,6 +1,6 @@
 /* eslint-disable linebreak-style */
 import Phaser from 'phaser';
-import collisionCategories from '../../world/collisionCategories';
+import collisionCategories from '../../helpers/collisionCategories';
 
 export default class InteractionObject extends Phaser.Physics.Matter.Image {
   constructor(config) {

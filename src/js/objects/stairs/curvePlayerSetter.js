@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-import collisionCategories from '../../world/collisionCategories';
+import collisionCategories from '../../helpers/collisionCategories';
 import { stats } from '../../Player/playerStates/stats';
 import { setCanGoX } from '../../Player/playerStates/externalParams';
 import stairsParams from './stairsParams';
@@ -15,6 +15,11 @@ let path = {};
 let container = {};
 let directionUp;
 
+const AnimationActivity = {
+  isAnimationActive: false,
+  directionUp: false
+}
+
 const {
   MIDDLE_POINT_X_OFFSET,
   MIDDLE_POINT_Y_OFFSET,
@@ -24,7 +29,7 @@ const {
 
 const createAnimation = () => {
   graphics = scene.add.graphics();
-  isAnimationActive = true;
+  AnimationActivity.isAnimationActive = true;
   graphics = scene.add.graphics();
   container.setCollidesWith([]);
 
@@ -33,7 +38,7 @@ const createAnimation = () => {
   path = new Phaser.Curves.Path(player.position.x, player.position.y);
   let middlePosX;
   let middlePosY;
-  if (directionUp) {
+  if (AnimationActivity.directionUp) {
     middlePosX = player.position.x - MIDDLE_POINT_X_OFFSET;
     middlePosY = end.y + MIDDLE_POINT_Y_OFFSET;
   } else {
@@ -46,42 +51,47 @@ const createAnimation = () => {
   scene.tweens.add({
     targets: follower,
     t: 1,
-    ease: directionUp ? 'Cubic.easeOut' : 'Cubic.easeIn',
+    ease: AnimationActivity.directionUp ? 'Cubic.easeOut' : 'Cubic.easeIn',
     duration: GO_DOWN_TIME,
     yoyo: false,
     repeat: 0,
   });
+
+
 };
 
 const updateCornersPosition = () => {
-  if (!isAnimationActive || Object.keys(graphics).length === 0) {
+  if (!AnimationActivity.isAnimationActive || Object.keys(graphics).length === 0) {
     return;
   }
   graphics.clear();
   graphics.lineStyle(2, 0xffffff, 1);
 
-  // path.draw(graphics); раскоментировать для отображения линии анимации
+  // path.draw(graphics);
 
   path.getPoint(follower.t, follower.vec);
 
   graphics.fillStyle(0xff0000, 1);
   container.setPosition(follower.vec.x, follower.vec.y - stats.bodyContainerYOffset);
   if (follower.t === 1) {
-    isAnimationActive = false;
+    AnimationActivity.isAnimationActive = false;
     container.setCollidesWith(collisionCategories.ground);
   }
   setCanGoX(false);
 };
 
 const curvePlayerSetter = (playerObj, playerContainer, positionsEnd, sceneObj, dirUp) => {
-  directionUp = dirUp;
+  AnimationActivity.directionUp = dirUp;
   player = playerObj;
   container = playerContainer;
   end = positionsEnd;
   scene = sceneObj;
-  if (!isAnimationActive) {
+
+  if (!AnimationActivity.isAnimationActive) {
     createAnimation();
   }
+
+
 };
 
-export { curvePlayerSetter, updateCornersPosition };
+export { curvePlayerSetter, updateCornersPosition, AnimationActivity };
