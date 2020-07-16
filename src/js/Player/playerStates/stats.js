@@ -4,6 +4,7 @@ import {
   updateHealthBarUI,
   updateHealthUI,
   updateKeysUI,
+  updateMagazineUI,
 } from '../../interface/UIHelpers';
 
 const HERO_MAX_HEALTH = 100;
@@ -45,6 +46,32 @@ const setFullHealth = () => {
   stats.health = HERO_MAX_HEALTH;
 };
 
+const useBullet = () => {
+  if (stats.bullets <= 0) {
+    return false;
+  }
+  stats.bullets -= 1;
+  updateMagazineUI(stats.bullets);
+  return true;
+};
+
+const setBullets = () => {
+  if (stats.bulletsInReserve <= 0) {
+    return false;
+  }
+  const bulletsNeeded = stats.magazineSize - stats.bullets;
+  if (stats.bulletsInReserve >= bulletsNeeded) {
+    stats.bulletsInReserve -= bulletsNeeded;
+    stats.bullets += bulletsNeeded;
+  } else {
+    stats.bullets += stats.bulletsInReserve;
+    stats.bulletsInReserve = 0;
+  }
+  updateMagazineUI(stats.bullets);
+  updateBulletsUI(stats.bulletsInReserve);
+  return true;
+};
+
 const updateStats = (statName, value) => {
   switch (statName) {
     case 'health': {
@@ -79,4 +106,5 @@ const updateStats = (statName, value) => {
 
 export {
   stats, looseHealth, setFullHealth, updateStats, STAT_NAME,
+  useBullet, setBullets,
 };

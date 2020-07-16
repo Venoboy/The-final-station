@@ -42,6 +42,7 @@ const getResultPoint = (startX, startY, finishX, finishY) => {
 };
 
 const createShootLine = (scene, person) => {
+  const holder = new ShootDisplay(scene, person);
   const construct = (pointer) => {
     const graphics = scene.add.graphics();
     const player = person;
@@ -50,7 +51,6 @@ const createShootLine = (scene, person) => {
     const resultPoint = getResultPoint(startX, startY, pointer.worldX, pointer.worldY);
 
     // вставить функцию проверки обоймы
-    const holder = new ShootDisplay(scene, player);
     const canShoot = holder.shoot();
     if (!canShoot) {
       return;
@@ -74,8 +74,9 @@ const createShootLine = (scene, person) => {
       onUpdate: updateShootLine,
     });
   };
-
   scene.input.on('pointerdown', (pointer) => construct(pointer));
+  const reloadKey = scene.input.keyboard.addKey('R');
+  reloadKey.on('up', holder.reload, holder);
 };
 
 export default createShootLine;

@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import Phaser from 'phaser';
 import PersonWithObjectAnimation from './PlayerWithStuffAnimation';
 import PersonDeadAnimation from './PlayerDeadAnim';
@@ -164,27 +165,6 @@ export default class PersonAnimation {
       frames: [{ key: 'climbing', frame: 3 }],
       frameRate: 20,
     });
-    function reloadFunc(t) {
-      if (isAlive && !healing) {
-        let anim;
-        reloading = true;
-        person.list[2].setVisible(false);
-        if (legs.anims.currentAnim.key === 'Lturnleg') {
-          reload.anims.play('Reload', true);
-
-          anim = t.scene.anims.get('Reload');
-        } else if (legs.anims.currentAnim.key === 'Rturnleg') {
-          reload.anims.play('ReloadR', true);
-          anim = t.scene.anims.get('ReloadR');
-        }
-        anim.on('complete', () => {
-          reloading = false;
-          body.setVisible(true);
-          person.list[2].setVisible(true);
-        });
-      }
-    }
-
 
     this.scene.input.on(
       'pointermove',
@@ -213,18 +193,18 @@ export default class PersonAnimation {
       },
       this,
     );
-    this.scene.input.on(
-      'pointerdown',
-      function () {
-        if (stats.bullets === 0 && stats.bulletsInReserve !== 0) {
-          reloadFunc(this);
-        }
-      },
-      this,
-    );
+    // this.scene.input.on(
+    //   'pointerdown',
+    //   function () {
+    //     if (stats.bullets === 0 && stats.bulletsInReserve !== 0) {
+    //       reloadFunc(this);
+    //     }
+    //   },
+    //   this,
+    // );
 
     const keyObj = this.scene.input.keyboard.addKey('q');
-    const keyObj2 = this.scene.input.keyboard.addKey('r');
+    // const keyObj2 = this.scene.input.keyboard.addKey('r');
     keyObj.on('down', () => {
       if (isAlive && !reloading) {
         let anim;
@@ -244,13 +224,33 @@ export default class PersonAnimation {
         });
       }
     });
-    keyObj2.on('down', () => {
-      reloadFunc(this);
-    });
+    // keyObj2.on('down', () => {
+    //   reloadFunc(this);
+    // });
 
     cursors = this.scene.cursors;
 
     return this.playerInstance;
+  }
+
+  reloadAnimation() {
+    if (isAlive && !healing) {
+      let anim;
+      reloading = true;
+      person.list[2].setVisible(false);
+      if (legs.anims.currentAnim.key === 'Lturnleg') {
+        reload.anims.play('Reload', true);
+        anim = this.scene.anims.get('Reload');
+      } else if (legs.anims.currentAnim.key === 'Rturnleg') {
+        reload.anims.play('ReloadR', true);
+        anim = this.scene.anims.get('ReloadR');
+      }
+      anim.on('complete', () => {
+        reloading = false;
+        body.setVisible(true);
+        person.list[2].setVisible(true);
+      });
+    }
   }
 
   update(stairsInf) {
