@@ -14,7 +14,7 @@ const textConfig = {
 };
 /* default values of game bar items */
 const defaultValues = {
-  health: 2,
+  aids: 2,
   bullets: magazineSize,
   food: 2,
   keys: 0,
@@ -47,7 +47,7 @@ export default class GameBar extends Phaser.Scene {
     this.frame = this.add.image(0, 0, 'gameBar').setScale(0.8);
     this.healthBar = new HealtBar(this, 0, 0);
     this.magazine = new WeaponMagazine(this, magazineSize, magazineSize, 0, 0);
-    this.health = this.add.text(0, 0, this.startValues.health, textConfig).setOrigin(0.5);
+    this.aids = this.add.text(0, 0, this.startValues.health, textConfig).setOrigin(0.5);
     this.bullets = this.add.text(0, 0, this.startValues.bullets, textConfig).setOrigin(0.5);
     this.food = this.add.text(0, 0, this.startValues.food, textConfig).setOrigin(0.5);
     this.keys = this.add.text(0, 0, this.startValues.keys, textConfig).setOrigin(0.5);
@@ -58,8 +58,8 @@ export default class GameBar extends Phaser.Scene {
     + (percentageOffset * this.frame.displayWidth);
   }
 
-  updateHealth(health) {
-    this.health.text = health;
+  updateAids(aids) {
+    this.aids.text = aids;
   }
 
   updateHealthBar(health) {

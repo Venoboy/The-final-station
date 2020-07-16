@@ -3,16 +3,12 @@ import {
   updateBulletsUI,
   updateFoodUI,
   updateHealthBarUI,
-  updateHealthUI,
+  updateAidsUI,
   updateKeysUI,
   updateMagazineUI,
 } from '../../interface/UIHelpers';
 
 const HERO_MAX_HEALTH = 100;
-
-const STAT_NAME = {
-  bullets: 'bullets',
-};
 
 const stats = {
   aids: 2,
@@ -66,7 +62,7 @@ const setFullHealth = () => {
   stats.health = HERO_MAX_HEALTH;
   stats.aids -= 1;
   updateHealthBarUI(stats.health);
-  updateHealthUI(stats.aids);
+  updateAidsUI(stats.aids);
 };
 
 const useBullet = () => {
@@ -89,12 +85,12 @@ const setBullets = () => {
 
 const updateStats = (statName, value) => {
   switch (statName) {
-    case 'health': {
+    case 'aids': {
       stats[statName] += value;
-      updateHealthUI(stats[statName]);
+      updateAidsUI(stats[statName]);
       break;
     }
-    case STAT_NAME.bullets: {
+    case 'bullets': {
       stats.bulletsInReserve += value;
       updateBulletsUI(stats.bulletsInReserve);
       break;
@@ -120,7 +116,6 @@ const updateStats = (statName, value) => {
 };
 
 export {
-  stats, looseHealth, setFullHealth, updateStats, STAT_NAME,
-  useBullet, setBullets, isMagazineFull, canShoot, canReload,
-  canHeal,
+  stats, looseHealth, setFullHealth, updateStats, useBullet,
+  setBullets, isMagazineFull, canShoot, canReload, canHeal,
 };
