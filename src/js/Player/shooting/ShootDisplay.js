@@ -1,5 +1,7 @@
 /* eslint-disable linebreak-style */
-import { useBullet, setBullets, isMagazineFull } from '../playerStates/stats';
+import {
+  useBullet, setBullets, isMagazineFull, canShoot, canReload,
+} from '../playerStates/stats';
 import PersonAnimation from '../animation/PlayerAnimation';
 
 const textConfig = {
@@ -16,25 +18,23 @@ class ShootDisplay {
   }
 
   shoot() {
-    const bulletUsed = useBullet();
-    if (!bulletUsed) {
-      this.reload();
+    if (canShoot()) {
+      useBullet();
+      return true;
     }
-    return bulletUsed;
+    this.reload();
+    return false;
   }
 
   reload() {
-    const magazineFull = isMagazineFull();
-    if (magazineFull) {
-      return false;
+    if (isMagazineFull()) {
+      return;
     }
-    const bulletsSetted = setBullets();
-    if (!bulletsSetted) {
-      this.displayWarning();
+    if (canReload()) {
+      this.animation.reloadAnimation(setBullets);
     } else {
-      this.animation.reloadAnimation();
+      this.displayWarning();
     }
-    return bulletsSetted;
   }
 
   displayWarning() {

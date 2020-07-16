@@ -220,12 +220,14 @@ export default class PersonAnimation {
     this.currentAnim.push(...anims);
   };
 
-  healAnimation() {
+  healAnimation(callback) {
     if (isAlive && !reloading) {
       let anim;
       healing = true;
       person.list[2].setVisible(false);
-      this.sounds.heal.play();
+      if (!this.sounds.heal.isPlaying) {
+        this.sounds.heal.play();
+      }
       if (legs.anims.currentAnim.key === 'Lturnleg') {
         heal.anims.play('Heal', true);
         anim = this.scene.anims.get('Heal');
@@ -234,6 +236,7 @@ export default class PersonAnimation {
         anim = this.scene.anims.get('HealR');
       }
       anim.on('complete', () => {
+        callback();
         healing = false;
         body.setVisible(true);
         person.list[2].setVisible(true);
@@ -241,12 +244,14 @@ export default class PersonAnimation {
     }
   }
 
-  reloadAnimation() {
+  reloadAnimation(callback) {
     if (isAlive && !healing) {
       let anim;
       reloading = true;
       person.list[2].setVisible(false);
-      this.sounds.reload.play();
+      if (!this.sounds.reload.isPlaying) {
+        this.sounds.reload.play();
+      }
       if (legs.anims.currentAnim.key === 'Lturnleg') {
         reload.anims.play('Reload', true);
         anim = this.scene.anims.get('Reload');
@@ -255,6 +260,7 @@ export default class PersonAnimation {
         anim = this.scene.anims.get('ReloadR');
       }
       anim.on('complete', () => {
+        callback();
         reloading = false;
         body.setVisible(true);
         person.list[2].setVisible(true);
@@ -367,6 +373,7 @@ export default class PersonAnimation {
       } else if (AnimationActivity.isAnimationActive && !AnimationActivity.directionUp) {
         personStartClimb();
         startClimb.anims.play('Down', true);
+        this.changeCurrentAnims('Down');
       } else if (
         cursors.down.isDown()
         && playerOnStairs

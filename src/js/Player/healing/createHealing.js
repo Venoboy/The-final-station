@@ -1,14 +1,13 @@
 /* eslint-disable linebreak-style */
-import { setFullHealth } from '../playerStates/stats';
+import { setFullHealth, canHeal } from '../playerStates/stats';
 import PersonAnimation from '../animation/PlayerAnimation';
 
 
 function createHealing(scene) {
   const animation = new PersonAnimation(scene);
   function heal() {
-    const wasHealed = setFullHealth();
-    if (wasHealed) {
-      animation.healAnimation();
+    if (canHeal()) {
+      animation.healAnimation(setFullHealth);
     }
   }
   const healKey = scene.input.keyboard.addKey('Q');

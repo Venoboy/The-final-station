@@ -30,6 +30,22 @@ const stats = {
   MAX_ANGLE: Math.PI / 6,
 };
 
+const isMagazineFull = () => {
+  return stats.bullets === stats.magazineSize;
+};
+
+const canShoot = () => {
+  return stats.bullets > 0;
+};
+
+const canReload = () => {
+  return stats.bulletsInReserve > 0;
+};
+
+const canHeal = () => {
+  return stats.health !== HERO_MAX_HEALTH && stats.aids > 0;
+};
+
 const looseHealth = (amount) => {
   if (stats.health > 0) {
     stats.health -= amount;
@@ -44,33 +60,21 @@ const looseHealth = (amount) => {
 };
 
 const setFullHealth = () => {
-  if (stats.health === HERO_MAX_HEALTH || stats.aids <= 0) {
-    return false;
+  if (!canHeal()) {
+    return;
   }
   stats.health = HERO_MAX_HEALTH;
   stats.aids -= 1;
   updateHealthBarUI(stats.health);
   updateHealthUI(stats.aids);
-  return true;
 };
 
 const useBullet = () => {
-  if (stats.bullets <= 0) {
-    return false;
-  }
   stats.bullets -= 1;
   updateMagazineUI(stats.bullets);
-  return true;
 };
 
-const isMagazineFull = () => {
-  return stats.bullets === stats.magazineSize;
-}
-
 const setBullets = () => {
-  if (stats.bulletsInReserve <= 0) {
-    return false;
-  }
   const bulletsNeeded = stats.magazineSize - stats.bullets;
   if (stats.bulletsInReserve >= bulletsNeeded) {
     stats.bulletsInReserve -= bulletsNeeded;
@@ -81,7 +85,6 @@ const setBullets = () => {
   }
   updateMagazineUI(stats.bullets);
   updateBulletsUI(stats.bulletsInReserve);
-  return true;
 };
 
 const updateStats = (statName, value) => {
@@ -118,5 +121,6 @@ const updateStats = (statName, value) => {
 
 export {
   stats, looseHealth, setFullHealth, updateStats, STAT_NAME,
-  useBullet, setBullets, isMagazineFull,
+  useBullet, setBullets, isMagazineFull, canShoot, canReload,
+  canHeal,
 };
