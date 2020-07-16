@@ -1,6 +1,7 @@
-/* eslint-disable linebreak-style */
-import { stats } from './playerStates/stats';
-import { updateBulletsUI, updateMagazineUI } from '../interface/UIHelpers';
+import {
+  useBullet, setBullets, isMagazineFull, canShoot, canReload,
+} from '../playerStates/stats';
+import PersonAnimation from '../animation/PlayerAnimation';
 
 const textConfig = {
   fontFamily: 'font1',
@@ -12,32 +13,24 @@ class ShootDisplay {
     this.scene = scene;
     this.player = player;
     this.activeWarnings = [];
+    this.animation = new PersonAnimation(scene);
   }
 
   shoot() {
-    let shootIsSuccessed = false;
-    if (stats.bullets > 0) {
-      stats.bullets -= 1;
-      updateMagazineUI(stats.bullets);
-      shootIsSuccessed = true;
-    } else {
-      this.reload();
+    if (canShoot()) {
+      useBullet();
+      return true;
     }
-    return shootIsSuccessed;
+    this.reload();
+    return false;
   }
 
   reload() {
-    if (stats.bulletsInReserve > 0) {
-      const bulletsNeeded = stats.magazineSize - stats.bullets;
-      if (stats.bulletsInReserve >= bulletsNeeded) {
-        stats.bulletsInReserve -= bulletsNeeded;
-        stats.bullets += bulletsNeeded;
-      } else {
-        stats.bullets += stats.bulletsInReserve;
-        stats.bulletsInReserve = 0;
-      }
-      updateMagazineUI(stats.bullets);
-      updateBulletsUI(stats.bulletsInReserve);
+    if (isMagazineFull()) {
+      return;
+    }
+    if (canReload()) {
+      this.animation.reloadAnimation(setBullets);
     } else {
       this.displayWarning();
     }

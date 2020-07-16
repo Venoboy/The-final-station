@@ -3,8 +3,8 @@ import Phaser from 'phaser';
 import defineEndPoint from './defineEndPoint';
 import { stats } from '../playerStates/stats';
 import { leftAngle, rightAngle } from '../../helpers/setMaxAngle';
-import ShootDisplay from '../ShootDisplay';
-
+import ShootDisplay from './ShootDisplay';
+import eventsCenter from '../../eventsCenter';
 
 const SHOOT_DISTANCE = 220;
 const SHOOT_LINE_START_ALPHA = 0.4;
@@ -42,21 +42,22 @@ const getResultPoint = (startX, startY, finishX, finishY) => {
 };
 
 const createShootLine = (scene, person) => {
+  const holder = new ShootDisplay(scene, person);
   const construct = (pointer) => {
     const graphics = scene.add.graphics();
+    const shootSound = scene.sound.add('pistolShoot');
     const player = person;
     const startX = player.x;
     const startY = player.y - GUN_OFFSET;
     const resultPoint = getResultPoint(startX, startY, pointer.worldX, pointer.worldY);
 
     // вставить функцию проверки обоймы
-    const holder = new ShootDisplay(scene, player);
     const isHeroDead = stats.health <= 0;
     const canShoot = !isHeroDead && holder.shoot();
     if (!canShoot) {
       return;
     }
-
+    shootSound.play();
     const { endX, endY } = defineEndPoint(scene, startX, startY, resultPoint);
 
     graphics.lineStyle(SHOOT_LINE_WIDTH, SHOOT_LINE_COLOR, SHOOT_LINE_START_ALPHA);
@@ -77,6 +78,12 @@ const createShootLine = (scene, person) => {
   };
 
   scene.input.on('pointerdown', (pointer) => construct(pointer));
+  const reloadKey = scene.input.keyboard.addKey('R');
+  reloadKey.on('up', holder.reload, holder);
+  eventsCenter.on('player-died', () => {
+    scene.input.off('pointerdown', (pointer) => construct(pointer));
+    reloadKey.off('up', holder.reload, holder);
+  });
 };
 
 export default createShootLine;

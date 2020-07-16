@@ -57,7 +57,7 @@ export default class GameScene extends Phaser.Scene {
     // this.music.play(); // откл. звук
 
     const startValues = {
-      health: stats.aids,
+      aids: stats.aids,
       food: stats.food,
       keys: stats.keys,
       bullets: stats.bullets,

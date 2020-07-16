@@ -2,15 +2,13 @@ import {
   updateBulletsUI,
   updateFoodUI,
   updateHealthBarUI,
-  updateHealthUI,
+  updateAidsUI,
   updateKeysUI,
+  updateMagazineUI,
 } from '../../interface/UIHelpers';
+import eventsCenter from '../../eventsCenter';
 
 const HERO_MAX_HEALTH = 100;
-
-const STAT_NAME = {
-  bullets: 'bullets',
-};
 
 const stats = {
   aids: 2,
@@ -28,6 +26,22 @@ const stats = {
   MAX_ANGLE: Math.PI / 6,
 };
 
+const isMagazineFull = () => {
+  return stats.bullets === stats.magazineSize;
+};
+
+const canShoot = () => {
+  return stats.bullets > 0;
+};
+
+const canReload = () => {
+  return stats.bulletsInReserve > 0;
+};
+
+const canHeal = () => {
+  return stats.health !== HERO_MAX_HEALTH && stats.aids > 0;
+};
+
 const looseHealth = (amount) => {
   if (stats.health > 0) {
     stats.health -= amount;
@@ -35,24 +49,48 @@ const looseHealth = (amount) => {
       stats.health = 0;
     }
     updateHealthBarUI(stats.health);
-    // if (stats.health === 0) {
-    //   eventsCenter.emit('player-died');
-    // }
+    if (stats.health === 0) {
+      eventsCenter.emit('player-died');
+    }
   }
 };
 
 const setFullHealth = () => {
+  if (!canHeal()) {
+    return;
+  }
   stats.health = HERO_MAX_HEALTH;
+  stats.aids -= 1;
+  updateHealthBarUI(stats.health);
+  updateAidsUI(stats.aids);
+};
+
+const useBullet = () => {
+  stats.bullets -= 1;
+  updateMagazineUI(stats.bullets);
+};
+
+const setBullets = () => {
+  const bulletsNeeded = stats.magazineSize - stats.bullets;
+  if (stats.bulletsInReserve >= bulletsNeeded) {
+    stats.bulletsInReserve -= bulletsNeeded;
+    stats.bullets += bulletsNeeded;
+  } else {
+    stats.bullets += stats.bulletsInReserve;
+    stats.bulletsInReserve = 0;
+  }
+  updateMagazineUI(stats.bullets);
+  updateBulletsUI(stats.bulletsInReserve);
 };
 
 const updateStats = (statName, value) => {
   switch (statName) {
-    case 'health': {
+    case 'aids': {
       stats[statName] += value;
-      updateHealthUI(stats[statName]);
+      updateAidsUI(stats[statName]);
       break;
     }
-    case STAT_NAME.bullets: {
+    case 'bullets': {
       stats.bulletsInReserve += value;
       updateBulletsUI(stats.bulletsInReserve);
       break;
@@ -78,5 +116,6 @@ const updateStats = (statName, value) => {
 };
 
 export {
-  stats, looseHealth, setFullHealth, updateStats, STAT_NAME,
+  stats, looseHealth, setFullHealth, updateStats, useBullet,
+  setBullets, isMagazineFull, canShoot, canReload, canHeal,
 };

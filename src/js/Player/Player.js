@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import ObjectInteraction from './ObjectInteraction';
 import { stats } from './playerStates/stats';
-import ShootDisplay from './ShootDisplay';
+// import ShootDisplay from './ShootDisplay';
 
 export default class Player {
   constructor(scene, x, y, container) {
@@ -80,11 +80,11 @@ export default class Player {
     });
 
     this.objectInteraction = new ObjectInteraction(scene, this);
-    this.shootDisplay = new ShootDisplay(scene, this);
-    this.shootKey = scene.input.keyboard.addKey('Space');
-    this.shootKey.on('up', this.shootDisplay.shoot, this.shootDisplay);
-    this.reloadKey = scene.input.keyboard.addKey('R');
-    this.reloadKey.on('up', this.shootDisplay.reload, this.shootDisplay);
+    // this.shootDisplay = new ShootDisplay(scene, this);
+    // this.shootKey = scene.input.keyboard.addKey('Space');
+    // this.shootKey.on('up', this.shootDisplay.shoot, this.shootDisplay);
+    // this.reloadKey = scene.input.keyboard.addKey('R');
+    // this.reloadKey.on('up', this.shootDisplay.reload, this.shootDisplay);
   }
 
   onSensorCollide({ bodyA, bodyB }) {

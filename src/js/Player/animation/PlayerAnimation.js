@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import Phaser from 'phaser';
 import PersonWithObjectAnimation from './PlayerWithStuffAnimation';
 import PersonDeadAnimation from './PlayerDeadAnim';
@@ -5,7 +6,7 @@ import { stats } from '../playerStates/stats';
 import PersonStartClimbAnimation from './PlayerRightStairClimbAnim';
 import { AnimationActivity } from '../../objects/stairs/curvePlayerSetter';
 import Player from '../Player';
-import { rightAngle, leftAngle } from '../../helpers/setMaxAngle';
+import { leftAngle, rightAngle } from '../../helpers/setMaxAngle';
 
 
 let person;
@@ -22,7 +23,7 @@ let dead;
 let reload;
 let healing = false;
 let reloading = false;
-let isAlive = stats.health > 0;
+let isAlive = true;
 let corpse;
 let startClimb;
 
@@ -31,6 +32,22 @@ const { PI } = Math;
 export default class PersonAnimation {
   constructor(scene) {
     this.scene = scene;
+    /* animation sounds */
+    this.sounds = {
+      footstep: this.scene.sound.add('playerFootstep', { volume: 1 }),
+      ladder: [
+        this.scene.sound.add('ladder', { volume: 0.1 }),
+        this.scene.sound.add('ladder2', { volume: 0.1 }),
+        this.scene.sound.add('ladder3', { volume: 0.1 }),
+        this.scene.sound.add('ladder4', { volume: 0.1 }),
+        this.scene.sound.add('ladder5', { volume: 0.1 }),
+        this.scene.sound.add('ladder6', { volume: 0.1 }),
+      ],
+      heal: this.scene.sound.add('heroHeal', { volume: 1 }),
+      reload: this.scene.sound.add('pistolReload', { volume: 1 }),
+    };
+
+    this.currentAnim = [];
   }
 
 
@@ -137,7 +154,7 @@ export default class PersonAnimation {
         start: 2,
         end: 9,
       }),
-      frameRate: 8,
+      frameRate: 14,
       repeat: -1,
     });
     this.scene.anims.create({
@@ -146,7 +163,7 @@ export default class PersonAnimation {
         start: 16,
         end: 23,
       }),
-      frameRate: 8,
+      frameRate: 14,
       repeat: -1,
     });
 
@@ -164,28 +181,6 @@ export default class PersonAnimation {
       frames: [{ key: 'climbing', frame: 3 }],
       frameRate: 20,
     });
-    function reloadFunc(t) {
-      isAlive = stats.health > 0;
-      if (isAlive && !healing) {
-        let anim;
-        reloading = true;
-        person.list[2].setVisible(false);
-        if (legs.anims.currentAnim.key === 'Lturnleg') {
-          reload.anims.play('Reload', true);
-
-          anim = t.scene.anims.get('Reload');
-        } else if (legs.anims.currentAnim.key === 'Rturnleg') {
-          reload.anims.play('ReloadR', true);
-          anim = t.scene.anims.get('ReloadR');
-        }
-        anim.on('complete', () => {
-          reloading = false;
-          body.setVisible(true);
-          person.list[2].setVisible(true);
-        });
-      }
-    }
-
 
     this.scene.input.on(
       'pointermove',
@@ -197,16 +192,17 @@ export default class PersonAnimation {
           person.body.position.y,
         );
 
-        isAlive = stats.health > 0;
+        const isHeroAlive = stats.health > 0;
+
         if (
-          person.list[2].parentContainer.x > pointer.worldX && isAlive
+          person.list[2].parentContainer.x > pointer.worldX && isHeroAlive
         ) {
           turn = false;
           gunBack = this.scene.add.image(1.5, 1, 'gunback').setOrigin(1, 0.5);
           person.replace(gun, gunBack);
           person.list[2].setRotation(leftAngle(angle, stats.MAX_ANGLE));
         } else if (
-          person.list[2].parentContainer.x < pointer.worldX && isAlive
+          person.list[2].parentContainer.x < pointer.worldX && isHeroAlive
         ) {
           turn = true;
           person.replace(person.list[2], gun);
@@ -215,45 +211,63 @@ export default class PersonAnimation {
       },
       this,
     );
-    this.scene.input.on(
-      'pointerdown',
-      function () {
-        if (stats.bullets === 0 && stats.bulletsInReserve !== 0) {
-          reloadFunc(this);
-        }
-      },
-      this,
-    );
-
-    const keyObj = this.scene.input.keyboard.addKey('q');
-    const keyObj2 = this.scene.input.keyboard.addKey('r');
-    keyObj.on('down', () => {
-      isAlive = stats.health > 0;
-      if (isAlive && !reloading) {
-        let anim;
-        healing = true;
-        person.list[2].setVisible(false);
-        if (legs.anims.currentAnim.key === 'Lturnleg') {
-          heal.anims.play('Heal', true);
-          anim = this.scene.anims.get('Heal');
-        } else if (legs.anims.currentAnim.key === 'Rturnleg') {
-          heal.anims.play('HealR', true);
-          anim = this.scene.anims.get('HealR');
-        }
-        anim.on('complete', () => {
-          healing = false;
-          body.setVisible(true);
-          person.list[2].setVisible(true);
-        });
-      }
-    });
-    keyObj2.on('down', () => {
-      reloadFunc(this);
-    });
 
     cursors = this.scene.cursors;
 
     return this.playerInstance;
+  }
+
+  changeCurrentAnims = (...anims) => {
+    this.currentAnim = [];
+    this.currentAnim.push(...anims);
+  };
+
+  healAnimation(callback) {
+    if (isAlive && !reloading) {
+      let anim;
+      healing = true;
+      person.list[2].setVisible(false);
+      if (!this.sounds.heal.isPlaying) {
+        this.sounds.heal.play();
+      }
+      if (legs.anims.currentAnim.key === 'Lturnleg') {
+        heal.anims.play('Heal', true);
+        anim = this.scene.anims.get('Heal');
+      } else if (legs.anims.currentAnim.key === 'Rturnleg') {
+        heal.anims.play('HealR', true);
+        anim = this.scene.anims.get('HealR');
+      }
+      anim.on('complete', () => {
+        callback();
+        healing = false;
+        body.setVisible(true);
+        person.list[2].setVisible(true);
+      });
+    }
+  }
+
+  reloadAnimation(callback) {
+    if (isAlive && !healing) {
+      let anim;
+      reloading = true;
+      person.list[2].setVisible(false);
+      if (!this.sounds.reload.isPlaying) {
+        this.sounds.reload.play();
+      }
+      if (legs.anims.currentAnim.key === 'Lturnleg') {
+        reload.anims.play('Reload', true);
+        anim = this.scene.anims.get('Reload');
+      } else if (legs.anims.currentAnim.key === 'Rturnleg') {
+        reload.anims.play('ReloadR', true);
+        anim = this.scene.anims.get('ReloadR');
+      }
+      anim.on('complete', () => {
+        callback();
+        reloading = false;
+        body.setVisible(true);
+        person.list[2].setVisible(true);
+      });
+    }
   }
 
   update(stairsInf) {
@@ -272,6 +286,7 @@ export default class PersonAnimation {
       climbDude.setVisible(false);
       startClimb.setVisible(false);
     }
+
     function personStartClimb() {
       body.setVisible(false);
       legs.setVisible(false);
@@ -279,6 +294,63 @@ export default class PersonAnimation {
       climbDude.setVisible(false);
       startClimb.setVisible(true);
     }
+
+    /* sounds update start */
+    if (legs.anims.currentAnim) {
+      if (legs.anims.currentAnim.key === 'rightl'
+        && (
+          legs.anims.currentFrame.textureFrame === 24
+          || legs.anims.currentFrame.textureFrame === 27)
+        && this.currentAnim.includes('rightl')
+      ) {
+        if (!this.sounds.footstep.isPlaying) {
+          this.sounds.footstep.play();
+        }
+      }
+      if (legs.anims.currentAnim.key === 'leftl'
+        && (
+          legs.anims.currentFrame.textureFrame === 10
+          || legs.anims.currentFrame.textureFrame === 13)
+        && this.currentAnim.includes('leftl')
+      ) {
+        if (!this.sounds.footstep.isPlaying) {
+          this.sounds.footstep.play();
+        }
+      }
+      if (legs.anims.currentAnim.key === 'backRightl'
+        && (
+          legs.anims.currentFrame.textureFrame === 18
+          || legs.anims.currentFrame.textureFrame === 22)
+        && this.currentAnim.includes('backRightl')
+      ) {
+        if (!this.sounds.footstep.isPlaying) {
+          this.sounds.footstep.play();
+        }
+      }
+      if (legs.anims.currentAnim.key === 'backLeftl'
+        && (
+          legs.anims.currentFrame.textureFrame === 4
+          || legs.anims.currentFrame.textureFrame === 8)
+        && this.currentAnim.includes('backLeftl')
+      ) {
+        if (!this.sounds.footstep.isPlaying) {
+          this.sounds.footstep.play();
+        }
+      }
+    }
+
+    if (climbDude.anims.currentAnim) {
+      if (climbDude.anims.currentAnim.key === 'Climb'
+        && this.currentAnim.includes('Climb')
+      ) {
+        const ladderIndex = climbDude.anims.currentFrame.textureFrame;
+        if (ladderIndex >= 0 && !this.sounds.ladder[ladderIndex].isPlaying) {
+          this.sounds.ladder[ladderIndex].play();
+        }
+      }
+    }
+    /* sounds update end */
+
     if (isAlive) {
       playerOnStairs = !stairsInf.playerInstance.isTouching.ground;
       gunBack = this.scene.add.image(1.5, 1, 'gunback').setOrigin(1, 0.5);
@@ -315,21 +387,26 @@ export default class PersonAnimation {
         if (!turn) {
           legs.anims.play('backLeftl', true);
           body.anims.play('left', true);
+          this.changeCurrentAnims('backLeftl', 'left');
         } else if (turn) {
           body.anims.play('right', true);
           legs.anims.play('backRightl', true);
+          this.changeCurrentAnims('right', 'backRightl');
         }
       } else if (cursors.right.isDown()) {
         if (turn) {
           legs.anims.play('rightl', true);
           body.anims.play('right', true);
+          this.changeCurrentAnims('rightl', 'right');
         } else if (!turn) {
           legs.anims.play('leftl', true);
           body.anims.play('left', true);
+          this.changeCurrentAnims('leftl', 'left');
         }
       } else if (AnimationActivity.isAnimationActive && !AnimationActivity.directionUp) {
         personStartClimb();
         startClimb.anims.play('Down', true);
+        this.changeCurrentAnims('Down');
       } else if (
         cursors.down.isDown()
         && playerOnStairs
@@ -337,9 +414,11 @@ export default class PersonAnimation {
       ) {
         personClimb();
         climbDude.anims.play('Climb', true);
+        this.changeCurrentAnims('Climb');
       } else if (AnimationActivity.isAnimationActive && AnimationActivity.directionUp) {
         personStartClimb();
         startClimb.anims.play('Up', true);
+        this.changeCurrentAnims('Up');
       } else if (
         cursors.up.isDown()
         && playerOnStairs
@@ -347,12 +426,15 @@ export default class PersonAnimation {
       ) {
         personClimb();
         climbDude.anims.play('Climb', true);
+        this.changeCurrentAnims('Climb');
       } else if (playerOnStairs && stairsInf.st.label === 'stairs-right') {
         personClimb();
         climbDude.anims.play('climbStay', true);
+        this.changeCurrentAnims('climbStay');
       } else if (playerOnStairs && (cursors.down.isDown() || cursors.up.isDown())) {
         body.anims.play('Lturn', true);
         legs.anims.play('leftl', true);
+        this.changeCurrentAnims('Lturn', 'leftl');
       } else if (person.list[2].texture.key === 'gun') {
         if (healing) {
           heal.setVisible(true);
@@ -362,6 +444,7 @@ export default class PersonAnimation {
         }
         body.anims.play('Lturn', true);
         legs.anims.play('Lturnleg', true);
+        this.changeCurrentAnims('Lturn', 'Lturnleg');
       } else {
         if (healing) {
           heal.setVisible(true);
@@ -371,6 +454,7 @@ export default class PersonAnimation {
         }
         body.anims.play('Rturn', true);
         legs.anims.play('Rturnleg', true);
+        this.changeCurrentAnims('Rturn', 'Rturnleg');
       }
     } else {
       dead.setVisible(true);
