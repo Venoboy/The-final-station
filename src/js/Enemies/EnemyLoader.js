@@ -4,6 +4,7 @@ import enemySettings from './enemySettings';
 import collisionCategories from '../helpers/collisionCategories';
 import { stairsArray } from '../objects/stairs/stairsCreation';
 
+
 const enemiesArray = [];
 
 export default class EnemyLoader {
@@ -28,12 +29,15 @@ export default class EnemyLoader {
           config.position = position;
           config.scene = this.scene;
           config.settings = enemySettings[type];
+
           config.playerInstance = this.playerInstance;
           config.collisionCategory = collisionCategories.enemies;
           config.collisionGroup = collisionGroup;
 
+
           return new EnemyConstructor(config);
         });
+
         enemiesArray.push(enemiesArr);
       });
   };

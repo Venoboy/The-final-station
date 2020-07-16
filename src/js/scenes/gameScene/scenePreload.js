@@ -7,8 +7,18 @@ import bak_3 from '../../../assets/level0/bak_3.png';
 import bak_5 from '../../../assets/level0/bak_5.png';
 import tunnel from '../../../assets/level0/tunnel.png';
 import moons from '../../../assets/level0/backgr_3.png';
-import bigEnemyPic from '../../../assets/level0/enemies/BigZombie Idle_02.png';
-import fastEnemyPic from '../../../assets/level0/enemies/FastZombie Idle_03.png';
+// import bigEnemyPic from '../../../assets/level0/enemies/BigZombie Idle_02.png';
+// import fastEnemyPic from '../../../assets/level0/enemies/FastZombie Idle_03.png';
+import bigZombie from '../../../assets/level0/enemies/bigDamSt.png';
+import fastZombie from '../../../assets/level0/enemies/smallDamSt.png';
+// import bigZombieWalk from '../../../assets/level0/enemies/BigZombie.png';
+// import fastZombieWalk from '../../../assets/level0/enemies/SmallZombie.png';
+// import bigZombieAtack from '../../../assets/level0/enemies/bigAtack.png';
+// import fastZombieAtack from '../../../assets/level0/enemies/smallZombieAtack.png';
+// import bigZombieDead from '../../../assets/level0/enemies/bigDead.png';
+// import fastZombieDead from '../../../assets/level0/enemies/smallZombieDead.png';
+// import bigZombieDamaged from '../../../assets/level0/enemies/damagedBig.png';
+// import fastZombieDamaged from '../../../assets/level0/enemies/smallDamaged.png';
 import door from '../../../assets/interaction-objects/Door3.png';
 import door_ from '../../../assets/interaction-objects/Door1_.png';
 import lid from '../../../assets/interaction-objects/Lid.png';
@@ -47,8 +57,52 @@ const scenePreload = (scene) => {
   scene.load.image('deadBody1', deadBody1);
   scene.load.image('deadBody2', deadBody2);
 
-  scene.load.image('enemyBig', bigEnemyPic);
-  scene.load.image('enemyFast', fastEnemyPic);
+  // scene.load.image('enemyBig', bigEnemyPic);
+  // scene.load.image('enemyFast', fastEnemyPic);
+  scene.load.spritesheet('bigZombie', bigZombie, {
+    frameWidth: 32,
+    frameHeight: 32,
+  });
+  scene.load.spritesheet('smallZombie', fastZombie, {
+    frameWidth: 32,
+    frameHeight: 32,
+  });
+
+  // scene.load.spritesheet('bigZWalk', bigZombieWalk, {
+  //   frameWidth: 32,
+  //   frameHeight: 32,
+  // });
+  // scene.load.spritesheet('smallZWalk', fastZombieWalk, {
+  //   frameWidth: 32,
+  //   frameHeight: 32,
+  // });
+
+  // scene.load.spritesheet('bigZAtack', bigZombieAtack, {
+  //   frameWidth: 32,
+  //   frameHeight: 32,
+  // });
+  // scene.load.spritesheet('smallZAtack', fastZombieAtack, {
+  //   frameWidth: 32,
+  //   frameHeight: 32,
+  // });
+
+  // scene.load.spritesheet('bigZDead', bigZombieDead, {
+  //   frameWidth: 32,
+  //   frameHeight: 32,
+  // });
+  // scene.load.spritesheet('smallZDead', fastZombieDead, {
+  //   frameWidth: 32,
+  //   frameHeight: 32,
+  // });
+
+  // scene.load.spritesheet('bigZDamaged', bigZombieDamaged, {
+  //   frameWidth: 32,
+  //   frameHeight: 32,
+  // });
+  // scene.load.spritesheet('smallZDamaged', fastZombieDamaged, {
+  //   frameWidth: 32,
+  //   frameHeight: 32,
+  // });
 
   scene.load.audio('doorSound1', doorSound1);
   scene.load.audio('doorSound3', doorSound3);

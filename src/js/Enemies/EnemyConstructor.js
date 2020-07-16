@@ -1,8 +1,10 @@
+/* eslint-disable brace-style */
 import Phaser from 'phaser';
 import collisionCategories from '../helpers/collisionCategories';
 import { doors } from '../scenes/gameScene/sceneSetters';
 import { looseHealth } from '../Player/playerStates/stats';
 import { groundArray } from '../objects/ground/groundCreation';
+import { BigZombieAnimationCreate, SmallZombieAnimationCreate } from './EnemiesAnimation';
 
 
 export default class EnemyConstructor {
@@ -19,6 +21,7 @@ export default class EnemyConstructor {
     this.collisionCategory = config.collisionCategory;
     this.speed = config.settings.speed;
     this.health = config.settings.health;
+    this.spriteType = config.settings.type;
     this.currentSpeed = 0;
     this.blockDoor = false;
     this.x = config.position.x;
@@ -38,7 +41,7 @@ export default class EnemyConstructor {
     this.canGoLeft = true;
     this.canGoRight = true;
     this.enemy = this.scene.matter.add
-      .image(this.x, this.y, config.type);
+      .sprite(this.x, this.y, this.spriteType);
 
     const { Body, Bodies } = Phaser.Physics.Matter.Matter;
     const { width: w, height: h } = this.enemy;
@@ -52,7 +55,7 @@ export default class EnemyConstructor {
     };
     const compoundBody = Body.create({
       parts: [this.mainBody, this.sensors.detect, this.sensors.body,
-        this.sensors.left, this.sensors.right],
+      this.sensors.left, this.sensors.right],
       frictionStatic: 0.1,
       frictionAir: 0.02,
       friction: 0.1,
@@ -67,6 +70,14 @@ export default class EnemyConstructor {
       .setCollisionGroup(config.collisionGroup)
       .setCollidesWith([collisionCategories.ground]);
     this.enemy.setData('health', this.health);
+
+
+    if (config.type === 'enemyBig') {
+      BigZombieAnimationCreate(this.scene);
+    }
+    else if (config.type === 'enemyFast') {
+      SmallZombieAnimationCreate(this.scene);
+    }
   }
 
   onDetectDoors = (sensor, door) => {
@@ -182,6 +193,16 @@ export default class EnemyConstructor {
     this.scene.matter.overlap(this.sensors.body, this.config.stairsArray, this.enemyStairsOverlap);
     this.enemyCheckingPlayer();
     // здесь можно вставить анимацию врага, в зависимости от this.currentSpeed
+
+    if (this.currentSpeed === 0) {
+      this.enemy.anims.play('stayLeft', true);
+    }
+    else if (this.currentSpeed > 0) {
+      this.enemy.anims.play('walkRight', true);
+    }
+    else if (this.currentSpeed < 0) {
+      this.enemy.anims.play('walkLeft', true);
+    }
     this.enemy.setVelocityX(this.currentSpeed);
     this.blockDoor = false;
     if (this.isEnemySeePlayer) {
