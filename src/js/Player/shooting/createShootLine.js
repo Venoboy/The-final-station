@@ -51,7 +51,8 @@ const createShootLine = (scene, person) => {
 
     // вставить функцию проверки обоймы
     const holder = new ShootDisplay(scene, player);
-    const canShoot = holder.shoot();
+    const isHeroDead = stats.health <= 0;
+    const canShoot = !isHeroDead && holder.shoot();
     if (!canShoot) {
       return;
     }

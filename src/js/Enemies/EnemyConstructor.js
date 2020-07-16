@@ -86,7 +86,7 @@ export default class EnemyConstructor {
     this.attackCounter += 1;
     if (this.attackCounter === framesDelay) {
       this.attackCounter = 0;
-      looseHealth(10);
+      looseHealth(this.config.settings.damage);
     }
   };
 

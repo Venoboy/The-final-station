@@ -22,7 +22,7 @@ let dead;
 let reload;
 let healing = false;
 let reloading = false;
-let isAlive = true;
+let isAlive = stats.health > 0;
 let corpse;
 let startClimb;
 
@@ -165,6 +165,7 @@ export default class PersonAnimation {
       frameRate: 20,
     });
     function reloadFunc(t) {
+      isAlive = stats.health > 0;
       if (isAlive && !healing) {
         let anim;
         reloading = true;
@@ -196,15 +197,16 @@ export default class PersonAnimation {
           person.body.position.y,
         );
 
+        isAlive = stats.health > 0;
         if (
-          person.list[2].parentContainer.x > pointer.worldX
+          person.list[2].parentContainer.x > pointer.worldX && isAlive
         ) {
           turn = false;
           gunBack = this.scene.add.image(1.5, 1, 'gunback').setOrigin(1, 0.5);
           person.replace(gun, gunBack);
           person.list[2].setRotation(leftAngle(angle, stats.MAX_ANGLE));
         } else if (
-          person.list[2].parentContainer.x < pointer.worldX
+          person.list[2].parentContainer.x < pointer.worldX && isAlive
         ) {
           turn = true;
           person.replace(person.list[2], gun);
@@ -226,6 +228,7 @@ export default class PersonAnimation {
     const keyObj = this.scene.input.keyboard.addKey('q');
     const keyObj2 = this.scene.input.keyboard.addKey('r');
     keyObj.on('down', () => {
+      isAlive = stats.health > 0;
       if (isAlive && !reloading) {
         let anim;
         healing = true;
