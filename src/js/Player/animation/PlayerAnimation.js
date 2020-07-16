@@ -203,27 +203,9 @@ export default class PersonAnimation {
     //   this,
     // );
 
-    const keyObj = this.scene.input.keyboard.addKey('q');
+    // const keyObj = this.scene.input.keyboard.addKey('q');
     // const keyObj2 = this.scene.input.keyboard.addKey('r');
-    keyObj.on('down', () => {
-      if (isAlive && !reloading) {
-        let anim;
-        healing = true;
-        person.list[2].setVisible(false);
-        if (legs.anims.currentAnim.key === 'Lturnleg') {
-          heal.anims.play('Heal', true);
-          anim = this.scene.anims.get('Heal');
-        } else if (legs.anims.currentAnim.key === 'Rturnleg') {
-          heal.anims.play('HealR', true);
-          anim = this.scene.anims.get('HealR');
-        }
-        anim.on('complete', () => {
-          healing = false;
-          body.setVisible(true);
-          person.list[2].setVisible(true);
-        });
-      }
-    });
+    // keyObj.on('down', this.healAnimation, this);
     // keyObj2.on('down', () => {
     //   reloadFunc(this);
     // });
@@ -231,6 +213,26 @@ export default class PersonAnimation {
     cursors = this.scene.cursors;
 
     return this.playerInstance;
+  }
+
+  healAnimation() {
+    if (isAlive && !reloading) {
+      let anim;
+      healing = true;
+      person.list[2].setVisible(false);
+      if (legs.anims.currentAnim.key === 'Lturnleg') {
+        heal.anims.play('Heal', true);
+        anim = this.scene.anims.get('Heal');
+      } else if (legs.anims.currentAnim.key === 'Rturnleg') {
+        heal.anims.play('HealR', true);
+        anim = this.scene.anims.get('HealR');
+      }
+      anim.on('complete', () => {
+        healing = false;
+        body.setVisible(true);
+        person.list[2].setVisible(true);
+      });
+    }
   }
 
   reloadAnimation() {

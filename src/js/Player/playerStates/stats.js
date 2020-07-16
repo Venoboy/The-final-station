@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import {
   updateBulletsUI,
   updateFoodUI,
@@ -43,7 +44,14 @@ const looseHealth = (amount) => {
 };
 
 const setFullHealth = () => {
+  if (stats.health === HERO_MAX_HEALTH || stats.aids <= 0) {
+    return false;
+  }
   stats.health = HERO_MAX_HEALTH;
+  stats.aids -= 1;
+  updateHealthBarUI(stats.health);
+  updateHealthUI(stats.aids);
+  return true;
 };
 
 const useBullet = () => {

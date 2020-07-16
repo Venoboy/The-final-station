@@ -5,6 +5,7 @@ import collisionCategories from '../helpers/collisionCategories';
 import StairsInteraction from '../objects/stairs/StairsInteraction';
 import sidesCollisionHandler from './playerStates/sidesCollisionHandler';
 import createShootLine from './shooting/createShootLine';
+import createHealing from './healing/createHealing';
 
 // eslint-disable-next-line import/no-mutable-exports
 let stairsInteraction = {};
@@ -39,6 +40,7 @@ export default class PlayerInteraction {
     };
     stairsInteraction = new StairsInteraction(playerInteractionConfig);
     createShootLine(this.scene, this.player);
+    createHealing(this.scene);
   }
 
   update() {

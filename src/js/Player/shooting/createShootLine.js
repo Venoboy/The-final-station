@@ -3,7 +3,7 @@ import Phaser from 'phaser';
 import defineEndPoint from './defineEndPoint';
 import { stats } from '../playerStates/stats';
 import { leftAngle, rightAngle } from '../../helpers/setMaxAngle';
-import ShootDisplay from '../ShootDisplay';
+import ShootDisplay from './ShootDisplay';
 
 
 const SHOOT_DISTANCE = 220;

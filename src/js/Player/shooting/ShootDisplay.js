@@ -1,6 +1,6 @@
 /* eslint-disable linebreak-style */
-import { useBullet, setBullets } from './playerStates/stats';
-import PersonAnimation from './animation/PlayerAnimation';
+import { useBullet, setBullets } from '../playerStates/stats';
+import PersonAnimation from '../animation/PlayerAnimation';
 
 const textConfig = {
   fontFamily: 'font1',
