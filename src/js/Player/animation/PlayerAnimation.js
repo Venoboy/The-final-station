@@ -34,7 +34,7 @@ export default class PersonAnimation {
     this.scene = scene;
     /* animation sounds */
     this.sounds = {
-      footstep: this.scene.sound.add('playerFootstep', { volume: 1 }),
+      footstep: this.scene.sound.add('playerFootstep', { volume: 0.5 }),
       ladder: [
         this.scene.sound.add('ladder', { volume: 0.1 }),
         this.scene.sound.add('ladder2', { volume: 0.1 }),
@@ -154,7 +154,7 @@ export default class PersonAnimation {
         start: 2,
         end: 9,
       }),
-      frameRate: 8,
+      frameRate: 10,
       repeat: -1,
     });
     this.scene.anims.create({
@@ -163,7 +163,7 @@ export default class PersonAnimation {
         start: 16,
         end: 23,
       }),
-      frameRate: 8,
+      frameRate: 10,
       repeat: -1,
     });
 
@@ -299,6 +299,36 @@ export default class PersonAnimation {
           legs.anims.currentFrame.textureFrame === 24
           || legs.anims.currentFrame.textureFrame === 27)
         && this.currentAnim.includes('rightl')
+      ) {
+        if (!this.sounds.footstep.isPlaying) {
+          this.sounds.footstep.play();
+        }
+      }
+      if (legs.anims.currentAnim.key === 'leftl'
+      && (
+        legs.anims.currentFrame.textureFrame === 10
+        || legs.anims.currentFrame.textureFrame === 13)
+      && this.currentAnim.includes('leftl')
+      ) {
+        if (!this.sounds.footstep.isPlaying) {
+          this.sounds.footstep.play();
+        }
+      }
+      if (legs.anims.currentAnim.key === 'backRightl'
+      && (
+        legs.anims.currentFrame.textureFrame === 18
+        || legs.anims.currentFrame.textureFrame === 22)
+      && this.currentAnim.includes('backRightl')
+      ) {
+        if (!this.sounds.footstep.isPlaying) {
+          this.sounds.footstep.play();
+        }
+      }
+      if (legs.anims.currentAnim.key === 'backLeftl'
+      && (
+        legs.anims.currentFrame.textureFrame === 4
+        || legs.anims.currentFrame.textureFrame === 8)
+      && this.currentAnim.includes('backLeftl')
       ) {
         if (!this.sounds.footstep.isPlaying) {
           this.sounds.footstep.play();
