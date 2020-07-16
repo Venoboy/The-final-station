@@ -6,6 +6,7 @@ import {
   updateKeysUI,
   updateMagazineUI,
 } from '../../interface/UIHelpers';
+import eventsCenter from '../../eventsCenter';
 
 const HERO_MAX_HEALTH = 100;
 
@@ -48,9 +49,9 @@ const looseHealth = (amount) => {
       stats.health = 0;
     }
     updateHealthBarUI(stats.health);
-    // if (stats.health === 0) {
-    //   eventsCenter.emit('player-died');
-    // }
+    if (stats.health === 0) {
+      eventsCenter.emit('player-died');
+    }
   }
 };
 

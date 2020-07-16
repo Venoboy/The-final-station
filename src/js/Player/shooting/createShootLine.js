@@ -4,7 +4,7 @@ import defineEndPoint from './defineEndPoint';
 import { stats } from '../playerStates/stats';
 import { leftAngle, rightAngle } from '../../helpers/setMaxAngle';
 import ShootDisplay from './ShootDisplay';
-
+import eventsCenter from '../../eventsCenter';
 
 const SHOOT_DISTANCE = 220;
 const SHOOT_LINE_START_ALPHA = 0.4;
@@ -78,6 +78,10 @@ const createShootLine = (scene, person) => {
   scene.input.on('pointerdown', (pointer) => construct(pointer));
   const reloadKey = scene.input.keyboard.addKey('R');
   reloadKey.on('up', holder.reload, holder);
+  eventsCenter.on('player-died', () => {
+    scene.input.off('pointerdown', (pointer) => construct(pointer));
+    reloadKey.off('up', holder.reload, holder);
+  });
 };
 
 export default createShootLine;

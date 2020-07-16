@@ -34,7 +34,7 @@ export default class PersonAnimation {
     this.scene = scene;
     /* animation sounds */
     this.sounds = {
-      footstep: this.scene.sound.add('playerFootstep', { volume: 0.5 }),
+      footstep: this.scene.sound.add('playerFootstep', { volume: 1 }),
       ladder: [
         this.scene.sound.add('ladder', { volume: 0.1 }),
         this.scene.sound.add('ladder2', { volume: 0.1 }),
@@ -154,7 +154,7 @@ export default class PersonAnimation {
         start: 2,
         end: 9,
       }),
-      frameRate: 10,
+      frameRate: 14,
       repeat: -1,
     });
     this.scene.anims.create({
@@ -163,7 +163,7 @@ export default class PersonAnimation {
         start: 16,
         end: 23,
       }),
-      frameRate: 10,
+      frameRate: 14,
       repeat: -1,
     });
 
@@ -431,7 +431,7 @@ export default class PersonAnimation {
       } else if (playerOnStairs && (cursors.down.isDown() || cursors.up.isDown())) {
         body.anims.play('Lturn', true);
         legs.anims.play('leftl', true);
-        this.changeCurrentAnims('Lturn', 'backLeftl');
+        this.changeCurrentAnims('Lturn', 'leftl');
       } else if (person.list[2].texture.key === 'gun') {
         if (healing) {
           heal.setVisible(true);
