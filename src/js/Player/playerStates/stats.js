@@ -63,6 +63,10 @@ const useBullet = () => {
   return true;
 };
 
+const isMagazineFull = () => {
+  return stats.bullets === stats.magazineSize;
+}
+
 const setBullets = () => {
   if (stats.bulletsInReserve <= 0) {
     return false;
@@ -114,5 +118,5 @@ const updateStats = (statName, value) => {
 
 export {
   stats, looseHealth, setFullHealth, updateStats, STAT_NAME,
-  useBullet, setBullets,
+  useBullet, setBullets, isMagazineFull,
 };

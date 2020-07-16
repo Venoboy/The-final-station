@@ -1,5 +1,5 @@
 /* eslint-disable linebreak-style */
-import { useBullet, setBullets } from '../playerStates/stats';
+import { useBullet, setBullets, isMagazineFull } from '../playerStates/stats';
 import PersonAnimation from '../animation/PlayerAnimation';
 
 const textConfig = {
@@ -24,6 +24,10 @@ class ShootDisplay {
   }
 
   reload() {
+    const magazineFull = isMagazineFull();
+    if (magazineFull) {
+      return false;
+    }
     const bulletsSetted = setBullets();
     if (!bulletsSetted) {
       this.displayWarning();

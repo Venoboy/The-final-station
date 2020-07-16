@@ -45,6 +45,7 @@ const createShootLine = (scene, person) => {
   const holder = new ShootDisplay(scene, person);
   const construct = (pointer) => {
     const graphics = scene.add.graphics();
+    const shootSound = scene.sound.add('pistolShoot');
     const player = person;
     const startX = player.x;
     const startY = player.y - GUN_OFFSET;
@@ -55,7 +56,7 @@ const createShootLine = (scene, person) => {
     if (!canShoot) {
       return;
     }
-
+    shootSound.play();
     const { endX, endY } = defineEndPoint(scene, startX, startY, resultPoint);
 
     graphics.lineStyle(SHOOT_LINE_WIDTH, SHOOT_LINE_COLOR, SHOOT_LINE_START_ALPHA);
