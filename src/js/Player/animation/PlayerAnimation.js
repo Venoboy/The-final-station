@@ -88,7 +88,7 @@ export default class PersonAnimation {
         start: 0,
         end: 5,
       }),
-      frameRate: 10,
+      frameRate: 7,
       repeat: -1,
     });
     this.scene.anims.create({
@@ -97,7 +97,7 @@ export default class PersonAnimation {
         start: 10,
         end: 15,
       }),
-      frameRate: 10,
+      frameRate: 7,
       repeat: -1,
     });
 
@@ -136,7 +136,7 @@ export default class PersonAnimation {
         start: 6,
         end: 13,
       }),
-      frameRate: 10,
+      frameRate: 7,
       repeat: -1,
     });
     this.scene.anims.create({
@@ -145,7 +145,7 @@ export default class PersonAnimation {
         start: 24,
         end: 29,
       }),
-      frameRate: 10,
+      frameRate: 7,
       repeat: -1,
     });
     this.scene.anims.create({
@@ -154,7 +154,7 @@ export default class PersonAnimation {
         start: 2,
         end: 9,
       }),
-      frameRate: 14,
+      frameRate: 7,
       repeat: -1,
     });
     this.scene.anims.create({
@@ -163,7 +163,7 @@ export default class PersonAnimation {
         start: 16,
         end: 23,
       }),
-      frameRate: 14,
+      frameRate: 7,
       repeat: -1,
     });
 
@@ -195,14 +195,14 @@ export default class PersonAnimation {
         const isHeroAlive = stats.health > 0;
 
         if (
-          person.list[2].parentContainer.x > pointer.worldX && isHeroAlive
+          person.list[2].parentContainer.x > pointer.worldX && isHeroAlive && !healing && !reloading
         ) {
           turn = false;
           gunBack = this.scene.add.image(1.5, 1, 'gunback').setOrigin(1, 0.5);
           person.replace(gun, gunBack);
           person.list[2].setRotation(leftAngle(angle, stats.MAX_ANGLE));
         } else if (
-          person.list[2].parentContainer.x < pointer.worldX && isHeroAlive
+          person.list[2].parentContainer.x < pointer.worldX && isHeroAlive && !healing && !reloading
         ) {
           turn = true;
           person.replace(person.list[2], gun);
@@ -223,7 +223,7 @@ export default class PersonAnimation {
   };
 
   healAnimation(callback) {
-    if (isAlive && !reloading) {
+    if (isAlive && !reloading && person.body.velocity.x === 0) {
       let anim;
       healing = true;
       person.list[2].setVisible(false);
@@ -247,7 +247,7 @@ export default class PersonAnimation {
   }
 
   reloadAnimation(callback) {
-    if (isAlive && !healing) {
+    if (isAlive && !healing && person.body.velocity.x === 0) {
       let anim;
       reloading = true;
       person.list[2].setVisible(false);
@@ -432,7 +432,11 @@ export default class PersonAnimation {
         climbDude.anims.play('climbStay', true);
         this.changeCurrentAnims('climbStay');
       } else if (playerOnStairs && (cursors.down.isDown() || cursors.up.isDown())) {
-        body.anims.play('Lturn', true);
+        if (this.scene.input.mousePointer.x + this.scene.cameras.main.scrollX < person.x) {
+          body.anims.play('Rturn', true);
+        } else {
+          body.anims.play('Lturn', true);
+        }
         legs.anims.play('leftl', true);
         this.changeCurrentAnims('Lturn', 'leftl');
       } else if (person.list[2].texture.key === 'gun') {

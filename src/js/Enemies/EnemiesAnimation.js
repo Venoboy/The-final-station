@@ -42,7 +42,7 @@ const BigZombieAnimationCreate = (scene) => {
       start: 29,
       end: 33,
     }),
-    frameRate: 9,
+    frameRate: 13,
     repeat: -1,
   });
   scene.anims.create({
@@ -51,7 +51,7 @@ const BigZombieAnimationCreate = (scene) => {
       start: 24,
       end: 28,
     }),
-    frameRate: 9,
+    frameRate: 13,
     repeat: -1,
   });
   scene.anims.create({
@@ -78,16 +78,16 @@ const BigZombieAnimationCreate = (scene) => {
       start: 0,
       end: 2,
     }),
-    frameRate: 10,
+    frameRate: 3,
     repeat: -1,
   });
   scene.anims.create({
-    key: 'damagedLeft',
+    key: 'damagedRight',
     frames: scene.anims.generateFrameNumbers('bigZombie', {
       start: 3,
       end: 5,
     }),
-    frameRate: 10,
+    frameRate: 3,
     repeat: -1,
   });
 };

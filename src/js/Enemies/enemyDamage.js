@@ -8,13 +8,24 @@ const enemyDamage = (enemyObject, player) => {
   if (enemyHealth <= 0) {
     // запустить анимацию смерти
     if (player < enemy.x && enemy.texture.key === 'bigZombie') {
-      enemy.anims.play('deadLeft');
+      enemy.anims.play('deadLeft', true);
     } else if (player < enemy.x && enemy.texture.key === 'smallZombie') {
-      enemy.anims.play('deadLefts');
+      enemy.anims.play('deadLefts', true);
     } else if (player > enemy.x && enemy.texture.key === 'bigZombie') {
-      enemy.anims.play('deadRight');
+      enemy.anims.play('deadRight', true);
     } else if (player > enemy.x && enemy.texture.key === 'smallZombie') {
-      enemy.anims.play('deadRights');
+      enemy.anims.play('deadRights', true);
+    }
+  } else if (enemyHealth > 0) {
+    if (player < enemy.x && enemy.texture.key === 'bigZombie') {
+      console.log('попал');
+      enemy.anims.play('damagedLeft', true);
+    } else if (player < enemy.x && enemy.texture.key === 'smallZombie') {
+      enemy.anims.play('damagedRights', true);
+    } else if (player > enemy.x && enemy.texture.key === 'bigZombie') {
+      enemy.anims.play('damagedRight', true);
+    } else if (player > enemy.x && enemy.texture.key === 'smallZombie') {
+      enemy.anims.play('damagedLefts', true);
     }
   }
 };
