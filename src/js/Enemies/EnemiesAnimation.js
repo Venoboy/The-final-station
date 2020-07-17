@@ -6,7 +6,7 @@ const BigZombieAnimationCreate = (scene) => {
       start: 10,
       end: 13,
     }),
-    frameRate: 10,
+    frameRate: 6,
     repeat: -1,
   });
   scene.anims.create({
@@ -15,7 +15,7 @@ const BigZombieAnimationCreate = (scene) => {
       start: 6,
       end: 9,
     }),
-    frameRate: 10,
+    frameRate: 6,
     repeat: -1,
   });
   scene.anims.create({
@@ -24,7 +24,7 @@ const BigZombieAnimationCreate = (scene) => {
       start: 14,
       end: 18,
     }),
-    frameRate: 10,
+    frameRate: 9,
     repeat: -1,
   });
   scene.anims.create({
@@ -33,7 +33,7 @@ const BigZombieAnimationCreate = (scene) => {
       start: 19,
       end: 23,
     }),
-    frameRate: 10,
+    frameRate: 9,
     repeat: -1,
   });
   scene.anims.create({
@@ -42,7 +42,7 @@ const BigZombieAnimationCreate = (scene) => {
       start: 29,
       end: 33,
     }),
-    frameRate: 10,
+    frameRate: 9,
     repeat: -1,
   });
   scene.anims.create({
@@ -51,7 +51,7 @@ const BigZombieAnimationCreate = (scene) => {
       start: 24,
       end: 28,
     }),
-    frameRate: 10,
+    frameRate: 9,
     repeat: -1,
   });
   scene.anims.create({
@@ -61,7 +61,7 @@ const BigZombieAnimationCreate = (scene) => {
       end: 49,
     }),
     frameRate: 10,
-    repeat: -1,
+    repeat: 0,
   });
   scene.anims.create({
     key: 'deadRight',
@@ -70,7 +70,7 @@ const BigZombieAnimationCreate = (scene) => {
       end: 41,
     }),
     frameRate: 10,
-    repeat: -1,
+    repeat: 0,
   });
   scene.anims.create({
     key: 'damagedLeft',
@@ -94,79 +94,79 @@ const BigZombieAnimationCreate = (scene) => {
 
 const SmallZombieAnimationCreate = (scene) => {
   scene.anims.create({
-    key: 'stayLeft',
+    key: 'stayLefts',
     frames: scene.anims.generateFrameNumbers('smallZombie', {
       start: 11,
       end: 15,
     }),
-    frameRate: 10,
+    frameRate: 6,
     repeat: -1,
   });
   scene.anims.create({
-    key: 'stayRight',
+    key: 'stayRights',
     frames: scene.anims.generateFrameNumbers('smallZombie', {
       start: 6,
       end: 10,
     }),
-    frameRate: 10,
+    frameRate: 6,
     repeat: -1,
   });
   scene.anims.create({
-    key: 'walkLeft',
+    key: 'walkLefts',
     frames: scene.anims.generateFrameNumbers('smallZombie', {
       start: 36,
       end: 43,
     }),
-    frameRate: 10,
+    frameRate: 9,
     repeat: -1,
   });
   scene.anims.create({
-    key: 'walkRight',
+    key: 'walkRights',
     frames: scene.anims.generateFrameNumbers('smallZombie', {
       start: 28,
       end: 35,
     }),
-    frameRate: 10,
+    frameRate: 9,
     repeat: -1,
   });
   scene.anims.create({
-    key: 'atackLeft',
+    key: 'atackLefts',
     frames: scene.anims.generateFrameNumbers('smallZombie', {
       start: 22,
       end: 27,
     }),
-    frameRate: 10,
+    frameRate: 8,
     repeat: -1,
   });
   scene.anims.create({
-    key: 'atackRight',
+    key: 'atackRights',
     frames: scene.anims.generateFrameNumbers('smallZombie', {
       start: 16,
       end: 21,
     }),
-    frameRate: 10,
+    frameRate: 8,
     repeat: -1,
   });
   scene.anims.create({
-    key: 'deadLeft',
+    key: 'deadLefts',
     frames: scene.anims.generateFrameNumbers('smallZombie', {
       start: 50,
       end: 55,
     }),
     frameRate: 10,
-    repeat: -1,
+    repeat: 0,
   });
   scene.anims.create({
-    key: 'deadRight',
+    key: 'deadRights',
     frames: scene.anims.generateFrameNumbers('smallZombie', {
       start: 44,
       end: 49,
     }),
     frameRate: 10,
-    repeat: -1,
+    repeat: 0,
   });
   scene.anims.create({
-    key: 'damagedLeft',
+    key: 'damagedLefts',
     frames: scene.anims.generateFrameNumbers('smallZombie', {
       start: 0,
       end: 2,
@@ -175,7 +175,7 @@ const SmallZombieAnimationCreate = (scene) => {
     repeat: -1,
   });
   scene.anims.create({
-    key: 'damagedLeft',
+    key: 'damagedRights',
     frames: scene.anims.generateFrameNumbers('smallZombie', {
       start: 3,
       end: 5,

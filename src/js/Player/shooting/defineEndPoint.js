@@ -26,7 +26,7 @@ const rayColsFinder = (worldBodiesArr, currentStartX, currentStartY, out) => {
     if (isEnemy) {
       const isEnemyDead = raycols[0].body.parent.gameObject.getData('health') <= 0;
       if (!isEnemyDead) {
-        enemyDamage(raycols[0].body.parent.gameObject);
+        enemyDamage(raycols[0].body.parent.gameObject, currentStartX);
       } else {
         raycols[0].point.x = null;
         raycols[0].point.y = null;

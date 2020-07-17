@@ -28,6 +28,7 @@ export default class EnemyConstructor {
     this.y = config.position.y;
     this.ATTACK_DISTANCE = 3;
     this.attackCounter = 0;
+    this.atacking = false;
     this.walkingInterval = 100;
     this.currentWalking = 0;
     this.stayingInterval = 15;
@@ -77,7 +78,9 @@ export default class EnemyConstructor {
     }
     else if (config.type === 'enemyFast') {
       SmallZombieAnimationCreate(this.scene);
+
     }
+
   }
 
   onDetectDoors = (sensor, door) => {
@@ -91,19 +94,36 @@ export default class EnemyConstructor {
     const framesDelay = 10;
 
     if (this.attackCounter === framesDelay / 2) {
-      // здесь можно вставить анимацию атаки
+
+      if (this.player.x < this.enemy.x && this.enemy.texture.key === 'bigZombie') {
+        this.enemy.anims.play('atackLeft', true);
+      }
+      else if (this.player.x < this.enemy.x && this.enemy.texture.key === 'smallZombie') {
+        this.enemy.anims.play('atackLefts', true);
+
+      }
+      else if (this.player.x > this.enemy.x && this.enemy.texture.key === 'bigZombie') {
+        this.enemy.anims.play('atackRight', true);
+
+      }
+      else if (this.player.x > this.enemy.x && this.enemy.texture.key === 'smallZombie') {
+        this.enemy.anims.play('atackRights', true);
+
+      }
     }
     this.attackCounter += 1;
     if (this.attackCounter === framesDelay) {
       this.attackCounter = 0;
       looseHealth(10);
     }
+
   };
 
   onDetect = () => {
     this.activeDoors = doors.filter((door) => door.body !== undefined);
     this.scene.matter.overlap(this.sensors.detect, this.activeDoors, this.onDetectDoors);
     if (!this.blockDoor) {
+      this.atacking = false;
       if (this.player.x < this.enemy.x - this.ATTACK_DISTANCE) {
         this.currentSpeed = -this.speed;
         this.attackCounter = 0;
@@ -112,8 +132,10 @@ export default class EnemyConstructor {
         this.attackCounter = 0;
       } else {
         this.currentSpeed = 0;
+        this.atacking = true;
         if (this.player.x < this.enemy.x) {
           this.attack('right');
+
         } else if (this.player.x >= this.enemy.x) {
           this.attack('left');
         }
@@ -194,14 +216,23 @@ export default class EnemyConstructor {
     this.enemyCheckingPlayer();
     // здесь можно вставить анимацию врага, в зависимости от this.currentSpeed
 
-    if (this.currentSpeed === 0) {
+    if (this.currentSpeed === 0 && this.enemy.texture.key === 'bigZombie' && !this.atacking) {
       this.enemy.anims.play('stayLeft', true);
     }
-    else if (this.currentSpeed > 0) {
+    else if (this.currentSpeed === 0 && this.enemy.texture.key === 'smallZombie' && !this.atacking) {
+      this.enemy.anims.play('stayLefts', true);
+    }
+    else if (this.currentSpeed > 0 && this.enemy.texture.key === 'bigZombie' && !this.atacking) {
       this.enemy.anims.play('walkRight', true);
     }
-    else if (this.currentSpeed < 0) {
+    else if (this.currentSpeed > 0 && this.enemy.texture.key === 'smallZombie' && !this.atacking) {
+      this.enemy.anims.play('walkRights', true);
+    }
+    else if (this.currentSpeed < 0 && this.enemy.texture.key === 'bigZombie') {
       this.enemy.anims.play('walkLeft', true);
+    }
+    else if (this.currentSpeed < 0 && this.enemy.texture.key === 'smallZombie') {
+      this.enemy.anims.play('walkLefts', true);
     }
     this.enemy.setVelocityX(this.currentSpeed);
     this.blockDoor = false;
