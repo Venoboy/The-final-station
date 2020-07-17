@@ -58,7 +58,6 @@ const scenePreload = (scene) => {
   });
 
 
-
   scene.load.audio('doorSound1', doorSound1);
   scene.load.audio('doorSound3', doorSound3);
   scene.load.audio('doorSound4', doorSound4);

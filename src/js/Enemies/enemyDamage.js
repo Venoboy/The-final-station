@@ -9,14 +9,11 @@ const enemyDamage = (enemyObject, player) => {
     // запустить анимацию смерти
     if (player < enemy.x && enemy.texture.key === 'bigZombie') {
       enemy.anims.play('deadLeft');
-    }
-    else if (player < enemy.x && enemy.texture.key === 'smallZombie') {
+    } else if (player < enemy.x && enemy.texture.key === 'smallZombie') {
       enemy.anims.play('deadLefts');
-    }
-    else if (player > enemy.x && enemy.texture.key === 'bigZombie') {
+    } else if (player > enemy.x && enemy.texture.key === 'bigZombie') {
       enemy.anims.play('deadRight');
-    }
-    else if (player > enemy.x && enemy.texture.key === 'smallZombie') {
+    } else if (player > enemy.x && enemy.texture.key === 'smallZombie') {
       enemy.anims.play('deadRights');
     }
   }

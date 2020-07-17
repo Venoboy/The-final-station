@@ -5,6 +5,7 @@ import { doors } from '../scenes/gameScene/sceneSetters';
 import { looseHealth } from '../Player/playerStates/stats';
 import { groundArray } from '../objects/ground/groundCreation';
 import { BigZombieAnimationCreate, SmallZombieAnimationCreate } from './EnemiesAnimation';
+import { stats } from '../Player/playerStates/stats';
 
 
 export default class EnemyConstructor {
@@ -78,9 +79,7 @@ export default class EnemyConstructor {
     }
     else if (config.type === 'enemyFast') {
       SmallZombieAnimationCreate(this.scene);
-
     }
-
   }
 
   onDetectDoors = (sensor, door) => {
@@ -94,29 +93,24 @@ export default class EnemyConstructor {
     const framesDelay = 10;
 
     if (this.attackCounter === framesDelay / 2) {
-
       if (this.player.x < this.enemy.x && this.enemy.texture.key === 'bigZombie') {
         this.enemy.anims.play('atackLeft', true);
       }
       else if (this.player.x < this.enemy.x && this.enemy.texture.key === 'smallZombie') {
         this.enemy.anims.play('atackLefts', true);
-
       }
       else if (this.player.x > this.enemy.x && this.enemy.texture.key === 'bigZombie') {
         this.enemy.anims.play('atackRight', true);
-
       }
       else if (this.player.x > this.enemy.x && this.enemy.texture.key === 'smallZombie') {
         this.enemy.anims.play('atackRights', true);
-
       }
     }
     this.attackCounter += 1;
     if (this.attackCounter === framesDelay) {
       this.attackCounter = 0;
-      looseHealth(10);
+      looseHealth(this.config.settings.damage);
     }
-
   };
 
   onDetect = () => {
@@ -124,20 +118,22 @@ export default class EnemyConstructor {
     this.scene.matter.overlap(this.sensors.detect, this.activeDoors, this.onDetectDoors);
     if (!this.blockDoor) {
       this.atacking = false;
-      if (this.player.x < this.enemy.x - this.ATTACK_DISTANCE) {
-        this.currentSpeed = -this.speed;
-        this.attackCounter = 0;
-      } else if (this.player.x > this.enemy.x + this.ATTACK_DISTANCE) {
-        this.currentSpeed = this.speed;
-        this.attackCounter = 0;
-      } else {
-        this.currentSpeed = 0;
-        this.atacking = true;
-        if (this.player.x < this.enemy.x) {
-          this.attack('right');
-
-        } else if (this.player.x >= this.enemy.x) {
-          this.attack('left');
+      const isHeroDead = stats.health <= 0;
+      if (!this.blockDoor && !isHeroDead) {
+        if (this.player.x < this.enemy.x - this.ATTACK_DISTANCE) {
+          this.currentSpeed = -this.speed;
+          this.attackCounter = 0;
+        } else if (this.player.x > this.enemy.x + this.ATTACK_DISTANCE) {
+          this.currentSpeed = this.speed;
+          this.attackCounter = 0;
+        } else {
+          this.currentSpeed = 0;
+          this.atacking = true;
+          if (this.player.x < this.enemy.x) {
+            this.attack('right');
+          } else if (this.player.x >= this.enemy.x) {
+            this.attack('left');
+          }
         }
       }
     }
@@ -200,9 +196,10 @@ export default class EnemyConstructor {
   };
 
   enemyCheckingPlayer = () => {
+    const isHeroDead = stats.health <= 0;
     const sensorPlayerOverlap = this.scene.matter
       .overlap(this.sensors.detect, this.playerInstance.sensors.body, this.onDetect);
-    this.isEnemySeePlayer = sensorPlayerOverlap && !this.blockDoor;
+    this.isEnemySeePlayer = sensorPlayerOverlap && !this.blockDoor && !isHeroDead;
     if (this.isEnemySawPlayer && !this.isEnemySeePlayer) {
       this.enemySearchingPlayer();
     }

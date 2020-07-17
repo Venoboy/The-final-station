@@ -6,7 +6,7 @@ const enemySettings = {
     height: 26,
     health: 40,
     type: 'bigZombie',
-
+    damage: 15,
   },
   enemyFast: {
     speed: 1.4,
@@ -14,6 +14,7 @@ const enemySettings = {
     height: 18,
     health: 60,
     type: 'smallZombie',
+    damage: 15,
   },
 };
 
