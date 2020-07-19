@@ -12,7 +12,7 @@ export default function updateSounds() {
     }
     if (animKey === 'walkLefts' || animKey === 'walkRights') {
       if ([38, 42, 30, 34].includes(frameNumber)) {
-        this.footstepSounds[2].play();
+        this.footstepSounds[1].play();
       }
     }
   }

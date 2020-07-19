@@ -11,8 +11,8 @@ import eventsCenter from '../../eventsCenter';
 
 const HERO_MAX_HEALTH = 100;
 const HeroAttacking = {
-  attacking: false
-}
+  attacking: false,
+};
 
 const stats = {
   aids: 2,
@@ -91,8 +91,8 @@ const setBullets = () => {
 const updateStats = (statName, value) => {
   switch (statName) {
     case 'aids': {
-      stats[statName] += value;
-      updateAidsUI(stats[statName]);
+      stats.aids += value;
+      updateAidsUI(stats.aids);
       break;
     }
     case 'bullets': {
@@ -101,13 +101,13 @@ const updateStats = (statName, value) => {
       break;
     }
     case 'food': {
-      stats[statName] += value;
-      updateFoodUI(stats[statName]);
+      stats.food += value;
+      updateFoodUI(stats.food);
       break;
     }
     case 'keys': {
-      stats[statName] += value;
-      updateKeysUI(stats[statName]);
+      stats.keys += value;
+      updateKeysUI(stats.keys);
       break;
     }
     default: {

@@ -75,7 +75,6 @@ export default class EnemyConstructor {
     this.footstepSounds = [
       this.scene.sound.add('zombieFootstep', { volume: 0.5 }),
       this.scene.sound.add('zombieFootstep2', { volume: 0.5 }),
-      this.scene.sound.add('zombieFootstep3', { volume: 0.5 }),
     ];
     this.updateSounds = updateSounds.bind(this);
 

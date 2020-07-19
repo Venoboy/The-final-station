@@ -50,12 +50,7 @@ export default class ObjectInteraction {
   onObjectCollideEnd(object) {
     if (object === this.activeObject) {
       this.activeObject.deactivate();
-      if (this.activatedObjects.length !== 0) {
-        this.activeObject = this.activatedObjects.pop();
-        this.activeObject.activate();
-      } else {
-        this.activeObject = null;
-      }
+      this.changeActiveObject();
     } else {
       const objectIndex = this.activatedObjects.findIndex((el) => el === object);
       this.activatedObjects.splice(objectIndex, 1);
@@ -67,12 +62,7 @@ export default class ObjectInteraction {
     if (this.activeObject) {
       const interactionInfo = this.activeObject.interact();
       this.processInteraction(interactionInfo);
-      if (this.activatedObjects.length !== 0) {
-        this.activeObject = this.activatedObjects.pop();
-        this.activeObject.activate();
-      } else {
-        this.activeObject = null;
-      }
+      this.changeActiveObject();
     }
   }
 
@@ -82,6 +72,15 @@ export default class ObjectInteraction {
       info.items.forEach((item) => {
         updateStats(item.name, item.quantity);
       });
+    }
+  }
+
+  changeActiveObject() {
+    if (this.activatedObjects.length !== 0) {
+      this.activeObject = this.activatedObjects.pop();
+      this.activeObject.activate();
+    } else {
+      this.activeObject = null;
     }
   }
 }
