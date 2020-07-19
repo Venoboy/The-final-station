@@ -3,6 +3,8 @@ import enemyPositions from './enemyPositions';
 import enemySettings from './enemySettings';
 import collisionCategories from '../helpers/collisionCategories';
 import { stairsArray } from '../objects/stairs/stairsCreation';
+import { obj } from './enemyDamage';
+
 
 const enemiesArray = [];
 
@@ -28,12 +30,15 @@ export default class EnemyLoader {
           config.position = position;
           config.scene = this.scene;
           config.settings = enemySettings[type];
+
           config.playerInstance = this.playerInstance;
           config.collisionCategory = collisionCategories.enemies;
           config.collisionGroup = collisionGroup;
 
+
           return new EnemyConstructor(config);
         });
+
         enemiesArray.push(enemiesArr);
       });
   };
@@ -43,7 +48,7 @@ export default class EnemyLoader {
       enemyType.forEach((enemy) => {
         const isAlive = enemy.enemy.getData('health') > 0;
         if (enemy.enemy.body && isAlive) {
-          enemy.update();
+          enemy.update(obj);
         }
       });
     });

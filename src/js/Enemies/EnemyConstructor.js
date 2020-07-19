@@ -1,8 +1,10 @@
+/* eslint-disable brace-style */
 import Phaser from 'phaser';
 import collisionCategories from '../helpers/collisionCategories';
 import { doors } from '../scenes/gameScene/sceneSetters';
 import { looseHealth } from '../Player/playerStates/stats';
 import { groundArray } from '../objects/ground/groundCreation';
+import { BigZombieAnimationCreate, SmallZombieAnimationCreate } from './EnemiesAnimation';
 import { stats } from '../Player/playerStates/stats';
 
 
@@ -20,12 +22,14 @@ export default class EnemyConstructor {
     this.collisionCategory = config.collisionCategory;
     this.speed = config.settings.speed;
     this.health = config.settings.health;
+    this.spriteType = config.settings.type;
     this.currentSpeed = 0;
     this.blockDoor = false;
     this.x = config.position.x;
     this.y = config.position.y;
     this.ATTACK_DISTANCE = 3;
     this.attackCounter = 0;
+    this.atacking = false;
     this.walkingInterval = 100;
     this.currentWalking = 0;
     this.stayingInterval = 15;
@@ -39,7 +43,7 @@ export default class EnemyConstructor {
     this.canGoLeft = true;
     this.canGoRight = true;
     this.enemy = this.scene.matter.add
-      .image(this.x, this.y, config.type);
+      .sprite(this.x, this.y, this.spriteType);
 
     const { Body, Bodies } = Phaser.Physics.Matter.Matter;
     const { width: w, height: h } = this.enemy;
@@ -68,6 +72,14 @@ export default class EnemyConstructor {
       .setCollisionGroup(config.collisionGroup)
       .setCollidesWith([collisionCategories.ground]);
     this.enemy.setData('health', this.health);
+
+
+    if (config.type === 'enemyBig') {
+      BigZombieAnimationCreate(this.scene);
+    }
+    else if (config.type === 'enemyFast') {
+      SmallZombieAnimationCreate(this.scene);
+    }
   }
 
   onDetectDoors = (sensor, door) => {
@@ -81,11 +93,23 @@ export default class EnemyConstructor {
     const framesDelay = 10;
 
     if (this.attackCounter === framesDelay / 2) {
-      // здесь можно вставить анимацию атаки
+      if (this.player.x < this.enemy.x && this.enemy.texture.key === 'bigZombie') {
+        this.enemy.anims.play('atackLeft', true);
+      }
+      else if (this.player.x < this.enemy.x && this.enemy.texture.key === 'smallZombie') {
+        this.enemy.anims.play('atackLefts', true);
+      }
+      else if (this.player.x > this.enemy.x && this.enemy.texture.key === 'bigZombie') {
+        this.enemy.anims.play('atackRight', true);
+      }
+      else if (this.player.x > this.enemy.x && this.enemy.texture.key === 'smallZombie') {
+        this.enemy.anims.play('atackRights', true);
+      }
     }
     this.attackCounter += 1;
     if (this.attackCounter === framesDelay) {
       this.attackCounter = 0;
+
       looseHealth(this.config.settings.damage);
     }
   };
@@ -93,20 +117,24 @@ export default class EnemyConstructor {
   onDetect = () => {
     this.activeDoors = doors.filter((door) => door.body !== undefined);
     this.scene.matter.overlap(this.sensors.detect, this.activeDoors, this.onDetectDoors);
-    const isHeroDead = stats.health <= 0;
-    if (!this.blockDoor && !isHeroDead) {
-      if (this.player.x < this.enemy.x - this.ATTACK_DISTANCE) {
-        this.currentSpeed = -this.speed;
-        this.attackCounter = 0;
-      } else if (this.player.x > this.enemy.x + this.ATTACK_DISTANCE) {
-        this.currentSpeed = this.speed;
-        this.attackCounter = 0;
-      } else {
-        this.currentSpeed = 0;
-        if (this.player.x < this.enemy.x) {
-          this.attack('right');
-        } else if (this.player.x >= this.enemy.x) {
-          this.attack('left');
+    if (!this.blockDoor) {
+      this.atacking = false;
+      const isHeroDead = stats.health <= 0;
+      if (!this.blockDoor && !isHeroDead) {
+        if (this.player.x < this.enemy.x - this.ATTACK_DISTANCE) {
+          this.currentSpeed = -this.speed;
+          this.attackCounter = 0;
+        } else if (this.player.x > this.enemy.x + this.ATTACK_DISTANCE) {
+          this.currentSpeed = this.speed;
+          this.attackCounter = 0;
+        } else {
+          this.currentSpeed = 0;
+          this.atacking = true;
+          if (this.player.x < this.enemy.x) {
+            this.attack('right');
+          } else if (this.player.x >= this.enemy.x) {
+            this.attack('left');
+          }
         }
       }
     }
@@ -178,13 +206,33 @@ export default class EnemyConstructor {
     }
   };
 
-  update = () => {
+  update = (obj) => {
+    // console.log(obj.damaged);
     this.enemy.setCollidesWith([collisionCategories.ground]);
     this.enemy.body.ignoreGravity = false;
     this.currentSpeed = 0;
     this.scene.matter.overlap(this.sensors.body, this.config.stairsArray, this.enemyStairsOverlap);
     this.enemyCheckingPlayer();
     // здесь можно вставить анимацию врага, в зависимости от this.currentSpeed
+
+    if (this.currentSpeed === 0 && this.enemy.texture.key === 'bigZombie' && !this.atacking && !obj.damaged) {
+      this.enemy.anims.play('stayLeft', true);
+    }
+    else if (this.currentSpeed === 0 && this.enemy.texture.key === 'smallZombie' && !this.atacking && !obj.damaged) {
+      this.enemy.anims.play('stayLefts', true);
+    }
+    else if (this.currentSpeed > 0 && this.enemy.texture.key === 'bigZombie' && !this.atacking && !obj.damaged) {
+      this.enemy.anims.play('walkRight', true);
+    }
+    else if (this.currentSpeed > 0 && this.enemy.texture.key === 'smallZombie' && !this.atacking && !obj.damaged) {
+      this.enemy.anims.play('walkRights', true);
+    }
+    else if (this.currentSpeed < 0 && this.enemy.texture.key === 'bigZombie' && !this.atacking && !obj.damaged) {
+      this.enemy.anims.play('walkLeft', true);
+    }
+    else if (this.currentSpeed < 0 && this.enemy.texture.key === 'smallZombie' && !this.atacking && !obj.damaged) {
+      this.enemy.anims.play('walkLefts', true);
+    }
     this.enemy.setVelocityX(this.currentSpeed);
     this.blockDoor = false;
     if (this.isEnemySeePlayer) {

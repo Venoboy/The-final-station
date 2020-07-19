@@ -1,10 +1,13 @@
 import Phaser from 'phaser';
 
 import raycast from './matter-raycast';
-import enemyDamage from '../../Enemies/enemyDamage';
+import { enemyDamage } from '../../Enemies/enemyDamage';
 
 let isFounded = false;
 const DIVIDE_PARTS = 500;
+const SceneObj = {
+  scene: {}
+}
 
 const rayColsFinder = (worldBodiesArr, currentStartX, currentStartY, out) => {
   let raycols = raycast(
@@ -17,7 +20,7 @@ const rayColsFinder = (worldBodiesArr, currentStartX, currentStartY, out) => {
     const isMainBody = ray.body.label === 'mainBody';
     const isSensor = ray.body.isSensor === true && ray.body.label !== 'enemy body sensor';
     const isStairs = ray.body.label === 'stairs-middle' || ray.body.label === 'stairs-left'
-    || ray.body.label === 'stairs-right';
+      || ray.body.label === 'stairs-right';
     return !isMainBody && !isSensor && !isStairs;
   });
 
@@ -26,7 +29,7 @@ const rayColsFinder = (worldBodiesArr, currentStartX, currentStartY, out) => {
     if (isEnemy) {
       const isEnemyDead = raycols[0].body.parent.gameObject.getData('health') <= 0;
       if (!isEnemyDead) {
-        enemyDamage(raycols[0].body.parent.gameObject);
+        enemyDamage(raycols[0].body.parent.gameObject, currentStartX, SceneObj);
       } else {
         raycols[0].point.x = null;
         raycols[0].point.y = null;
@@ -69,6 +72,7 @@ const continuousExtension = (worldBodiesArr, startX, startY, resultPoint) => {
 };
 
 const defineEndPoint = (scene, startX, startY, resultPoint) => {
+  SceneObj.scene = scene;
   const worldBodiesArr = scene.matter.getMatterBodies(undefined);
   let { x, y } = continuousExtension(worldBodiesArr, startX, startY, resultPoint);
   isFounded = false;
