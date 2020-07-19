@@ -81,4 +81,11 @@ export default class GameBar extends Phaser.Scene {
   updateKeys(keys) {
     this.keys.text = keys;
   }
+
+  updateStocks(aids, bullets, food, keys) {
+    this.updateAids(aids);
+    this.updateBullets(bullets);
+    this.updateFood(food);
+    this.updateKeys(keys);
+  }
 }
