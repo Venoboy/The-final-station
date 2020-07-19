@@ -53,8 +53,9 @@ const createShootLine = (scene, person) => {
     const resultPoint = getResultPoint(startX, startY, pointer.worldX, pointer.worldY);
 
     const isHeroDead = stats.health <= 0;
-    const canShoot = !isHeroDead && holder.shoot() && !stairsInteraction.isOnSideStairs;
-    console.log(stairsInteraction.isOnSideStairs);
+    const canShoot = !isHeroDead && holder.shoot()
+      && !stairsInteraction.isOnSideStairs
+      && pointer.primaryDown;
     if (!canShoot) {
       return;
     }
