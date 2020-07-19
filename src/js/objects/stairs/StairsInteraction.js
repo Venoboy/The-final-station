@@ -1,4 +1,4 @@
-import { setCanGoX, getCanGoX } from '../../Player/playerStates/externalParams';
+import { setCanGoX } from '../../Player/playerStates/externalParams';
 import sidesCollisionHandler from '../../Player/playerStates/sidesCollisionHandler';
 import positionStairsSetter from './positionStairsSetter';
 import { updateCornersPosition } from './curvePlayerSetter';
@@ -15,6 +15,7 @@ export default class StairsInteraction {
     this.stairsArray = stairsArray;
     this.distanceMiddle = 100;
     this.st = '';
+    this.isOnSideStairs = false;
 
     this.PLAYER_SPEED_Y = 1.8;
   }
@@ -67,6 +68,9 @@ export default class StairsInteraction {
       this.isPlayerOnPosition = true;
     }
     this.onStairsHandler(this.isPlayerOnPosition);
+
+    this.isOnSideStairs = (stairs.label === 'stairs-left' || stairs.label === 'stairs-right')
+      && this.isPlayerOnPosition;
   };
 
 
@@ -97,6 +101,5 @@ export default class StairsInteraction {
 
     stairsParams.lastStep = false;
     this.isPlayerOnPosition = false;
-    // прочекать
   }
 }

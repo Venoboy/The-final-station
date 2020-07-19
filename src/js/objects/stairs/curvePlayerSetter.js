@@ -5,7 +5,6 @@ import { stats } from '../../Player/playerStates/stats';
 import { setCanGoX } from '../../Player/playerStates/externalParams';
 import stairsParams from './stairsParams';
 
-let isAnimationActive = false;
 let player = {};
 let scene = {};
 let end = {};
@@ -13,12 +12,11 @@ let graphics = {};
 let follower = {};
 let path = {};
 let container = {};
-let directionUp;
 
 const AnimationActivity = {
   isAnimationActive: false,
-  directionUp: false
-}
+  directionUp: false,
+};
 
 const {
   MIDDLE_POINT_X_OFFSET,
@@ -67,8 +65,6 @@ const updateCornersPosition = () => {
   graphics.clear();
   graphics.lineStyle(2, 0xffffff, 1);
 
-  // path.draw(graphics);
-
   path.getPoint(follower.t, follower.vec);
 
   graphics.fillStyle(0xff0000, 1);
@@ -90,8 +86,6 @@ const curvePlayerSetter = (playerObj, playerContainer, positionsEnd, sceneObj, d
   if (!AnimationActivity.isAnimationActive) {
     createAnimation();
   }
-
-
 };
 
 export { curvePlayerSetter, updateCornersPosition, AnimationActivity };
