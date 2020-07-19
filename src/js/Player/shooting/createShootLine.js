@@ -5,7 +5,6 @@ import { stats } from '../playerStates/stats';
 import { leftAngle, rightAngle } from '../../helpers/setMaxAngle';
 import ShootDisplay from './ShootDisplay';
 import eventsCenter from '../../eventsCenter';
-import { stairsInteraction } from '../PlayerInteraction';
 
 const SHOOT_DISTANCE = 220;
 const SHOOT_LINE_START_ALPHA = 0.4;
@@ -53,7 +52,7 @@ const createShootLine = (scene, person, stairsInfo) => {
     const resultPoint = getResultPoint(startX, startY, pointer.worldX, pointer.worldY);
 
     const isHeroDead = stats.health <= 0;
-    const canShoot = !isHeroDead && !stairsInteraction.isOnSideStairs
+    const canShoot = !isHeroDead
       && pointer.primaryDown
       && holder.shoot();
     if (!canShoot) {
