@@ -1,5 +1,6 @@
 import {
   useBullet, setBullets, isMagazineFull, canShoot, canReload,
+  noActions,
 } from '../playerStates/stats';
 import PersonAnimation from '../animation/PlayerAnimation';
 
@@ -22,7 +23,7 @@ class ShootDisplay {
   }
 
   shoot() {
-    if (this.onRightStairs()) {
+    if (this.onRightStairs() || !noActions()) {
       return false;
     }
     if (canShoot()) {
@@ -34,7 +35,7 @@ class ShootDisplay {
   }
 
   reload() {
-    if (this.onRightStairs()) {
+    if (this.onRightStairs() || !noActions()) {
       return;
     }
     if (isMagazineFull()) {

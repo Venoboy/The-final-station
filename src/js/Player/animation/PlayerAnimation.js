@@ -2,7 +2,7 @@
 import Phaser from 'phaser';
 import PersonWithObjectAnimation from './PlayerWithStuffAnimation';
 import PersonDeadAnimation from './PlayerDeadAnim';
-import { stats, HeroAttacking } from '../playerStates/stats';
+import { stats, HeroAttacking, playerActions } from '../playerStates/stats';
 import PersonStartClimbAnimation from './PlayerRightStairClimbAnim';
 import { AnimationActivity } from '../../objects/stairs/curvePlayerSetter';
 import Player from '../Player';
@@ -21,8 +21,6 @@ let turn;
 let heal;
 let dead;
 let reload;
-let healing = false;
-let reloading = false;
 let isAlive = true;
 let startClimb;
 let damaged;
@@ -46,7 +44,6 @@ export default class PersonAnimation {
       heal: this.scene.sound.add('heroHeal', { volume: 1 }),
       reload: this.scene.sound.add('pistolReload', { volume: 1 }),
     };
-
     this.currentAnim = [];
   }
 
@@ -80,7 +77,6 @@ export default class PersonAnimation {
       startClimb,
       damaged,
     ]);
-
 
     this.playerInstance = new Player(this.scene, 109.36, 180.5, person);
 
@@ -215,14 +211,16 @@ export default class PersonAnimation {
         const isHeroAlive = stats.health > 0;
 
         if (
-          person.list[2].parentContainer.x > pointer.worldX && isHeroAlive && !healing && !reloading
+          person.list[2].parentContainer.x > pointer.worldX
+          && isHeroAlive && !playerActions.healing && !playerActions.reloading
         ) {
           turn = false;
           gunBack = this.scene.add.image(1.5, 1, 'gunback').setOrigin(1, 0.5);
           person.replace(gun, gunBack);
           person.list[2].setRotation(leftAngle(angle, stats.MAX_ANGLE));
         } else if (
-          person.list[2].parentContainer.x < pointer.worldX && isHeroAlive && !healing && !reloading
+          person.list[2].parentContainer.x < pointer.worldX
+          && isHeroAlive && !playerActions.healing && !playerActions.reloading
         ) {
           turn = true;
           person.replace(person.list[2], gun);
@@ -243,9 +241,9 @@ export default class PersonAnimation {
   };
 
   healAnimation(callback) {
-    if (isAlive && !reloading && person.body.velocity.x === 0) {
+    if (isAlive && !playerActions.reloading && person.body.velocity.x === 0) {
       let anim;
-      healing = true;
+      playerActions.healing = true;
       person.list[2].setVisible(false);
       if (!this.sounds.heal.isPlaying) {
         this.sounds.heal.play();
@@ -259,7 +257,7 @@ export default class PersonAnimation {
       }
       anim.on('complete', () => {
         callback();
-        healing = false;
+        playerActions.healing = false;
         body.setVisible(true);
         person.list[2].setVisible(true);
       });
@@ -267,9 +265,9 @@ export default class PersonAnimation {
   }
 
   reloadAnimation(callback) {
-    if (isAlive && !healing && person.body.velocity.x === 0) {
+    if (isAlive && !playerActions.healing && person.body.velocity.x === 0) {
       let anim;
-      reloading = true;
+      playerActions.reloading = true;
       person.list[2].setVisible(false);
       if (!this.sounds.reload.isPlaying) {
         this.sounds.reload.play();
@@ -283,7 +281,7 @@ export default class PersonAnimation {
       }
       anim.on('complete', () => {
         callback();
-        reloading = false;
+        playerActions.reloading = false;
         body.setVisible(true);
         person.list[2].setVisible(true);
       });
@@ -315,8 +313,6 @@ export default class PersonAnimation {
       startClimb.setVisible(true);
     }
 
-
-    /* sounds update start */
     if (legs.anims.currentAnim) {
       if (legs.anims.currentAnim.key === 'rightl'
         && (
@@ -370,18 +366,17 @@ export default class PersonAnimation {
         }
       }
     }
-    /* sounds update end */
 
     if (isAlive) {
       playerOnStairs = !stairsInf.playerInstance.isTouching.ground;
       gunBack = this.scene.add.image(1.5, 1, 'gunback').setOrigin(1, 0.5);
-      if (!playerOnStairs && !healing && !reloading) {
+      if (!playerOnStairs && !playerActions.healing && !playerActions.reloading) {
         personNotClimb();
       }
-      if (healing) {
+      if (playerActions.healing) {
         body.setVisible(false);
       }
-      if (reloading) {
+      if (playerActions.reloading) {
         body.setVisible(false);
       }
       if (stats.health === 0) {
@@ -480,20 +475,20 @@ export default class PersonAnimation {
         legs.anims.play('leftl', true);
         this.changeCurrentAnims('Lturn', 'leftl');
       } else if (person.list[2].texture.key === 'gun') {
-        if (healing) {
+        if (playerActions.healing) {
           heal.setVisible(true);
         }
-        if (reloading) {
+        if (playerActions.reloading) {
           reload.setVisible(true);
         }
         body.anims.play('Lturn', true);
         legs.anims.play('Lturnleg', true);
         this.changeCurrentAnims('Lturn', 'Lturnleg');
       } else {
-        if (healing) {
+        if (playerActions.healing) {
           heal.setVisible(true);
         }
-        if (reloading) {
+        if (playerActions.reloading) {
           reload.setVisible(true);
         }
         body.anims.play('Rturn', true);

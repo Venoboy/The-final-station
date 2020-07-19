@@ -28,6 +28,15 @@ const stats = {
   MAX_ANGLE: Math.PI / 6,
 };
 
+const playerActions = {
+  reloading: false,
+  healing: false,
+};
+
+const noActions = () => {
+  return !playerActions.healing && !playerActions.reloading;
+}
+
 const isMagazineFull = () => {
   return stats.bulletsInMagazine === stats.magazineSize;
 };
@@ -100,5 +109,5 @@ const restock = (items) => {
 export {
   stats, looseHealth, setFullHealth, restock, useBullet,
   setBullets, isMagazineFull, canShoot, canReload, canHeal,
-  HeroAttacking,
+  HeroAttacking, playerActions, noActions,
 };

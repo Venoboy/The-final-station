@@ -1,11 +1,13 @@
-import { setFullHealth, canHeal } from '../playerStates/stats';
+import { setFullHealth, canHeal, noActions } from '../playerStates/stats';
 import PersonAnimation from '../animation/PlayerAnimation';
 import eventsCenter from '../../eventsCenter';
 
 function createHealing(scene, stairsInfo) {
   const animation = new PersonAnimation(scene);
   function heal() {
-    if (!stairsInfo.playerInstance.isTouching.ground && stairsInfo.st.label === 'stairs-right') {
+    if ((!stairsInfo.playerInstance.isTouching.ground && stairsInfo.st.label === 'stairs-right')
+      || !noActions()
+    ) {
       return;
     }
     if (canHeal()) {
