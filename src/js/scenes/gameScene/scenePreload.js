@@ -9,6 +9,9 @@ import tunnel from '../../../assets/level0/tunnel.png';
 import moons from '../../../assets/level0/backgr_3.png';
 import bigZombie from '../../../assets/level0/enemies/bigDamSt.png';
 import fastZombie from '../../../assets/level0/enemies/smallDamSt.png';
+import zombieFootstep from '../../../assets/audio/zombieFootstep1.mp3';
+import zombieFootstep2 from '../../../assets/audio/zombieFootstep2.mp3';
+import zombieFootstep3 from '../../../assets/audio/zombieFootstep3.mp3';
 import door from '../../../assets/interaction-objects/Door3.png';
 import door_ from '../../../assets/interaction-objects/Door1_.png';
 import lid from '../../../assets/interaction-objects/Lid.png';
@@ -67,6 +70,9 @@ const scenePreload = (scene) => {
   scene.load.audio('levelMusic', levelMusic);
   scene.load.audio('crowdTalks', crowdTalks);
   scene.load.audio('stream', stream);
+  scene.load.audio('zombieFootstep', zombieFootstep);
+  scene.load.audio('zombieFootstep2', zombieFootstep2);
+  scene.load.audio('zombieFootstep3', zombieFootstep3);
 
   scene.load.spritesheet('crowd_man', crowd_man, {
     frameWidth: 14,
