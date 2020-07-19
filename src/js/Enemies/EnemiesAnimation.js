@@ -78,8 +78,8 @@ const BigZombieAnimationCreate = (scene) => {
       start: 0,
       end: 2,
     }),
-    frameRate: 3,
-    repeat: -1,
+    frameRate: 12,
+    repeat: 0,
   });
   scene.anims.create({
     key: 'damagedRight',
@@ -87,8 +87,8 @@ const BigZombieAnimationCreate = (scene) => {
       start: 3,
       end: 5,
     }),
-    frameRate: 3,
-    repeat: -1,
+    frameRate: 12,
+    repeat: 0,
   });
 };
 
@@ -171,8 +171,10 @@ const SmallZombieAnimationCreate = (scene) => {
       start: 0,
       end: 2,
     }),
-    frameRate: 10,
-    repeat: -1,
+    frameRate: 12,
+    repeat: 0,
+    showOnStart: false,
+    hideOnComplete: true,
   });
   scene.anims.create({
     key: 'damagedRights',
@@ -180,8 +182,10 @@ const SmallZombieAnimationCreate = (scene) => {
       start: 3,
       end: 5,
     }),
-    frameRate: 10,
-    repeat: -1,
+    frameRate: 12,
+    repeat: 0,
+    showOnStart: false,
+    hideOnComplete: true,
   });
 };
 

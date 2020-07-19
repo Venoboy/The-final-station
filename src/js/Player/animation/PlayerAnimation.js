@@ -2,7 +2,7 @@
 import Phaser from 'phaser';
 import PersonWithObjectAnimation from './PlayerWithStuffAnimation';
 import PersonDeadAnimation from './PlayerDeadAnim';
-import { stats } from '../playerStates/stats';
+import { stats, HeroAttacking } from '../playerStates/stats';
 import PersonStartClimbAnimation from './PlayerRightStairClimbAnim';
 import { AnimationActivity } from '../../objects/stairs/curvePlayerSetter';
 import Player from '../Player';
@@ -24,8 +24,8 @@ let reload;
 let healing = false;
 let reloading = false;
 let isAlive = true;
-let corpse;
 let startClimb;
+let damaged;
 
 const { PI } = Math;
 
@@ -67,6 +67,7 @@ export default class PersonAnimation {
     gun.name = 'dudeGun';
     climbDude = this.scene.add.sprite(0, 0, 'climbing').setVisible(false);
     climbDude.name = 'climbDude';
+    damaged = this.scene.add.sprite(0, 0, 'damage').setVisible(false);
 
     person = this.scene.add.container(109.36, 180.5, [
       legs,
@@ -77,6 +78,7 @@ export default class PersonAnimation {
       reload,
       dead,
       startClimb,
+      damaged,
     ]);
 
 
@@ -97,7 +99,7 @@ export default class PersonAnimation {
         start: 10,
         end: 15,
       }),
-      frameRate: 7,
+      frameRate: 9,
       repeat: -1,
     });
 
@@ -145,7 +147,7 @@ export default class PersonAnimation {
         start: 24,
         end: 29,
       }),
-      frameRate: 7,
+      frameRate: 9,
       repeat: -1,
     });
     this.scene.anims.create({
@@ -154,7 +156,7 @@ export default class PersonAnimation {
         start: 2,
         end: 9,
       }),
-      frameRate: 7,
+      frameRate: 12,
       repeat: -1,
     });
     this.scene.anims.create({
@@ -163,7 +165,7 @@ export default class PersonAnimation {
         start: 16,
         end: 23,
       }),
-      frameRate: 7,
+      frameRate: 12,
       repeat: -1,
     });
 
@@ -180,6 +182,24 @@ export default class PersonAnimation {
       key: 'climbStay',
       frames: [{ key: 'climbing', frame: 3 }],
       frameRate: 20,
+    });
+    this.scene.anims.create({
+      key: 'DamageR',
+      frames: this.scene.anims.generateFrameNumbers('damage', {
+        start: 0,
+        end: 2,
+      }),
+      frameRate: 10,
+      repeat: 0,
+    });
+    this.scene.anims.create({
+      key: 'DamageL',
+      frames: this.scene.anims.generateFrameNumbers('damage', {
+        start: 3,
+        end: 5,
+      }),
+      frameRate: 10,
+      repeat: 0,
     });
 
     this.scene.input.on(
@@ -295,6 +315,7 @@ export default class PersonAnimation {
       startClimb.setVisible(true);
     }
 
+
     /* sounds update start */
     if (legs.anims.currentAnim) {
       if (legs.anims.currentAnim.key === 'rightl'
@@ -369,20 +390,39 @@ export default class PersonAnimation {
         legs.setVisible(false);
         person.list[2].setVisible(false);
         dead.setVisible(true);
+
         if (legs.anims.currentAnim.key === 'Lturnleg') {
           anim = this.scene.anims.get('Dead');
           dead.anims.play('Dead', true);
-          corpse = true;
         } else if (legs.anims.currentAnim.key === 'Rturnleg') {
           anim = this.scene.anims.get('DeadR');
           dead.anims.play('DeadR', true);
-          corpse = false;
         }
+        this.scene.input.keyboard.enabled = false;
         anim.on('complete', () => {
           isAlive = false;
+          this.scene.input.keyboard.enabled = true;
         });
       }
+      if (HeroAttacking.attacking && stats.health > 0) {
+        let anim;
+        personNotClimb();
+        damaged.setVisible(true);
+        body.setVisible(false);
+        if (legs.anims.currentAnim.key === 'Rturnleg') {
+          anim = this.scene.anims.get('DamageR');
+          damaged.anims.play('DamageR', true);
+        } else {
+          anim = this.scene.anims.get('DamageL');
+          damaged.anims.play('DamageL', true);
+        }
 
+        anim.on('complete', () => {
+          HeroAttacking.attacking = false;
+          body.setVisible(true);
+          damaged.setVisible(false);
+        });
+      }
       if (cursors.left.isDown()) {
         if (!turn) {
           legs.anims.play('backLeftl', true);
@@ -459,13 +499,6 @@ export default class PersonAnimation {
         body.anims.play('Rturn', true);
         legs.anims.play('Rturnleg', true);
         this.changeCurrentAnims('Rturn', 'Rturnleg');
-      }
-    } else {
-      dead.setVisible(true);
-      if (corpse) {
-        dead.anims.play('end', true);
-      } else {
-        dead.anims.play('endR', true);
       }
     }
   }

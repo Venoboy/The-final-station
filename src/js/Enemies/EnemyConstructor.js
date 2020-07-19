@@ -109,6 +109,7 @@ export default class EnemyConstructor {
     this.attackCounter += 1;
     if (this.attackCounter === framesDelay) {
       this.attackCounter = 0;
+
       looseHealth(this.config.settings.damage);
     }
   };
@@ -205,7 +206,8 @@ export default class EnemyConstructor {
     }
   };
 
-  update = () => {
+  update = (obj) => {
+    // console.log(obj.damaged);
     this.enemy.setCollidesWith([collisionCategories.ground]);
     this.enemy.body.ignoreGravity = false;
     this.currentSpeed = 0;
@@ -213,22 +215,22 @@ export default class EnemyConstructor {
     this.enemyCheckingPlayer();
     // здесь можно вставить анимацию врага, в зависимости от this.currentSpeed
 
-    if (this.currentSpeed === 0 && this.enemy.texture.key === 'bigZombie' && !this.atacking) {
+    if (this.currentSpeed === 0 && this.enemy.texture.key === 'bigZombie' && !this.atacking && !obj.damaged) {
       this.enemy.anims.play('stayLeft', true);
     }
-    else if (this.currentSpeed === 0 && this.enemy.texture.key === 'smallZombie' && !this.atacking) {
+    else if (this.currentSpeed === 0 && this.enemy.texture.key === 'smallZombie' && !this.atacking && !obj.damaged) {
       this.enemy.anims.play('stayLefts', true);
     }
-    else if (this.currentSpeed > 0 && this.enemy.texture.key === 'bigZombie' && !this.atacking) {
+    else if (this.currentSpeed > 0 && this.enemy.texture.key === 'bigZombie' && !this.atacking && !obj.damaged) {
       this.enemy.anims.play('walkRight', true);
     }
-    else if (this.currentSpeed > 0 && this.enemy.texture.key === 'smallZombie' && !this.atacking) {
+    else if (this.currentSpeed > 0 && this.enemy.texture.key === 'smallZombie' && !this.atacking && !obj.damaged) {
       this.enemy.anims.play('walkRights', true);
     }
-    else if (this.currentSpeed < 0 && this.enemy.texture.key === 'bigZombie') {
+    else if (this.currentSpeed < 0 && this.enemy.texture.key === 'bigZombie' && !this.atacking && !obj.damaged) {
       this.enemy.anims.play('walkLeft', true);
     }
-    else if (this.currentSpeed < 0 && this.enemy.texture.key === 'smallZombie') {
+    else if (this.currentSpeed < 0 && this.enemy.texture.key === 'smallZombie' && !this.atacking && !obj.damaged) {
       this.enemy.anims.play('walkLefts', true);
     }
     this.enemy.setVelocityX(this.currentSpeed);

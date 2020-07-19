@@ -3,6 +3,7 @@ import enemyPositions from './enemyPositions';
 import enemySettings from './enemySettings';
 import collisionCategories from '../helpers/collisionCategories';
 import { stairsArray } from '../objects/stairs/stairsCreation';
+import { obj } from './enemyDamage';
 
 
 const enemiesArray = [];
@@ -47,7 +48,7 @@ export default class EnemyLoader {
       enemyType.forEach((enemy) => {
         const isAlive = enemy.enemy.getData('health') > 0;
         if (enemy.enemy.body && isAlive) {
-          enemy.update();
+          enemy.update(obj);
         }
       });
     });

@@ -1,5 +1,4 @@
 
-
 export default class PersonDeadAnimation {
   constructor(scene) {
     this.scene = scene;
@@ -13,10 +12,10 @@ export default class PersonDeadAnimation {
         start: 0,
         end: 9,
       }),
-      frameRate: 7,
+      frameRate: 12,
       repeat: 0,
-      showOnStart: false,
-      hideOnComplete: true,
+      showOnStart: true,
+      hideOnComplete: false,
     });
     this.scene.anims.create({
       key: 'DeadR',
@@ -24,21 +23,21 @@ export default class PersonDeadAnimation {
         start: 10,
         end: 19,
       }),
-      frameRate: 7,
+      frameRate: 12,
       repeat: 0,
-      showOnStart: false,
-      hideOnComplete: true,
+      showOnStart: true,
+      hideOnComplete: false,
     });
-    this.scene.anims.create({
-      key: 'end',
-      frames: [{ key: 'dead', frame: 9 }],
-      frameRate: 20,
-    });
-    this.scene.anims.create({
-      key: 'endR',
-      frames: [{ key: 'dead', frame: 19 }],
-      frameRate: 20,
-    });
+    // this.scene.anims.create({
+    //   key: 'end',
+    //   frames: [{ key: 'dead', frame: 9 }],
+    //   frameRate: 5,
+    // });
+    // this.scene.anims.create({
+    //   key: 'endR',
+    //   frames: [{ key: 'dead', frame: 19 }],
+    //   frameRate: 5,
+    // });
 
     return deadanim;
   }

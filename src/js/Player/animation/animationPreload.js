@@ -8,6 +8,7 @@ import dead from '../../../assets/Player/Dead.png';
 import heal from '../../../assets/Player/Heal.png';
 import reload from '../../../assets/Player/Reload.png';
 import startClimb from '../../../assets/Player/GoRightStair.png';
+import damaged from '../../../assets/Player/HeroDamaged.png';
 
 import playerFootstep from '../../../assets/audio/playerFootstep.mp3';
 import ladder from '../../../assets/audio/ladder.mp3';
@@ -52,6 +53,11 @@ const animationPreload = (scene) => {
     frameWidth: 32,
     frameHeight: 32,
   });
+  scene.load.spritesheet('damage', damaged, {
+    frameWidth: 32,
+    frameHeight: 32,
+  });
+
 
   scene.load.audio('playerFootstep', playerFootstep);
   scene.load.audio('ladder', ladder);
