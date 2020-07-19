@@ -1,12 +1,12 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable brace-style */
 import Phaser from 'phaser';
 import collisionCategories from '../helpers/collisionCategories';
 import { doors } from '../scenes/gameScene/sceneSetters';
-import { looseHealth } from '../Player/playerStates/stats';
+import { looseHealth, stats } from '../Player/playerStates/stats';
 import { groundArray } from '../objects/ground/groundCreation';
 import { BigZombieAnimationCreate, SmallZombieAnimationCreate } from './EnemiesAnimation';
-import { stats } from '../Player/playerStates/stats';
-
+import updateSounds from './updateSounds';
 
 export default class EnemyConstructor {
   constructor(config) {
@@ -57,7 +57,7 @@ export default class EnemyConstructor {
     };
     const compoundBody = Body.create({
       parts: [this.mainBody, this.sensors.detect, this.sensors.body,
-      this.sensors.left, this.sensors.right],
+        this.sensors.left, this.sensors.right],
       frictionStatic: 0.1,
       frictionAir: 0.02,
       friction: 0.1,
@@ -72,6 +72,11 @@ export default class EnemyConstructor {
       .setCollisionGroup(config.collisionGroup)
       .setCollidesWith([collisionCategories.ground]);
     this.enemy.setData('health', this.health);
+    this.footstepSounds = [
+      this.scene.sound.add('zombieFootstep', { volume: 0.5 }),
+      this.scene.sound.add('zombieFootstep2', { volume: 0.5 }),
+    ];
+    this.updateSounds = updateSounds.bind(this);
 
 
     if (config.type === 'enemyBig') {
@@ -233,6 +238,7 @@ export default class EnemyConstructor {
     else if (this.currentSpeed < 0 && this.enemy.texture.key === 'smallZombie' && !this.atacking && !obj.damaged) {
       this.enemy.anims.play('walkLefts', true);
     }
+    this.updateSounds();
     this.enemy.setVelocityX(this.currentSpeed);
     this.blockDoor = false;
     if (this.isEnemySeePlayer) {

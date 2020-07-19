@@ -24,7 +24,11 @@ const updateKeysUI = (keys) => {
   eventsCenter.emit('update-keys', keys);
 };
 
+const updateStoksUI = (...stocks) => {
+  eventsCenter.emit('update-stocks', ...stocks);
+};
+
 export {
   updateAidsUI, updateFoodUI, updateBulletsUI, updateKeysUI,
-  updateMagazineUI, updateHealthBarUI,
+  updateMagazineUI, updateHealthBarUI, updateStoksUI,
 };

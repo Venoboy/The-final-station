@@ -1,23 +1,21 @@
 import {
   updateBulletsUI,
-  updateFoodUI,
   updateHealthBarUI,
   updateAidsUI,
-  updateKeysUI,
   updateMagazineUI,
+  updateStoksUI,
 } from '../../interface/UIHelpers';
 import eventsCenter from '../../eventsCenter';
 
-
 const HERO_MAX_HEALTH = 100;
 const HeroAttacking = {
-  attacking: false
-}
+  attacking: false,
+};
 
 const stats = {
   aids: 2,
   bullets: 6,
-  bulletsInReserve: 6,
+  bulletsInMagazine: 6,
   magazineSize: 6,
   food: 2,
   keys: 0,
@@ -31,15 +29,15 @@ const stats = {
 };
 
 const isMagazineFull = () => {
-  return stats.bullets === stats.magazineSize;
+  return stats.bulletsInMagazine === stats.magazineSize;
 };
 
 const canShoot = () => {
-  return stats.bullets > 0;
+  return stats.bulletsInMagazine > 0;
 };
 
 const canReload = () => {
-  return stats.bulletsInReserve > 0;
+  return stats.bullets > 0;
 };
 
 const canHeal = () => {
@@ -71,57 +69,36 @@ const setFullHealth = () => {
 };
 
 const useBullet = () => {
-  stats.bullets -= 1;
-  updateMagazineUI(stats.bullets);
+  stats.bulletsInMagazine -= 1;
+  updateMagazineUI(stats.bulletsInMagazine);
 };
 
 const setBullets = () => {
-  const bulletsNeeded = stats.magazineSize - stats.bullets;
-  if (stats.bulletsInReserve >= bulletsNeeded) {
-    stats.bulletsInReserve -= bulletsNeeded;
-    stats.bullets += bulletsNeeded;
+  const bulletsNeeded = stats.magazineSize - stats.bulletsInMagazine;
+  if (stats.bullets >= bulletsNeeded) {
+    stats.bullets -= bulletsNeeded;
+    stats.bulletsInMagazine += bulletsNeeded;
   } else {
-    stats.bullets += stats.bulletsInReserve;
-    stats.bulletsInReserve = 0;
+    stats.bulletsInMagazine += stats.bullets;
+    stats.bullets = 0;
   }
-  updateMagazineUI(stats.bullets);
-  updateBulletsUI(stats.bulletsInReserve);
+  updateMagazineUI(stats.bulletsInMagazine);
+  updateBulletsUI(stats.bullets);
 };
 
-const updateStats = (statName, value) => {
-  switch (statName) {
-    case 'aids': {
-      stats[statName] += value;
-      updateAidsUI(stats[statName]);
-      break;
+const restock = (items) => {
+  items.forEach((item) => {
+    if (stats[item.name]) {
+      stats[item.name] += item.quantity;
+    } else {
+      stats[item.name] = item.quantity;
     }
-    case 'bullets': {
-      stats.bulletsInReserve += value;
-      updateBulletsUI(stats.bulletsInReserve);
-      break;
-    }
-    case 'food': {
-      stats[statName] += value;
-      updateFoodUI(stats[statName]);
-      break;
-    }
-    case 'keys': {
-      stats[statName] += value;
-      updateKeysUI(stats[statName]);
-      break;
-    }
-    default: {
-      if (stats[statName]) {
-        stats[statName] += value;
-      } else {
-        stats[statName] = value;
-      }
-    }
-  }
+  });
+  updateStoksUI(stats.aids, stats.bullets, stats.food, stats.keys);
 };
 
 export {
-  stats, looseHealth, setFullHealth, updateStats, useBullet,
+  stats, looseHealth, setFullHealth, restock, useBullet,
   setBullets, isMagazineFull, canShoot, canReload, canHeal,
-  HeroAttacking
+  HeroAttacking,
 };

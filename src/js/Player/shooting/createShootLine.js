@@ -42,8 +42,8 @@ const getResultPoint = (startX, startY, finishX, finishY) => {
   return resultPoint;
 };
 
-const createShootLine = (scene, person) => {
-  const holder = new ShootDisplay(scene, person);
+const createShootLine = (scene, person, stairsInfo) => {
+  const holder = new ShootDisplay(scene, person, stairsInfo);
   const construct = (pointer) => {
     const graphics = scene.add.graphics();
     const shootSound = scene.sound.add('pistolShoot');
