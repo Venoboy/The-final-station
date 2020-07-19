@@ -8,7 +8,11 @@ import {
 } from '../../interface/UIHelpers';
 import eventsCenter from '../../eventsCenter';
 
+
 const HERO_MAX_HEALTH = 100;
+const HeroAttacking = {
+  attacking: false
+}
 
 const stats = {
   aids: 2,
@@ -45,6 +49,7 @@ const canHeal = () => {
 const looseHealth = (amount) => {
   if (stats.health > 0) {
     stats.health -= amount;
+    HeroAttacking.attacking = true;
     if (stats.health < 0) {
       stats.health = 0;
     }
@@ -118,4 +123,5 @@ const updateStats = (statName, value) => {
 export {
   stats, looseHealth, setFullHealth, updateStats, useBullet,
   setBullets, isMagazineFull, canShoot, canReload, canHeal,
+  HeroAttacking
 };
