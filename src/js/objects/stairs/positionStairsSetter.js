@@ -44,6 +44,7 @@ const positionStairsSetter = (config) => {
           x: finishX,
           y: finishY,
         };
+        // плавно переместиться по дуге на спуск с боковой лестницы
         curvePlayerSetter(pB, pC, positionsEnd, scene, false);
         setCanGoX(false);
       }
