@@ -40,8 +40,8 @@ export default class PlayerInteraction {
       playerInstance: this.playerInstance,
     };
     stairsInteraction = new StairsInteraction(playerInteractionConfig);
-    createShootLine(this.scene, this.player);
-    createHealing(this.scene);
+    createShootLine(this.scene, this.player, stairsInteraction);
+    createHealing(this.scene, stairsInteraction);
   }
 
   update() {

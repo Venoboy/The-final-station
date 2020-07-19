@@ -9,14 +9,22 @@ const textConfig = {
 };
 
 class ShootDisplay {
-  constructor(scene, player) {
+  constructor(scene, player, stairsInfo) {
     this.scene = scene;
     this.player = player;
     this.activeWarnings = [];
+    this.stairsInfo = stairsInfo;
     this.animation = new PersonAnimation(scene);
   }
 
+  onRightStairs() {
+    return !this.stairsInfo.playerInstance.isTouching.ground && this.stairsInfo.st.label === 'stairs-right';
+  }
+
   shoot() {
+    if (this.onRightStairs()) {
+      return false;
+    }
     if (canShoot()) {
       useBullet();
       return true;
@@ -26,6 +34,9 @@ class ShootDisplay {
   }
 
   reload() {
+    if (this.onRightStairs()) {
+      return;
+    }
     if (isMagazineFull()) {
       return;
     }
