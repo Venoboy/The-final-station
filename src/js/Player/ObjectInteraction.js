@@ -1,5 +1,5 @@
 import InteractionObject from '../objects/interactionObjects/InteractionObject';
-import { updateStats } from './playerStates/stats';
+import { restock } from './playerStates/stats';
 import eventsCenter from '../eventsCenter';
 
 export default class ObjectInteraction {
@@ -69,9 +69,7 @@ export default class ObjectInteraction {
   // eslint-disable-next-line class-methods-use-this
   processInteraction(info) {
     if (info.type === 'storage') {
-      info.items.forEach((item) => {
-        updateStats(item.name, item.quantity);
-      });
+      restock(info.items);
     }
   }
 

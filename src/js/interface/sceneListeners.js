@@ -35,6 +35,7 @@ const addSceneListeners = (scene) => {
   eventsCenter.on('update-magazine', scene.updateMagazine, scene);
   eventsCenter.on('update-food', scene.updateMagazine, scene);
   eventsCenter.on('update-keys', scene.updateMagazine, scene);
+  eventsCenter.on('update-stocks', scene.updateStocks, scene);
   // eventsCenter.on('player-died', () => {
   //   scene.cameras.main.fadeOut(2500);
   // });
@@ -48,6 +49,7 @@ const addSceneListeners = (scene) => {
     eventsCenter.off('update-magazine', scene.updateMagazine, scene);
     eventsCenter.off('update-food', scene.updateMagazine, scene);
     eventsCenter.off('update-keys', scene.updateMagazine, scene);
+    eventsCenter.off('update-stocks', scene.updateStocks, scene);
     // eventsCenter.off('player-died', () => {
     //   scene.cameras.main.fadeOut(2500);
     // });
