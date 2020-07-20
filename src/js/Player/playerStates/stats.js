@@ -1,9 +1,6 @@
 import {
-  updateBulletsUI,
-  updateHealthBarUI,
-  updateAidsUI,
-  updateMagazineUI,
-  updateStoksUI,
+  updateBulletsUI, updateHealthBarUI, updateAidsUI,
+  updateMagazineUI, updateStoksUI,
 } from '../../interface/UIHelpers';
 import eventsCenter from '../../eventsCenter';
 
@@ -11,6 +8,12 @@ const HERO_MAX_HEALTH = 100;
 const HeroAttacking = {
   attacking: false,
 };
+
+const defaultStats = {
+  bullets: 6,
+  health: HERO_MAX_HEALTH,
+  aids: 2,
+}
 
 const stats = {
   aids: 2,
@@ -32,6 +35,17 @@ const playerActions = {
   reloading: false,
   healing: false,
 };
+
+const renewStats = () => {
+  stats.bullets = defaultStats.bullets;
+  stats.health = defaultStats.health;
+  stats.aids = defaultStats.aids;
+  playerActions.reloading = false;
+  playerActions.healing = false;
+  HeroAttacking.attacking = false;
+};
+
+eventsCenter.on('start-game', renewStats);
 
 const noActions = () => {
   return !playerActions.healing && !playerActions.reloading;

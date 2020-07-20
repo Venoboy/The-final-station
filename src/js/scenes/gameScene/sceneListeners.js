@@ -19,20 +19,20 @@ function gameOver() {
 const addSceneListeners = (scene) => {
   scene.pauseKey.on('up', pause, scene);
 
-  // eventsCenter.on('player-died', gameOver, scene);
+  eventsCenter.on('player-died', gameOver, scene);
 
   scene.events.on('resume', () => {
-    // scene.music.play();
+    scene.music.play();
     scene.soundSensors.forEach((sensor) => sensor.sound.play());
   });
   scene.events.on('pause', () => {
-    // scene.music.pause();
+    scene.music.pause();
     scene.soundSensors.forEach((sensor) => sensor.sound.pause());
   });
   scene.events.on('shutdown', () => {
     scene.pauseKey.off('up', pause, scene);
-    // eventsCenter.off('player-died', gameOver, scene);
-    // scene.music.stop();
+    eventsCenter.off('player-died', gameOver, scene);
+    scene.music.stop();
     scene.soundSensors.forEach((sensor) => sensor.sound.stop());
   });
 };

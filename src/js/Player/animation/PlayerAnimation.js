@@ -7,7 +7,9 @@ import PersonStartClimbAnimation from './PlayerRightStairClimbAnim';
 import { AnimationActivity } from '../../objects/stairs/curvePlayerSetter';
 import Player from '../Player';
 import { leftAngle, rightAngle } from '../../helpers/setMaxAngle';
-
+import eventsCenter from '../../eventsCenter';
+import addSounds from './animationSounds/addSounds';
+import updateSounds from './animationSounds/updateSounds';
 
 let person;
 let body;
@@ -31,20 +33,9 @@ export default class PersonAnimation {
   constructor(scene) {
     this.scene = scene;
     /* animation sounds */
-    this.sounds = {
-      footstep: this.scene.sound.add('playerFootstep', { volume: 1 }),
-      ladder: [
-        this.scene.sound.add('ladder', { volume: 0.1 }),
-        this.scene.sound.add('ladder2', { volume: 0.1 }),
-        this.scene.sound.add('ladder3', { volume: 0.1 }),
-        this.scene.sound.add('ladder4', { volume: 0.1 }),
-        this.scene.sound.add('ladder5', { volume: 0.1 }),
-        this.scene.sound.add('ladder6', { volume: 0.1 }),
-      ],
-      heal: this.scene.sound.add('heroHeal', { volume: 1 }),
-      reload: this.scene.sound.add('pistolReload', { volume: 1 }),
-    };
+    this.sounds = addSounds(scene);
     this.currentAnim = [];
+    this.updateSounds = updateSounds.bind(this);
   }
 
 
@@ -98,7 +89,6 @@ export default class PersonAnimation {
       frameRate: 9,
       repeat: -1,
     });
-
     this.scene.anims.create({
       key: 'Lturn',
       frames: this.scene.anims.generateFrameNumbers('dude', {
@@ -127,7 +117,6 @@ export default class PersonAnimation {
       frames: [{ key: 'dudeLegs', frame: 0 }],
       frameRate: 20,
     });
-
     this.scene.anims.create({
       key: 'right',
       frames: this.scene.anims.generateFrameNumbers('dude', {
@@ -164,7 +153,6 @@ export default class PersonAnimation {
       frameRate: 12,
       repeat: -1,
     });
-
     this.scene.anims.create({
       key: 'Climb',
       frames: this.scene.anims.generateFrameNumbers('climbing', {
@@ -197,10 +185,8 @@ export default class PersonAnimation {
       frameRate: 10,
       repeat: 0,
     });
-
-    this.scene.input.on(
-      'pointermove',
-      function (pointer) {
+    this.scene.input.on('pointermove',
+      (pointer) => {
         const angle = Phaser.Math.Angle.Between(
           pointer.worldX,
           pointer.worldY,
@@ -208,11 +194,9 @@ export default class PersonAnimation {
           person.body.position.y,
         );
 
-        const isHeroAlive = stats.health > 0;
-
         if (
           person.list[2].parentContainer.x > pointer.worldX
-          && isHeroAlive && !playerActions.healing && !playerActions.reloading
+          && isAlive && !playerActions.healing && !playerActions.reloading
         ) {
           turn = false;
           gunBack = this.scene.add.image(1.5, 1, 'gunback').setOrigin(1, 0.5);
@@ -220,18 +204,23 @@ export default class PersonAnimation {
           person.list[2].setRotation(leftAngle(angle, stats.MAX_ANGLE));
         } else if (
           person.list[2].parentContainer.x < pointer.worldX
-          && isHeroAlive && !playerActions.healing && !playerActions.reloading
+          && isAlive && !playerActions.healing && !playerActions.reloading
         ) {
           turn = true;
           person.replace(person.list[2], gun);
           person.list[2].setRotation(rightAngle(angle, stats.MAX_ANGLE) - PI);
         }
       },
-      this,
-    );
+      this);
 
     cursors = this.scene.cursors;
 
+    eventsCenter.on('player-died', () => {
+      this.scene.input.off('pointermove');
+      isAlive = false;
+      this.deadAnimation();
+    });
+    isAlive = true;
     return this.playerInstance;
   }
 
@@ -288,7 +277,31 @@ export default class PersonAnimation {
     }
   }
 
+  deadAnimation() {
+    let anim;
+    body.setVisible(false);
+    legs.setVisible(false);
+    person.list[2].setVisible(false);
+    dead.setVisible(true);
+
+    if (legs.anims.currentAnim.key === 'Lturnleg') {
+      anim = this.scene.anims.get('Dead');
+      dead.anims.play('Dead', true);
+    } else if (legs.anims.currentAnim.key === 'Rturnleg') {
+      anim = this.scene.anims.get('DeadR');
+      dead.anims.play('DeadR', true);
+    }
+    this.scene.input.keyboard.enabled = false;
+    anim.on('complete', () => {
+      this.scene.input.keyboard.enabled = true;
+    });
+  }
+
   update(stairsInf) {
+    if (!isAlive) {
+      return;
+    }
+
     function personClimb() {
       body.setVisible(false);
       legs.setVisible(false);
@@ -313,188 +326,114 @@ export default class PersonAnimation {
       startClimb.setVisible(true);
     }
 
-    if (legs.anims.currentAnim) {
-      if (legs.anims.currentAnim.key === 'rightl'
-        && (
-          legs.anims.currentFrame.textureFrame === 24
-          || legs.anims.currentFrame.textureFrame === 27)
-        && this.currentAnim.includes('rightl')
-      ) {
-        if (!this.sounds.footstep.isPlaying) {
-          this.sounds.footstep.play();
-        }
-      }
-      if (legs.anims.currentAnim.key === 'leftl'
-        && (
-          legs.anims.currentFrame.textureFrame === 10
-          || legs.anims.currentFrame.textureFrame === 13)
-        && this.currentAnim.includes('leftl')
-      ) {
-        if (!this.sounds.footstep.isPlaying) {
-          this.sounds.footstep.play();
-        }
-      }
-      if (legs.anims.currentAnim.key === 'backRightl'
-        && (
-          legs.anims.currentFrame.textureFrame === 18
-          || legs.anims.currentFrame.textureFrame === 22)
-        && this.currentAnim.includes('backRightl')
-      ) {
-        if (!this.sounds.footstep.isPlaying) {
-          this.sounds.footstep.play();
-        }
-      }
-      if (legs.anims.currentAnim.key === 'backLeftl'
-        && (
-          legs.anims.currentFrame.textureFrame === 4
-          || legs.anims.currentFrame.textureFrame === 8)
-        && this.currentAnim.includes('backLeftl')
-      ) {
-        if (!this.sounds.footstep.isPlaying) {
-          this.sounds.footstep.play();
-        }
-      }
-    }
+    this.updateSounds(legs, climbDude);
 
-    if (climbDude.anims.currentAnim) {
-      if (climbDude.anims.currentAnim.key === 'Climb'
-        && this.currentAnim.includes('Climb')
-      ) {
-        const ladderIndex = climbDude.anims.currentFrame.textureFrame;
-        if (ladderIndex >= 0 && !this.sounds.ladder[ladderIndex].isPlaying) {
-          this.sounds.ladder[ladderIndex].play();
-        }
-      }
+    playerOnStairs = !stairsInf.playerInstance.isTouching.ground;
+    gunBack = this.scene.add.image(1.5, 1, 'gunback').setOrigin(1, 0.5);
+    if (!playerOnStairs && !playerActions.healing && !playerActions.reloading) {
+      personNotClimb();
     }
-
-    if (isAlive) {
-      playerOnStairs = !stairsInf.playerInstance.isTouching.ground;
-      gunBack = this.scene.add.image(1.5, 1, 'gunback').setOrigin(1, 0.5);
-      if (!playerOnStairs && !playerActions.healing && !playerActions.reloading) {
-        personNotClimb();
+    if (playerActions.healing) {
+      body.setVisible(false);
+    }
+    if (playerActions.reloading) {
+      body.setVisible(false);
+    }
+    if (HeroAttacking.attacking) {
+      let anim;
+      personNotClimb();
+      damaged.setVisible(true);
+      body.setVisible(false);
+      if (legs.anims.currentAnim.key === 'Rturnleg') {
+        anim = this.scene.anims.get('DamageR');
+        damaged.anims.play('DamageR', true);
+      } else {
+        anim = this.scene.anims.get('DamageL');
+        damaged.anims.play('DamageL', true);
       }
+
+      anim.on('complete', () => {
+        HeroAttacking.attacking = false;
+        body.setVisible(true);
+        damaged.setVisible(false);
+      });
+    }
+    if (cursors.left.isDown()) {
+      if (!turn) {
+        legs.anims.play('backLeftl', true);
+        body.anims.play('left', true);
+        this.changeCurrentAnims('backLeftl', 'left');
+      } else if (turn) {
+        body.anims.play('right', true);
+        legs.anims.play('backRightl', true);
+        this.changeCurrentAnims('right', 'backRightl');
+      }
+    } else if (cursors.right.isDown()) {
+      if (turn) {
+        legs.anims.play('rightl', true);
+        body.anims.play('right', true);
+        this.changeCurrentAnims('rightl', 'right');
+      } else if (!turn) {
+        legs.anims.play('leftl', true);
+        body.anims.play('left', true);
+        this.changeCurrentAnims('leftl', 'left');
+      }
+    } else if (AnimationActivity.isAnimationActive && !AnimationActivity.directionUp) {
+      personStartClimb();
+      startClimb.anims.play('Down', true);
+      this.changeCurrentAnims('Down');
+    } else if (
+      cursors.down.isDown()
+        && playerOnStairs
+        && stairsInf.st.label === 'stairs-right'
+    ) {
+      personClimb();
+      climbDude.anims.play('Climb', true);
+      this.changeCurrentAnims('Climb');
+    } else if (AnimationActivity.isAnimationActive && AnimationActivity.directionUp) {
+      personStartClimb();
+      startClimb.anims.play('Up', true);
+      this.changeCurrentAnims('Up');
+    } else if (
+      cursors.up.isDown()
+        && playerOnStairs
+        && stairsInf.st.label === 'stairs-right'
+    ) {
+      personClimb();
+      climbDude.anims.play('Climb', true);
+      this.changeCurrentAnims('Climb');
+    } else if (playerOnStairs && stairsInf.st.label === 'stairs-right') {
+      personClimb();
+      climbDude.anims.play('climbStay', true);
+      this.changeCurrentAnims('climbStay');
+    } else if (playerOnStairs && (cursors.down.isDown() || cursors.up.isDown())) {
+      if (this.scene.input.mousePointer.x + this.scene.cameras.main.scrollX < person.x) {
+        body.anims.play('Rturn', true);
+      } else {
+        body.anims.play('Lturn', true);
+      }
+      legs.anims.play('leftl', true);
+      this.changeCurrentAnims('Lturn', 'leftl');
+    } else if (person.list[2].texture.key === 'gun') {
       if (playerActions.healing) {
-        body.setVisible(false);
+        heal.setVisible(true);
       }
       if (playerActions.reloading) {
-        body.setVisible(false);
+        reload.setVisible(true);
       }
-      if (stats.health === 0) {
-        let anim;
-        body.setVisible(false);
-        legs.setVisible(false);
-        person.list[2].setVisible(false);
-        dead.setVisible(true);
-
-        if (legs.anims.currentAnim.key === 'Lturnleg') {
-          anim = this.scene.anims.get('Dead');
-          dead.anims.play('Dead', true);
-        } else if (legs.anims.currentAnim.key === 'Rturnleg') {
-          anim = this.scene.anims.get('DeadR');
-          dead.anims.play('DeadR', true);
-        }
-        this.scene.input.keyboard.enabled = false;
-        anim.on('complete', () => {
-          isAlive = false;
-          this.scene.input.keyboard.enabled = true;
-        });
+      body.anims.play('Lturn', true);
+      legs.anims.play('Lturnleg', true);
+      this.changeCurrentAnims('Lturn', 'Lturnleg');
+    } else {
+      if (playerActions.healing) {
+        heal.setVisible(true);
       }
-      if (HeroAttacking.attacking && stats.health > 0) {
-        let anim;
-        personNotClimb();
-        damaged.setVisible(true);
-        body.setVisible(false);
-        if (legs.anims.currentAnim.key === 'Rturnleg') {
-          anim = this.scene.anims.get('DamageR');
-          damaged.anims.play('DamageR', true);
-        } else {
-          anim = this.scene.anims.get('DamageL');
-          damaged.anims.play('DamageL', true);
-        }
-
-        anim.on('complete', () => {
-          HeroAttacking.attacking = false;
-          body.setVisible(true);
-          damaged.setVisible(false);
-        });
+      if (playerActions.reloading) {
+        reload.setVisible(true);
       }
-      if (cursors.left.isDown()) {
-        if (!turn) {
-          legs.anims.play('backLeftl', true);
-          body.anims.play('left', true);
-          this.changeCurrentAnims('backLeftl', 'left');
-        } else if (turn) {
-          body.anims.play('right', true);
-          legs.anims.play('backRightl', true);
-          this.changeCurrentAnims('right', 'backRightl');
-        }
-      } else if (cursors.right.isDown()) {
-        if (turn) {
-          legs.anims.play('rightl', true);
-          body.anims.play('right', true);
-          this.changeCurrentAnims('rightl', 'right');
-        } else if (!turn) {
-          legs.anims.play('leftl', true);
-          body.anims.play('left', true);
-          this.changeCurrentAnims('leftl', 'left');
-        }
-      } else if (AnimationActivity.isAnimationActive && !AnimationActivity.directionUp) {
-        personStartClimb();
-        startClimb.anims.play('Down', true);
-        this.changeCurrentAnims('Down');
-      } else if (
-        cursors.down.isDown()
-        && playerOnStairs
-        && stairsInf.st.label === 'stairs-right'
-      ) {
-        personClimb();
-        climbDude.anims.play('Climb', true);
-        this.changeCurrentAnims('Climb');
-      } else if (AnimationActivity.isAnimationActive && AnimationActivity.directionUp) {
-        personStartClimb();
-        startClimb.anims.play('Up', true);
-        this.changeCurrentAnims('Up');
-      } else if (
-        cursors.up.isDown()
-        && playerOnStairs
-        && stairsInf.st.label === 'stairs-right'
-      ) {
-        personClimb();
-        climbDude.anims.play('Climb', true);
-        this.changeCurrentAnims('Climb');
-      } else if (playerOnStairs && stairsInf.st.label === 'stairs-right') {
-        personClimb();
-        climbDude.anims.play('climbStay', true);
-        this.changeCurrentAnims('climbStay');
-      } else if (playerOnStairs && (cursors.down.isDown() || cursors.up.isDown())) {
-        if (this.scene.input.mousePointer.x + this.scene.cameras.main.scrollX < person.x) {
-          body.anims.play('Rturn', true);
-        } else {
-          body.anims.play('Lturn', true);
-        }
-        legs.anims.play('leftl', true);
-        this.changeCurrentAnims('Lturn', 'leftl');
-      } else if (person.list[2].texture.key === 'gun') {
-        if (playerActions.healing) {
-          heal.setVisible(true);
-        }
-        if (playerActions.reloading) {
-          reload.setVisible(true);
-        }
-        body.anims.play('Lturn', true);
-        legs.anims.play('Lturnleg', true);
-        this.changeCurrentAnims('Lturn', 'Lturnleg');
-      } else {
-        if (playerActions.healing) {
-          heal.setVisible(true);
-        }
-        if (playerActions.reloading) {
-          reload.setVisible(true);
-        }
-        body.anims.play('Rturn', true);
-        legs.anims.play('Rturnleg', true);
-        this.changeCurrentAnims('Rturn', 'Rturnleg');
-      }
+      body.anims.play('Rturn', true);
+      legs.anims.play('Rturnleg', true);
+      this.changeCurrentAnims('Rturn', 'Rturnleg');
     }
   }
 }

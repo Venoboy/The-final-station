@@ -3,7 +3,7 @@ import Phaser from 'phaser';
 import MenuButton from '../sceneObjects/MenuButton';
 import addSceneEffect from './sceneEffects';
 import addSceneListeners from './sceneListeners';
-import { createSoundFadeOut } from '../../objects/soundSensors/soundEffects';
+import { createSoundFadeOut, createSoundFadeIn } from '../../objects/soundSensors/soundEffects';
 
 export default class BootScene extends Phaser.Scene {
   constructor() {
@@ -29,15 +29,17 @@ export default class BootScene extends Phaser.Scene {
     const showMenuTimeline = addSceneEffect(this, this.bg, this.logoImg, this.playButton.button);
     showMenuTimeline.play();
     this.music = this.sound.add('menuSound', { volume: 0, loop: true });
-
+    this.musicFadeOut = createSoundFadeOut(this, this.music, 1000, 0);
+    this.musicFadeOut.onComplete = () => { this.music.stop(); };
+    this.musicFadeIn = createSoundFadeIn(this, this.music, 1000, 0);
+    this.music.play();
+    this.musicFadeIn.play();
     addSceneListeners(this);
   }
 
   startGame() {
     this.scene.cameras.main.fadeOut(1000);
-    const musicFadeOut = createSoundFadeOut(this.scene, this.scene.music, 1000, 0);
-    musicFadeOut.onComplete = () => { this.scene.music.stop(); };
-    musicFadeOut.play();
+    this.scene.musicFadeOut.play();
     this.scene.cameras.main.on('camerafadeoutcomplete', () => {
       this.scene.scene.start('game-scene');
     });
