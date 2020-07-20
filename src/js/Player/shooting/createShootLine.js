@@ -51,10 +51,7 @@ const createShootLine = (scene, person, stairsInfo) => {
     const startY = player.y - GUN_OFFSET;
     const resultPoint = getResultPoint(startX, startY, pointer.worldX, pointer.worldY);
 
-    const isHeroDead = stats.health <= 0;
-    const canShoot = !isHeroDead
-      && pointer.primaryDown
-      && holder.shoot();
+    const canShoot = holder.shoot() && pointer.primaryDown;
     if (!canShoot) {
       return;
     }
@@ -86,5 +83,4 @@ const createShootLine = (scene, person, stairsInfo) => {
     reloadKey.off('up', holder.reload, holder);
   });
 };
-
 export default createShootLine;

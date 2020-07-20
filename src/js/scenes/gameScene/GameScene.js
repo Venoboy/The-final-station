@@ -13,8 +13,7 @@ import {
   setInteractionObjects, setRooms, setSoundSensors, setTunnel,
   setAnimatedObjects, setBackgroundImages, setFrontImages,
 } from './sceneSetters';
-
-const heightPerScreen = 450;
+import eventsCenter from '../../eventsCenter';
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -33,6 +32,7 @@ export default class GameScene extends Phaser.Scene {
   }
 
   create() {
+    eventsCenter.emit('start-game');
     setBackgroundImages(this);
     setAnimatedObjects(this);
     setInteractionObjects(this);
@@ -54,7 +54,7 @@ export default class GameScene extends Phaser.Scene {
     this.soundSensors = setSoundSensors(this, this.playerInteraction.player);
     this.music = this.sound.add('levelMusic');
     this.music.loop = true;
-    // this.music.play(); // откл. звук
+    this.music.play(); // откл. звук
 
     const startValues = {
       aids: stats.aids,
@@ -64,7 +64,6 @@ export default class GameScene extends Phaser.Scene {
     };
     this.scene.launch('game-bar', startValues);
     this.cameras.main.setBounds(0, 0, 1536, 512);
-    this.cameras.main.setZoom(this.cameras.main.width / heightPerScreen);
     this.cameras.main.fadeIn(2500);
     this.pauseKey = this.input.keyboard.addKey(27);
     addSceneListeners(this);
