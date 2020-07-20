@@ -10,6 +10,7 @@ const HeroAttacking = {
 };
 
 const defaultStats = {
+  bulletsInMagazine: 6,
   bullets: 6,
   health: HERO_MAX_HEALTH,
   aids: 2,
@@ -37,6 +38,7 @@ const playerActions = {
 };
 
 const renewStats = () => {
+  stats.bulletsInMagazine = defaultStats.bulletsInMagazine;
   stats.bullets = defaultStats.bullets;
   stats.health = defaultStats.health;
   stats.aids = defaultStats.aids;

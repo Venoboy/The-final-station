@@ -1,32 +1,21 @@
 import Phaser from 'phaser';
 import HealtBar from './HealthBar';
 import WeaponMagazine from './WeaponMagazine';
+import { stats } from '../Player/playerStates/stats';
 
 import gameBar from '../../assets/interface/gameBarFrame.png';
 import bulletImg from '../../assets/interface/bullet.png';
 import bulletBG from '../../assets/interface/bulletBG.png';
 import addSceneListeners from './sceneListeners';
 
-const magazineSize = 6;
 const textConfig = {
   fontFamily: 'font1',
   fontSize: 24,
-};
-/* default values of game bar items */
-const defaultValues = {
-  aids: 2,
-  bullets: magazineSize,
-  food: 2,
-  keys: 0,
 };
 
 export default class GameBar extends Phaser.Scene {
   constructor() {
     super('game-bar');
-  }
-
-  init(startValues) {
-    this.startValues = startValues || defaultValues;
   }
 
   preload() {
@@ -46,11 +35,11 @@ export default class GameBar extends Phaser.Scene {
   addItems() {
     this.frame = this.add.image(0, 0, 'gameBar').setScale(0.8);
     this.healthBar = new HealtBar(this, 0, 0);
-    this.magazine = new WeaponMagazine(this, magazineSize, magazineSize, 0, 0);
-    this.aids = this.add.text(0, 0, this.startValues.aids, textConfig).setOrigin(0.5);
-    this.bullets = this.add.text(0, 0, this.startValues.bullets, textConfig).setOrigin(0.5);
-    this.food = this.add.text(0, 0, this.startValues.food, textConfig).setOrigin(0.5);
-    this.keys = this.add.text(0, 0, this.startValues.keys, textConfig).setOrigin(0.5);
+    this.magazine = new WeaponMagazine(this, stats.magazineSize, stats.magazineSize, 0, 0);
+    this.aids = this.add.text(0, 0, stats.aids, textConfig).setOrigin(0.5);
+    this.bullets = this.add.text(0, 0, stats.bullets, textConfig).setOrigin(0.5);
+    this.food = this.add.text(0, 0, stats.food, textConfig).setOrigin(0.5);
+    this.keys = this.add.text(0, 0, stats.keys, textConfig).setOrigin(0.5);
   }
 
   calculateOffset(percentageOffset) {

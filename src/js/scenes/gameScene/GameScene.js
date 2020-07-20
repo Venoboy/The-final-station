@@ -5,7 +5,6 @@ import addSceneListeners from './sceneListeners';
 
 import PlayerInteraction from '../../Player/PlayerInteraction';
 import EnemyLoader from '../../Enemies/EnemyLoader';
-import { stats } from '../../Player/playerStates/stats';
 import groundCreation from '../../objects/ground/groundCreation';
 import stairsCreation from '../../objects/stairs/stairsCreation';
 import createControls from '../../Player/controls/controls';
@@ -56,13 +55,7 @@ export default class GameScene extends Phaser.Scene {
     this.music.loop = true;
     this.music.play(); // откл. звук
 
-    const startValues = {
-      aids: stats.aids,
-      food: stats.food,
-      keys: stats.keys,
-      bullets: stats.bullets,
-    };
-    this.scene.launch('game-bar', startValues);
+    this.scene.launch('game-bar');
     this.cameras.main.setBounds(0, 0, 1536, 512);
     this.cameras.main.fadeIn(2500);
     this.pauseKey = this.input.keyboard.addKey(27);
