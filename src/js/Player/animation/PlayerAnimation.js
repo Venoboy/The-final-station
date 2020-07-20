@@ -288,12 +288,14 @@ export default class PersonAnimation {
 
     this.scene.input.off('pointermove');
 
+    isAlive = false;
     anim.on('complete', () => {
-      isAlive = false;
+
     });
   }
 
   update(stairsInf) {
+    const isHeroAlive = stats.health > 0;
     if (!isAlive) {
       return;
     }
@@ -335,10 +337,10 @@ export default class PersonAnimation {
     if (playerActions.reloading) {
       body.setVisible(false);
     }
-    if (stats.health === 0) {
+    if (stats.health <= 0) {
       this.deadAnimation(this.scene);
     }
-    if (HeroAttacking.attacking) {
+    if (HeroAttacking.attacking && isHeroAlive) {
       let anim;
       personNotClimb();
       damaged.setVisible(true);
