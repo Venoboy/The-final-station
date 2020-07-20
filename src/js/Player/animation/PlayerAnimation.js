@@ -270,7 +270,7 @@ export default class PersonAnimation {
     }
   }
 
-  deadAnimation() {
+  deadAnimation(scene) {
     let anim;
     body.setVisible(false);
     legs.setVisible(false);
@@ -285,9 +285,12 @@ export default class PersonAnimation {
       anim = this.scene.anims.get('DeadR');
       dead.anims.play('DeadR', true);
     }
-    this.scene.input.keyboard.enabled = false;
+
+    // eslint-disable-next-line no-param-reassign
+    scene.input.keyboard.enabled = false;
+
     anim.on('complete', () => {
-      this.scene.input.keyboard.enabled = true;
+      scene.input.keyboard.enabled = true;
       isAlive = false;
     });
   }
@@ -335,7 +338,7 @@ export default class PersonAnimation {
       body.setVisible(false);
     }
     if (stats.health === 0) {
-      this.deadAnimation();
+      this.deadAnimation(this.scene);
     }
     if (HeroAttacking.attacking) {
       let anim;
@@ -382,8 +385,8 @@ export default class PersonAnimation {
       this.changeCurrentAnims('Down');
     } else if (
       cursors.down.isDown()
-        && playerOnStairs
-        && stairsInf.st.label === 'stairs-right'
+      && playerOnStairs
+      && stairsInf.st.label === 'stairs-right'
     ) {
       personClimb();
       climbDude.anims.play('Climb', true);
@@ -394,8 +397,8 @@ export default class PersonAnimation {
       this.changeCurrentAnims('Up');
     } else if (
       cursors.up.isDown()
-        && playerOnStairs
-        && stairsInf.st.label === 'stairs-right'
+      && playerOnStairs
+      && stairsInf.st.label === 'stairs-right'
     ) {
       personClimb();
       climbDude.anims.play('Climb', true);
