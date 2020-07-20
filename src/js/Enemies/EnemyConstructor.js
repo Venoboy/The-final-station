@@ -212,13 +212,11 @@ export default class EnemyConstructor {
   };
 
   update = (obj) => {
-    // console.log(obj.damaged);
     this.enemy.setCollidesWith([collisionCategories.ground]);
     this.enemy.body.ignoreGravity = false;
     this.currentSpeed = 0;
     this.scene.matter.overlap(this.sensors.body, this.config.stairsArray, this.enemyStairsOverlap);
     this.enemyCheckingPlayer();
-    // здесь можно вставить анимацию врага, в зависимости от this.currentSpeed
 
     if (this.currentSpeed === 0 && this.enemy.texture.key === 'bigZombie' && !this.atacking && !obj.damaged) {
       this.enemy.anims.play('stayLeft', true);
@@ -233,10 +231,10 @@ export default class EnemyConstructor {
       this.enemy.anims.play('walkRights', true);
     }
     else if (this.currentSpeed < 0 && this.enemy.texture.key === 'bigZombie' && !this.atacking && !obj.damaged) {
-      this.enemy.anims.play('walkLeft', true);
+      this.enemy.anims.play('walkLeft', false);
     }
     else if (this.currentSpeed < 0 && this.enemy.texture.key === 'smallZombie' && !this.atacking && !obj.damaged) {
-      this.enemy.anims.play('walkLefts', true);
+      this.enemy.anims.play('walkLefts', false);
     }
     this.updateSounds();
     this.enemy.setVelocityX(this.currentSpeed);
