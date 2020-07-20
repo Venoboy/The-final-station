@@ -270,7 +270,7 @@ export default class PersonAnimation {
     }
   }
 
-  deadAnimation(scene) {
+  deadAnimation() {
     let anim;
     body.setVisible(false);
     legs.setVisible(false);
@@ -286,11 +286,9 @@ export default class PersonAnimation {
       dead.anims.play('DeadR', true);
     }
 
-    // eslint-disable-next-line no-param-reassign
-    scene.input.keyboard.enabled = false;
+    this.scene.input.off('pointermove');
 
     anim.on('complete', () => {
-      scene.input.keyboard.enabled = true;
       isAlive = false;
     });
   }
