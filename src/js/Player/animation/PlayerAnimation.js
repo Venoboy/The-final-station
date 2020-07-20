@@ -25,7 +25,6 @@ let reload;
 let isAlive = true;
 let startClimb;
 let damaged;
-
 const { PI } = Math;
 
 export default class PersonAnimation {
@@ -213,6 +212,7 @@ export default class PersonAnimation {
 
     cursors = this.scene.cursors;
 
+    this.scene.input.keyboard.enabled = true;
     isAlive = true;
     return this.playerInstance;
   }
@@ -275,22 +275,26 @@ export default class PersonAnimation {
     body.setVisible(false);
     legs.setVisible(false);
     person.list[2].setVisible(false);
-    damaged.setVisible(false);
+    startClimb.setVisible(false);
+    climbDude.setVisible(false);
     dead.setVisible(true);
+    damaged.setVisible(false);
+    heal.setVisible(false);
 
     if (legs.anims.currentAnim.key === 'Lturnleg') {
       anim = this.scene.anims.get('Dead');
       dead.anims.play('Dead', true);
-    } else if (legs.anims.currentAnim.key === 'Rturnleg') {
+    } else {
       anim = this.scene.anims.get('DeadR');
       dead.anims.play('DeadR', true);
     }
 
-    this.scene.input.off('pointermove');
-
     anim.on('complete', () => {
       isAlive = false;
     });
+
+    this.scene.input.keyboard.enabled = false;
+    this.scene.input.off('pointermove');
   }
 
   update(stairsInf) {
@@ -430,9 +434,11 @@ export default class PersonAnimation {
       if (playerActions.reloading) {
         reload.setVisible(true);
       }
-      body.anims.play('Rturn', true);
-      legs.anims.play('Rturnleg', true);
-      this.changeCurrentAnims('Rturn', 'Rturnleg');
+      if (isAlive) {
+        body.anims.play('Rturn', true);
+        legs.anims.play('Rturnleg', true);
+        this.changeCurrentAnims('Rturn', 'Rturnleg');
+      }
     }
   }
 }
