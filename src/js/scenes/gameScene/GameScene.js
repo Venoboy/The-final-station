@@ -15,8 +15,6 @@ import {
 } from './sceneSetters';
 import eventsCenter from '../../eventsCenter';
 
-const heightPerScreen = 450;
-
 export default class GameScene extends Phaser.Scene {
   constructor() {
     super('game-scene');
@@ -66,7 +64,6 @@ export default class GameScene extends Phaser.Scene {
     };
     this.scene.launch('game-bar', startValues);
     this.cameras.main.setBounds(0, 0, 1536, 512);
-    this.cameras.main.setZoom(this.cameras.main.width / heightPerScreen);
     this.cameras.main.fadeIn(2500);
     this.pauseKey = this.input.keyboard.addKey(27);
     addSceneListeners(this);

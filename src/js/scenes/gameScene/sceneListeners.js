@@ -1,6 +1,12 @@
 import eventsCenter from '../../eventsCenter';
 import { createSoundFadeOut } from '../../objects/soundSensors/soundEffects';
 
+const heightPerScreen = 450;
+
+function resize() {
+  this.cameras.main.setZoom(this.cameras.main.width / heightPerScreen);
+}
+
 function pause() {
   this.scene.pause();
   this.scene.launch('pause-menu');
@@ -17,7 +23,9 @@ function gameOver() {
 }
 
 const addSceneListeners = (scene) => {
+  resize.call(scene);
   scene.pauseKey.on('up', pause, scene);
+  scene.scale.on('resize', resize, scene);
 
   eventsCenter.on('player-died', gameOver, scene);
 
@@ -31,6 +39,7 @@ const addSceneListeners = (scene) => {
   });
   scene.events.on('shutdown', () => {
     scene.pauseKey.off('up', pause, scene);
+    scene.scale.off('resize', resize, scene);
     eventsCenter.off('player-died', gameOver, scene);
     scene.music.stop();
     scene.soundSensors.forEach((sensor) => sensor.sound.stop());
