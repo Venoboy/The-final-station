@@ -7,7 +7,6 @@ import PersonStartClimbAnimation from './PlayerRightStairClimbAnim';
 import { AnimationActivity } from '../../objects/stairs/curvePlayerSetter';
 import Player from '../Player';
 import { leftAngle, rightAngle } from '../../helpers/setMaxAngle';
-import eventsCenter from '../../eventsCenter';
 import addSounds from './animationSounds/addSounds';
 import updateSounds from './animationSounds/updateSounds';
 
@@ -32,7 +31,6 @@ const { PI } = Math;
 export default class PersonAnimation {
   constructor(scene) {
     this.scene = scene;
-    /* animation sounds */
     this.sounds = addSounds(scene);
     this.currentAnim = [];
     this.updateSounds = updateSounds.bind(this);
@@ -215,11 +213,6 @@ export default class PersonAnimation {
 
     cursors = this.scene.cursors;
 
-    eventsCenter.on('player-died', () => {
-      this.scene.input.off('pointermove');
-      isAlive = false;
-      this.deadAnimation();
-    });
     isAlive = true;
     return this.playerInstance;
   }
@@ -282,6 +275,7 @@ export default class PersonAnimation {
     body.setVisible(false);
     legs.setVisible(false);
     person.list[2].setVisible(false);
+    damaged.setVisible(false);
     dead.setVisible(true);
 
     if (legs.anims.currentAnim.key === 'Lturnleg') {
@@ -294,6 +288,7 @@ export default class PersonAnimation {
     this.scene.input.keyboard.enabled = false;
     anim.on('complete', () => {
       this.scene.input.keyboard.enabled = true;
+      isAlive = false;
     });
   }
 
@@ -338,6 +333,9 @@ export default class PersonAnimation {
     }
     if (playerActions.reloading) {
       body.setVisible(false);
+    }
+    if (stats.health === 0) {
+      this.deadAnimation();
     }
     if (HeroAttacking.attacking) {
       let anim;
