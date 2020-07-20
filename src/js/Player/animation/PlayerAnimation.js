@@ -233,7 +233,7 @@ export default class PersonAnimation {
       if (legs.anims.currentAnim.key === 'Lturnleg') {
         heal.anims.play('Heal', true);
         anim = this.scene.anims.get('Heal');
-      } else if (legs.anims.currentAnim.key === 'Rturnleg') {
+      } else {
         heal.anims.play('HealR', true);
         anim = this.scene.anims.get('HealR');
       }
@@ -257,7 +257,7 @@ export default class PersonAnimation {
       if (legs.anims.currentAnim.key === 'Lturnleg') {
         reload.anims.play('Reload', true);
         anim = this.scene.anims.get('Reload');
-      } else if (legs.anims.currentAnim.key === 'Rturnleg') {
+      } else {
         reload.anims.play('ReloadR', true);
         anim = this.scene.anims.get('ReloadR');
       }
