@@ -174,7 +174,7 @@ const SmallZombieAnimationCreate = (scene) => {
     frameRate: 12,
     repeat: 0,
     showOnStart: false,
-    hideOnComplete: true,
+    hideOnComplete: false,
   });
   scene.anims.create({
     key: 'damagedRights',
@@ -185,7 +185,7 @@ const SmallZombieAnimationCreate = (scene) => {
     frameRate: 12,
     repeat: 0,
     showOnStart: false,
-    hideOnComplete: true,
+    hideOnComplete: false,
   });
 };
 
