@@ -18,7 +18,7 @@ export default class Player {
       stairs: Bodies.rectangle(0, this.h * 0.33, this.w * 0.45, 1, { isSensor: true }),
       left: Bodies.rectangle(-(this.w * 0.12), 1, 2, this.h * 0.15, { isSensor: true }),
       right: Bodies.rectangle(this.w * 0.12, 1, 2, this.h * 0.15, { isSensor: true }),
-      objectSensor: Bodies.rectangle(0, 0, this.w * 0.4, this.h * 0.45, { isSensor: true }),
+      objectSensor: Bodies.rectangle(0, 0, this.w * 0.5, this.h * 0.45, { isSensor: true }),
       around: Bodies.rectangle(0, 0, this.w * 0.15, this.h * 0.3, { isSensor: true }),
       body: Bodies.rectangle(0, 0, this.w * 0.15, this.h * 0.3,
         {
