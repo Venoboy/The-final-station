@@ -123,7 +123,6 @@ export default class EnemyConstructor {
     this.activeDoors = doors.filter((door) => door.body !== undefined);
     this.scene.matter.overlap(this.sensors.detect, this.activeDoors, this.onDetectDoors);
     if (!this.blockDoor) {
-      this.atacking = false;
       const isHeroDead = stats.health <= 0;
       if (!this.blockDoor && !isHeroDead) {
         if (this.player.x < this.enemy.x - this.ATTACK_DISTANCE) {
@@ -203,6 +202,7 @@ export default class EnemyConstructor {
 
   enemyCheckingPlayer = () => {
     const isHeroDead = stats.health <= 0;
+    this.atacking = false;
     const sensorPlayerOverlap = this.scene.matter
       .overlap(this.sensors.detect, this.playerInstance.sensors.body, this.onDetect);
     this.isEnemySeePlayer = sensorPlayerOverlap && !this.blockDoor && !isHeroDead;
@@ -231,10 +231,10 @@ export default class EnemyConstructor {
       this.enemy.anims.play('walkRights', true);
     }
     else if (this.currentSpeed < 0 && this.enemy.texture.key === 'bigZombie' && !this.atacking && !obj.damaged) {
-      this.enemy.anims.play('walkLeft', false);
+      this.enemy.anims.play('walkLeft', true);
     }
     else if (this.currentSpeed < 0 && this.enemy.texture.key === 'smallZombie' && !this.atacking && !obj.damaged) {
-      this.enemy.anims.play('walkLefts', false);
+      this.enemy.anims.play('walkLefts', true);
     }
     this.updateSounds();
     this.enemy.setVelocityX(this.currentSpeed);
