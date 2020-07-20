@@ -1,4 +1,18 @@
 function updateSounds(legs, climbDude) {
+  if (climbDude.anims.currentAnim) {
+    if (climbDude.anims.currentAnim.key === 'Climb'
+      && this.currentAnim.includes('Climb')
+    ) {
+      const ladderIndex = climbDude.anims.currentFrame.textureFrame;
+      if (ladderIndex >= 0 && !this.sounds.ladder[ladderIndex].isPlaying) {
+        this.sounds.ladder[ladderIndex].play();
+      }
+      return;
+    }
+    if (climbDude.anims.currentAnim.key === 'climbStay') {
+      return;
+    }
+  }
   if (legs.anims.currentAnim) {
     if (legs.anims.currentAnim.key === 'rightl'
       && (
@@ -38,17 +52,6 @@ function updateSounds(legs, climbDude) {
     ) {
       if (!this.sounds.footstep.isPlaying) {
         this.sounds.footstep.play();
-      }
-    }
-  }
-
-  if (climbDude.anims.currentAnim) {
-    if (climbDude.anims.currentAnim.key === 'Climb'
-      && this.currentAnim.includes('Climb')
-    ) {
-      const ladderIndex = climbDude.anims.currentFrame.textureFrame;
-      if (ladderIndex >= 0 && !this.sounds.ladder[ladderIndex].isPlaying) {
-        this.sounds.ladder[ladderIndex].play();
       }
     }
   }
